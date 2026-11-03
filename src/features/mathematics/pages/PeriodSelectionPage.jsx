@@ -1,31 +1,7 @@
 import { Link } from 'react-router-dom';
+import { interactivePeriods } from '../data/interactive-missions.js';
 
-const PERIODS = [
-  {
-    id: 1,
-    title: 'Periodo 1',
-    description:
-      'Números naturales, operaciones, divisibilidad, MCD, MCM y ángulos.',
-  },
-  {
-    id: 2,
-    title: 'Periodo 2',
-    description:
-      'Conjuntos, relaciones entre conjuntos, operaciones y polígonos.',
-  },
-  {
-    id: 3,
-    title: 'Periodo 3',
-    description:
-      'Fracciones, números decimales, circunferencia y estadística.',
-  },
-  {
-    id: 4,
-    title: 'Periodo 4',
-    description:
-      'Decimales, geometría, tablas de frecuencia, gráficas y probabilidad.',
-  },
-];
+const PERIODS = interactivePeriods;
 
 function PeriodSelectionPage() {
   return (
@@ -44,7 +20,11 @@ function PeriodSelectionPage() {
 
       <section className="periods-grid" aria-label="Periodos académicos">
         {PERIODS.map((period) => (
-          <article className="period-card" key={period.id}>
+          <Link
+            className={`period-card period-card--${period.color}`}
+            key={period.id}
+            to={`/matematicas/grado/6/periodo/${period.id}`}
+          >
             <span className="period-number">
               {String(period.id).padStart(2, '0')}
             </span>
@@ -52,10 +32,8 @@ function PeriodSelectionPage() {
             <h2>{period.title}</h2>
             <p>{period.description}</p>
 
-            <span className="period-status">
-              Temas en preparación
-            </span>
-          </article>
+            <span className="period-status">{period.icon} {period.action} →</span>
+          </Link>
         ))}
       </section>
     </main>

@@ -3,6 +3,7 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 import HomePage from '../features/home/pages/HomePage.jsx';
 import GradeSelectionPage from '../features/home/pages/GradeSelectionPage.jsx';
 import PeriodSelectionPage from '../features/mathematics/pages/PeriodSelectionPage.jsx';
+import TopicSelectionPage from '../features/mathematics/pages/TopicSelectionPage.jsx';
 
 function ComingSoonPage() {
   return (
@@ -40,6 +41,11 @@ function AppRouter() {
       <Route
         path="/matematicas/grado/6"
         element={<PeriodSelectionPage />}
+      />
+
+      <Route
+        path="/matematicas/grado/6/periodo/:periodId"
+        element={<TopicSelectionPage />}
       />
 
       <Route
