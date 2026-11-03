@@ -45,7 +45,7 @@ function GradeSelectionPage({ subject }) {
         <div className="grades-grid">
           {GRADES.map((grade) => {
             const isAvailable =
-              subject === 'matematicas' && grade === 6;
+              subject === 'matematicas' && [5, 6].includes(grade);
 
             const gradeContent = (
               <>
@@ -70,7 +70,7 @@ function GradeSelectionPage({ subject }) {
               <Link
                 key={grade}
                 className="grade-card grade-card--available"
-                to="/matematicas/grado/6"
+                to={`/matematicas/grado/${grade}`}
               >
                 {gradeContent}
               </Link>

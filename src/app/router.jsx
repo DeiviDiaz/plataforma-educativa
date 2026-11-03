@@ -39,15 +39,14 @@ function AppRouter() {
       />
 
       <Route
-        path="/matematicas/grado/6"
+        path="/matematicas/grado/:grade"
         element={<PeriodSelectionPage />}
       />
 
       <Route
-        path="/matematicas/grado/6/periodo/:periodId"
+        path="/matematicas/grado/:grade/periodo/:periodId"
         element={<TopicSelectionPage />}
       />
-
       <Route
         path="/espanol/grado/6"
         element={<ComingSoonPage />}

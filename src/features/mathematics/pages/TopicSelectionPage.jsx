@@ -1,28 +1,87 @@
 import { useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
+import { Compass, Hammer, Sparkles, Target } from 'lucide-react';
 
+import { gradeFiveGames, gradeFivePeriods } from '../data/grade-five-games.js';
 import { interactiveMissions, interactivePeriods } from '../data/interactive-missions.js';
+import GradeFiveGame from '../games/GradeFiveGame.jsx';
 import InteractiveMissionGame from '../games/InteractiveMissionGame.jsx';
 
-function TopicSelectionPage() {
-  const { periodId } = useParams();
+const periodIcons = [Compass, Target, Sparkles, Hammer];
 
-  const selectedPeriod = interactivePeriods.find(
+function TopicSelectionPage() {
+  const { grade = '6', periodId } = useParams();
+  const periods = grade === '5' ? gradeFivePeriods : interactivePeriods;
+
+  const selectedPeriod = periods.find(
     (period) => period.id === Number(periodId),
   );
 
   const [activeMissionId, setActiveMissionId] = useState(null);
+  const [activeGameIndex, setActiveGameIndex] = useState(null);
 
   if (!selectedPeriod) {
     return (
       <main className="page-container">
-        <Link className="back-link" to="/matematicas/grado/6">
+        <Link className="back-link" to={`/matematicas/grado/${grade}`}>
           ← Volver a los periodos
         </Link>
 
         <section className="message-card">
           <h1>Periodo no encontrado</h1>
           <p>El periodo que buscas no está disponible.</p>
+        </section>
+      </main>
+    );
+  }
+
+  if (grade === '5') {
+    const games = gradeFiveGames[selectedPeriod.id - 1];
+    const activeGame = games[activeGameIndex];
+
+    if (activeGame) {
+      return (
+        <GradeFiveGame
+          period={selectedPeriod}
+          game={activeGame}
+          gameNumber={activeGameIndex}
+          onBack={() => setActiveGameIndex(null)}
+          onNextGame={() => setActiveGameIndex(
+            activeGameIndex === games.length - 1 ? null : activeGameIndex + 1,
+          )}
+        />
+      );
+    }
+
+    return (
+      <main className="page-container">
+        <Link className="back-link" to="/matematicas/grado/5">
+          ← Volver a los periodos
+        </Link>
+        <header className="page-heading">
+          <p className="page-eyebrow">
+            MATEMÁTICAS · QUINTO GRADO · PERIODO {selectedPeriod.id}
+          </p>
+          <h1>{selectedPeriod.title}</h1>
+          <p>{selectedPeriod.description}</p>
+        </header>
+        <section className="mission-grid-list" aria-label={`Misiones de ${selectedPeriod.title}`}>
+          {games.map((game, index) => (
+            <article className="mission-card" key={game.name}>
+              <span className="mission-card__icon" aria-hidden="true">
+                {(() => {
+                  const Icon = periodIcons[selectedPeriod.id - 1] ?? Compass;
+                  return <Icon />;
+                })()}
+              </span>
+              <span className="mission-card__number">Misión {String(index + 1).padStart(2, '0')}</span>
+              <h2>{game.name}</h2>
+              <p>{game.topics}</p>
+              <button type="button" onClick={() => setActiveGameIndex(index)}>
+                Mira y aprende →
+              </button>
+            </article>
+          ))}
         </section>
       </main>
     );
@@ -47,12 +106,14 @@ function TopicSelectionPage() {
 
   return (
     <main className="page-container">
-      <Link className="back-link" to="/matematicas/grado/6">
+      <Link className="back-link" to={`/matematicas/grado/${grade}`}>
         ← Volver a los periodos
       </Link>
 
       <header className="page-heading">
-        <p className="page-eyebrow">MATEMÁTICAS · SEXTO GRADO</p>
+        <p className="page-eyebrow">
+          MATEMÁTICAS · {grade === '5' ? 'QUINTO' : 'SEXTO'} GRADO
+        </p>
         <h1>{selectedPeriod.title}</h1>
         <p>{selectedPeriod.description}</p>
       </header>
@@ -61,7 +122,12 @@ function TopicSelectionPage() {
         <div className="mission-grid">
           {missions.map((mission) => (
             <article className="mission-card" key={mission.id}>
-              <span className="mission-card__icon" aria-hidden="true">{mission.icon}</span>
+              <span className="mission-card__icon" aria-hidden="true">
+                {(() => {
+                  const Icon = periodIcons[mission.period - 1] ?? Compass;
+                  return <Icon />;
+                })()}
+              </span>
               <span className="mission-card__number">
                 Misión {String(mission.number).padStart(2, '0')}
               </span>
