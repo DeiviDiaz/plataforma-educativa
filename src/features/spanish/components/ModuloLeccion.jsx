@@ -12,6 +12,7 @@ import ComprensionLectora from './classroom/ComprensionLectora';
 import GeneradorFichas from './classroom/GeneradorFichas';
 import BancoRetosAula from './classroom/BancoRetosAula';
 import GlosarioInteractivo from './classroom/GlosarioInteractivo';
+import TeoriaPedagogicaEnriquecida from './classroom/TeoriaPedagogicaEnriquecida';
 import { sounds } from '../utils/audio';
 import { voiceReader } from '../utils/speech';
 
@@ -135,7 +136,7 @@ export default function ModuloLeccion({ guia, gradoNombre, gradoNumero = 1, masc
                     : 'text-slate-600 hover:text-slate-900'
                 }`}
               >
-                📖 Texto de la Lección
+                📖 Teoría y Lectura Guiada
               </button>
 
               <button
@@ -174,101 +175,13 @@ export default function ModuloLeccion({ guia, gradoNombre, gradoNumero = 1, masc
           </div>
 
           {subSeccion === 'principal' ? (
-            <div className="bg-white rounded-3xl p-6 sm:p-10 shadow-sm border border-slate-200/80 space-y-6">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 pb-5">
-                <div>
-                  <span className={`text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full border ${
-                    esSecundaria ? 'bg-violet-50 text-violet-700 border-violet-200' : 'bg-emerald-50 text-emerald-700 border-emerald-200'
-                  }`}>
-                    {guia.numero || 'Guía Oficial'} • Estándar Nacional
-                  </span>
-                  <h3 className="text-2xl sm:text-3xl font-black text-slate-800 mt-2">
-                    {tituloGuia}
-                  </h3>
-                  {guia.componente && (
-                    <p className="text-xs text-slate-500 font-semibold mt-1">
-                      <strong>Componente:</strong> {guia.componente}
-                    </p>
-                  )}
-                </div>
-
-                <div className="flex items-center gap-2">
-                  <button
-                    onClick={toggleLecturaVoz}
-                    className={`px-4 py-2.5 rounded-xl font-black text-xs sm:text-sm flex items-center gap-2 shadow-sm transition-all cursor-pointer btn-press ${
-                      leyendoVoz
-                        ? 'bg-rose-500 hover:bg-rose-600 text-white animate-pulse'
-                        : 'bg-indigo-50 hover:bg-indigo-100 text-indigo-900 border border-indigo-200'
-                    }`}
-                  >
-                    <span>{leyendoVoz ? '⏹️ Detener Voz' : '🔊 Escuchar Lección'}</span>
-                  </button>
-                </div>
-              </div>
-
-              {/* Texto de Lectura Principal */}
-              <div
-                className={`text-slate-700 leading-relaxed font-medium p-6 sm:p-8 rounded-2xl border ${
-                  esSecundaria ? 'bg-slate-50/70 border-indigo-100' : 'bg-emerald-50/30 border-emerald-100'
-                } ${tamanoFuente}`}
-              >
-                {guia.leccion?.lectura ? (
-                  guia.leccion.lectura.split('\n\n').map((parrafo, i) => (
-                    <p key={i} className="mb-4 last:mb-0 indent-4">
-                      {parrafo}
-                    </p>
-                  ))
-                ) : (
-                  <p className="italic text-slate-400">
-                    Contenido pedagógico oficial de la lección disponible en esta guía de aprendizaje.
-                  </p>
-                )}
-              </div>
-
-              {/* ¿Sabías que...? */}
-              {guia.leccion?.sabiasQue && (
-                <div className="bg-amber-50 border-2 border-amber-200 p-5 rounded-2xl flex items-start gap-4">
-                  <span className="text-3xl p-2 bg-white rounded-xl shadow-xs shrink-0">💡</span>
-                  <div>
-                    <h4 className="font-extrabold text-amber-900 text-xs uppercase tracking-wider mb-1">
-                      ¿Sabías que...?
-                    </h4>
-                    <p className="text-amber-950 font-bold text-sm leading-relaxed">
-                      {guia.leccion.sabiasQue}
-                    </p>
-                  </div>
-                </div>
-              )}
-
-              {/* Conceptos Clave */}
-              {guia.leccion?.conceptosClave && (
-                <div className="space-y-3 pt-2">
-                  <h4 className="text-base font-black text-slate-800 flex items-center gap-2">
-                    <span>🧠</span> Conceptos Clave que Debes Aprender:
-                  </h4>
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                    {guia.leccion.conceptosClave.map((c, i) => (
-                      <div key={i} className="bg-slate-50 border border-slate-200 p-4 rounded-2xl">
-                        <span className="text-2xl block mb-1">{c.dibujo || '📌'}</span>
-                        <h5 className="font-extrabold text-slate-800 text-sm">{c.concepto}</h5>
-                        <p className="text-slate-600 text-xs mt-1 leading-relaxed">{c.ejemplo}</p>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {/* Botón de Pase al Siguiente Paso */}
-              <div className="pt-4 border-t border-slate-100 flex justify-end">
-                <button
-                  onClick={() => cambiarSeccion('comprension')}
-                  className="px-6 py-3.5 bg-gradient-to-r from-indigo-600 to-violet-600 text-white font-black text-sm rounded-2xl shadow-lg hover:scale-105 active:scale-95 transition-all flex items-center gap-2 cursor-pointer"
-                >
-                  <span>Paso 2: Taller de Comprensión y Cuaderno</span>
-                  <span>➔</span>
-                </button>
-              </div>
-            </div>
+            <TeoriaPedagogicaEnriquecida
+              guia={guia}
+              gradoNumero={gradoNumero}
+              gradoNombre={gradoNombre}
+              mascota={mascota}
+              onAvanzarPaso={(sec) => cambiarSeccion(sec)}
+            />
           ) : (
             <div className="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-slate-200/80">
               <CuentacuentosIlustrado titulo={`Teatro y Oratoria: ${tituloGuia}`} />

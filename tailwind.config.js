@@ -8,13 +8,8 @@ export default {
   content: [
     "./src/features/spanish/**/*.{js,jsx}",
   ],
-  /* Prefijo 'tw-' para aislar completamente las clases de Tailwind
-   * y evitar cualquier colisión con los estilos de Matemáticas.
-   * Ejemplo: className="tw-bg-white tw-text-lg" */
-  // prefix: 'tw-',  // DESACTIVADO: no se usa prefix para mantener compatibilidad con componentes existentes
-  
-  /* En su lugar, se usa la estrategia de "important" con selector 
-   * para que las clases de Tailwind solo apliquen dentro del wrapper .spanish-area */
+  /* Estrategia de "important" con selector para que las clases 
+   * de Tailwind solo apliquen dentro del wrapper .spanish-area */
   important: '.spanish-area',
   theme: {
     extend: {
@@ -38,7 +33,12 @@ export default {
         '5xl': '2.5rem',
       },
       fontFamily: {
-        sans: ['Inter', '"Segoe UI"', 'Arial', 'sans-serif'],
+        sans: ['"Plus Jakarta Sans"', 'Outfit', 'Inter', 'system-ui', '-apple-system', 'sans-serif'],
+        heading: ['Outfit', '"Plus Jakarta Sans"', 'system-ui', 'sans-serif'],
+        title: ['Fredoka', 'Outfit', '"Plus Jakarta Sans"', 'sans-serif'],
+        display: ['Outfit', '"Plus Jakarta Sans"', 'sans-serif'],
+        serif: ['Lora', 'Merriweather', 'Georgia', 'serif'],
+        literary: ['Lora', 'Georgia', 'serif'],
       },
       animation: {
         'fade-in': 'fadeIn 0.35s ease-out',

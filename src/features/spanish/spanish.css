@@ -1,6 +1,6 @@
 /* ═══════════════════════════════════════════════════════════
  * CSS exclusivo para la sección de Español ("Lengua Viva")
- * Usa Tailwind CSS scoped dentro de .spanish-area
+ * Usa Tailwind CSS scoped dentro de .spanish-area con tipografía premium
  * ═══════════════════════════════════════════════════════════ */
 
 @tailwind base;
@@ -8,10 +8,24 @@
 @tailwind utilities;
 
 .spanish-area {
-  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-family: 'Plus Jakarta Sans', Outfit, Inter, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   color: #1e293b;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  letter-spacing: -0.012em;
+}
+
+.spanish-area h1,
+.spanish-area h2,
+.spanish-area h3,
+.spanish-area .font-heading {
+  font-family: Outfit, 'Plus Jakarta Sans', system-ui, sans-serif;
+  letter-spacing: -0.028em;
+}
+
+.spanish-area .font-literary,
+.spanish-area blockquote {
+  font-family: Lora, Georgia, serif;
 }
 
 .spanish-area button,
@@ -74,5 +88,125 @@
   }
   .btn-press:active {
     transform: scale(0.97);
+  }
+
+  /* Efecto 3D Arcade Táctil Gamificado */
+  .btn-arcade-3d {
+    box-shadow: 0 6px 0 rgba(0, 0, 0, 0.22);
+    transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .btn-arcade-3d:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 0 rgba(0, 0, 0, 0.25);
+  }
+  .btn-arcade-3d:active {
+    transform: translateY(4px);
+    box-shadow: 0 2px 0 rgba(0, 0, 0, 0.25);
+  }
+
+  .btn-3d-rose { box-shadow: 0 5px 0 #be123c; }
+  .btn-3d-rose:hover { transform: translateY(-2px); box-shadow: 0 7px 0 #be123c; }
+  .btn-3d-rose:active { transform: translateY(3px); box-shadow: 0 2px 0 #be123c; }
+
+  .btn-3d-indigo { box-shadow: 0 5px 0 #3730a3; }
+  .btn-3d-indigo:hover { transform: translateY(-2px); box-shadow: 0 7px 0 #3730a3; }
+  .btn-3d-indigo:active { transform: translateY(3px); box-shadow: 0 2px 0 #3730a3; }
+
+  .btn-3d-emerald { box-shadow: 0 5px 0 #065f46; }
+  .btn-3d-emerald:hover { transform: translateY(-2px); box-shadow: 0 7px 0 #065f46; }
+  .btn-3d-emerald:active { transform: translateY(3px); box-shadow: 0 2px 0 #065f46; }
+
+  .btn-3d-blue { box-shadow: 0 5px 0 #1e40af; }
+  .btn-3d-blue:hover { transform: translateY(-2px); box-shadow: 0 7px 0 #1e40af; }
+  .btn-3d-blue:active { transform: translateY(3px); box-shadow: 0 2px 0 #1e40af; }
+
+  .btn-3d-amber { box-shadow: 0 5px 0 #b45309; }
+  .btn-3d-amber:hover { transform: translateY(-2px); box-shadow: 0 7px 0 #b45309; }
+  .btn-3d-amber:active { transform: translateY(3px); box-shadow: 0 2px 0 #b45309; }
+
+  .btn-3d-purple { box-shadow: 0 5px 0 #6b21a8; }
+  .btn-3d-purple:hover { transform: translateY(-2px); box-shadow: 0 7px 0 #6b21a8; }
+  .btn-3d-purple:active { transform: translateY(3px); box-shadow: 0 2px 0 #6b21a8; }
+
+  /* Fondo Lúdico Dinámico con patrón de constelaciones y letras flotantes */
+  .bg-playful-universe {
+    background-color: #f3f7fd;
+    background-image: 
+      radial-gradient(circle at 15% 20%, rgba(147, 197, 253, 0.45) 0%, transparent 28%),
+      radial-gradient(circle at 85% 30%, rgba(216, 180, 254, 0.45) 0%, transparent 32%),
+      radial-gradient(circle at 50% 80%, rgba(254, 215, 170, 0.4) 0%, transparent 30%),
+      radial-gradient(#93c5fd 1.2px, transparent 1.2px), 
+      radial-gradient(#fde047 1px, transparent 1px);
+    background-size: 100% 100%, 100% 100%, 100% 100%, 36px 36px, 54px 54px;
+    background-position: 0 0, 0 0, 0 0, 0 0, 18px 18px;
+  }
+
+  /* Animaciones Mágicas y Vibrantes */
+  .animate-float-slow {
+    animation: floaty 4s ease-in-out infinite;
+  }
+
+  .animate-glow-border {
+    animation: pulseGlow 3.5s ease-in-out infinite;
+  }
+
+  .shimmer-light::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.45), transparent);
+    transform: translateX(-100%);
+    animation: shimmerMove 3.5s infinite;
+  }
+
+  .animate-sparkle {
+    animation: sparkleFloat 4s ease-in-out infinite;
+  }
+
+  .animate-fire {
+    display: inline-block;
+    animation: fireBounce 1.2s ease-in-out infinite;
+  }
+
+  .card-game-arcade {
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  .card-game-arcade:hover {
+    transform: translateY(-8px) scale(1.015);
+  }
+}
+
+@keyframes floaty {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-8px) rotate(2deg); }
+}
+
+@keyframes pulseGlow {
+  0%, 100% { box-shadow: 0 0 25px rgba(245, 158, 11, 0.4), 0 0 50px rgba(124, 58, 237, 0.2); }
+  50% { box-shadow: 0 0 45px rgba(245, 158, 11, 0.7), 0 0 80px rgba(59, 130, 246, 0.35); }
+}
+
+@keyframes shimmerMove {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(200%); }
+}
+
+@keyframes sparkleFloat {
+  0% { transform: translateY(0px) rotate(0deg) scale(0.9); opacity: 0.6; }
+  50% { transform: translateY(-12px) rotate(180deg) scale(1.15); opacity: 1; }
+  100% { transform: translateY(0px) rotate(360deg) scale(0.9); opacity: 0.6; }
+}
+
+@keyframes fireBounce {
+  0%, 100% { transform: scale(1) rotate(-3deg); }
+  50% { transform: scale(1.18) rotate(4deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-float-slow, .animate-sparkle, .animate-fire, .animate-glow-border, .shimmer-light::after {
+    animation: none !important;
+  }
+  .card-game-arcade:hover {
+    transform: none !important;
   }
 }
