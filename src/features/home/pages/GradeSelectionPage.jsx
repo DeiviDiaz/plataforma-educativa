@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 
 const GRADES = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
-const AVAILABLE_GRADES = [5, 6, 7, 8, 9];
+const AVAILABLE_GRADES = [4, 5, 6, 7, 8, 9];
 
 export default function GradeSelectionPage({ subject = 'matematicas' }) {
   const isSubjectAvailable = subject === 'matematicas';

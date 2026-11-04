@@ -1,5 +1,56 @@
 // src/features/mathematics/data/grades-data.js
 export const gradesCurriculum = {
+  4: {
+    grade: 4,
+    subject: 'matematicas',
+    title: 'Matemáticas Cuarto Grado',
+    periods: [
+      {
+        id: 1,
+        title: 'Periodo 1: Números Naturales y Operaciones',
+        topics: [
+          { id: 'lectura-valor-posicional', title: 'Lectura, escritura y valor posicional de números naturales', gameIds: [] },
+          { id: 'orden-comparacion-naturales', title: 'Orden y comparación de números naturales', gameIds: [] },
+          { id: 'suma-resta-naturales', title: 'Suma y resta de números naturales', gameIds: [] },
+          { id: 'multiplicacion-division-naturales', title: 'Multiplicación y división de números naturales', gameIds: [] },
+          { id: 'problemas-operaciones-naturales', title: 'Resolución de problemas con operaciones combinadas', gameIds: [] },
+        ],
+      },
+      {
+        id: 2,
+        title: 'Periodo 2: Fracciones y Números Decimales',
+        topics: [
+          { id: 'representacion-fracciones', title: 'Representación y lectura de fracciones', gameIds: [] },
+          { id: 'fracciones-equivalentes', title: 'Fracciones equivalentes y comparación de fracciones', gameIds: [] },
+          { id: 'suma-resta-fracciones', title: 'Suma y resta de fracciones homogéneas', gameIds: [] },
+          { id: 'decimales-decimas-centesimas', title: 'Décimas, centésimas y números decimales', gameIds: [] },
+          { id: 'operaciones-decimales', title: 'Comparación y operaciones básicas con decimales', gameIds: [] },
+        ],
+      },
+      {
+        id: 3,
+        title: 'Periodo 3: Geometría y Medición',
+        topics: [
+          { id: 'rectas-angulos', title: 'Rectas, segmentos y clasificación de ángulos', gameIds: [] },
+          { id: 'poligonos-cuadrilateros', title: 'Polígonos y clasificación de cuadriláteros', gameIds: [] },
+          { id: 'perimetro-figuras', title: 'Perímetro de figuras planas', gameIds: [] },
+          { id: 'area-rectangulos-cuadrados', title: 'Área de cuadrados y rectángulos', gameIds: [] },
+          { id: 'unidades-medida', title: 'Unidades de longitud, capacidad, masa y tiempo', gameIds: [] },
+        ],
+      },
+      {
+        id: 4,
+        title: 'Periodo 4: Datos, Patrones y Resolución de Problemas',
+        topics: [
+          { id: 'secuencias-patrones', title: 'Secuencias numéricas y patrones', gameIds: [] },
+          { id: 'tablas-graficas', title: 'Lectura y construcción de tablas y gráficas', gameIds: [] },
+          { id: 'moda-promedio', title: 'Moda y promedio en situaciones sencillas', gameIds: [] },
+          { id: 'probabilidad-eventos', title: 'Posibilidad y probabilidad de eventos', gameIds: [] },
+          { id: 'estrategias-resolucion', title: 'Estrategias para resolver problemas matemáticos', gameIds: [] },
+        ],
+      },
+    ],
+  },
   7: {
     grade: 7,
     subject: 'matematicas',

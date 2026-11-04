@@ -215,7 +215,7 @@ function GradeFiveGame({ period, game, gameNumber, onBack, onNextGame }) {
           <Sparkles aria-hidden="true" size={64} />
         </motion.div>
         <h2>¡Misión completada!</h2>
-        <p>Superaste los tres niveles de esta aventura.</p>
+        <p>Superaste los cinco niveles de esta aventura.</p>
         <motion.button {...buttonMotion} className="game-secondary-button" type="button" onClick={resetLevel}>
           <RotateCcw aria-hidden="true" size={17} /> Repetir misión
         </motion.button>
@@ -254,7 +254,14 @@ function GradeFiveGame({ period, game, gameNumber, onBack, onNextGame }) {
             <h2><Eye aria-hidden="true" size={21} /> Mira y aprende</h2>
             <p>{game.concept}</p>
           </div>
-          <p className="reward-hint"><Sparkles aria-hidden="true" size={18} /> Tres niveles para practicar y comprender.</p>
+          {game.steps && (
+            <div className="lesson-box">
+              <h2><Lightbulb aria-hidden="true" size={21} /> Cómo jugar</h2>
+              <p>{game.steps}</p>
+              {game.example && <pre className="game-example">{game.example}</pre>}
+            </div>
+          )}
+          <p className="reward-hint"><Sparkles aria-hidden="true" size={18} /> Cinco niveles para practicar y comprender.</p>
         </aside>
         <section className="challenge-card" aria-labelledby="fifth-challenge-title">
           <div className="game-heading-row">
@@ -326,11 +333,15 @@ function GradeFiveGame({ period, game, gameNumber, onBack, onNextGame }) {
               <>
                 <p className="order-result">{order.length ? order.join(' → ') : 'Tu orden aparecerá aquí'}</p>
                 <div className="mission-options">
-                  {current.options.map((option) => (
-                    <motion.button {...buttonMotion} className="token" key={option} type="button" disabled={order.includes(option)} onClick={() => { playSelection(); setOrder((items) => [...items, option]); }}>
+                  {current.options.map((option, optionIndex) => {
+                    const usedCount = order.filter((item) => item === option).length;
+                    const optionCount = current.options.filter((item) => item === option).length;
+                    return (
+                    <motion.button {...buttonMotion} className="token" key={`${option}-${optionIndex}`} type="button" disabled={usedCount >= optionCount} onClick={() => { playSelection(); setOrder((items) => [...items, option]); }}>
                       {option}
                     </motion.button>
-                  ))}
+                    );
+                  })}
                 </div>
                 <motion.button {...buttonMotion} className="game-primary-button" type="button" onClick={() => check('')}>Comprobar orden</motion.button>
               </>
