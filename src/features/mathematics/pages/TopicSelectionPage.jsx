@@ -1,81 +1,110 @@
-import { useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import React from 'react';
+import { useParams, Link } from 'react-router-dom';
+import { gradeSixMathematics } from '../data/grade-six.js';
+import { gradesCurriculum } from '../data/grades-data.js';
 
-import { interactiveMissions, interactivePeriods } from '../data/interactive-missions.js';
-import InteractiveMissionGame from '../games/InteractiveMissionGame.jsx';
+export default function TopicSelectionPage() {
+  // 1. Obtenemos ambos datos de la URL
+  const { gradeId, periodId } = useParams();
+  const currentGrade = Number(gradeId) || 6;
+  const numPeriodId = Number(periodId);
 
-function TopicSelectionPage() {
-  const { periodId } = useParams();
+  // 2. Elegimos la fuente de datos correcta según el grado
+  const curriculum = currentGrade === 6 ? gradeSixMathematics : gradesCurriculum[currentGrade];
+  const period = curriculum?.periods.find((p) => p.id === numPeriodId);
 
-  const selectedPeriod = interactivePeriods.find(
-    (period) => period.id === Number(periodId),
-  );
-
-  const [activeMissionId, setActiveMissionId] = useState(null);
-
-  if (!selectedPeriod) {
+  if (!period) {
     return (
-      <main className="page-container">
-        <Link className="back-link" to="/matematicas/grado/6">
-          ← Volver a los periodos
-        </Link>
-
-        <section className="message-card">
-          <h1>Periodo no encontrado</h1>
-          <p>El periodo que buscas no está disponible.</p>
-        </section>
+      <main style={{ textAlign: 'center', padding: '40px' }}>
+        <h2>Periodo no encontrado</h2>
+        <Link to={`/matematicas/grado/${currentGrade}`}>← Volver al grado</Link>
       </main>
     );
   }
 
-  const missions = interactiveMissions.filter(
-    (mission) => mission.period === selectedPeriod.id,
-  );
-  const activeMission = missions.find((mission) => mission.id === activeMissionId);
-
-  if (activeMission) {
-    const nextMission = missions[missions.indexOf(activeMission) + 1];
-
-    return (
-      <InteractiveMissionGame
-        mission={activeMission}
-        onBack={() => setActiveMissionId(null)}
-        onNext={() => setActiveMissionId(nextMission?.id ?? null)}
-      />
-    );
-  }
-
   return (
-    <main className="page-container">
-      <Link className="back-link" to="/matematicas/grado/6">
-        ← Volver a los periodos
-      </Link>
-
-      <header className="page-heading">
-        <p className="page-eyebrow">MATEMÁTICAS · SEXTO GRADO</p>
-        <h1>{selectedPeriod.title}</h1>
-        <p>{selectedPeriod.description}</p>
+    <main style={{ maxWidth: '900px', margin: '0 auto', padding: '32px 16px' }}>
+      <header style={{ marginBottom: '24px' }}>
+        <Link to={`/matematicas/grado/${currentGrade}`} style={{ color: '#2563eb', textDecoration: 'none', fontWeight: 'bold' }}>
+          ← Volver a Periodos de {currentGrade}°
+        </Link>
+        <h1 style={{ fontSize: '1.8rem', color: '#0f172a', margin: '12px 0 6px' }}>
+          {period.title}
+        </h1>
+        <p style={{ color: '#64748b' }}>Selecciona una lección o reto</p>
       </header>
 
-      <section aria-label={`Temas de ${selectedPeriod.title}`}>
-        <div className="mission-grid">
-          {missions.map((mission) => (
-            <article className="mission-card" key={mission.id}>
-              <span className="mission-card__icon" aria-hidden="true">{mission.icon}</span>
-              <span className="mission-card__number">
-                Misión {String(mission.number).padStart(2, '0')}
-              </span>
-              <h2>{mission.title}</h2>
-              <p>{mission.lesson}</p>
-              <button type="button" onClick={() => setActiveMissionId(mission.id)}>
-                Jugar misión →
-              </button>
-            </article>
-          ))}
-        </div>
-      </section>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: '16px' }}>
+        {period.topics.map((topic) => {
+          const hasGames = topic.gameIds && topic.gameIds.length > 0;
+
+          return (
+            <div
+              key={topic.id}
+              style={{
+                backgroundColor: '#fff',
+                border: '2px solid',
+                borderColor: hasGames ? '#3b82f6' : '#e2e8f0',
+                borderRadius: '16px',
+                padding: '16px',
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'space-between'
+              }}
+            >
+              <div>
+                <h3 style={{ fontSize: '1.1rem', margin: '0 0 10px', color: '#1e293b' }}>{topic.title}</h3>
+                <span style={{
+                  display: 'inline-block',
+                  padding: '4px 8px',
+                  borderRadius: '12px',
+                  fontSize: '0.8rem',
+                  fontWeight: '600',
+                  backgroundColor: hasGames ? '#dcfce7' : '#f1f5f9',
+                  color: hasGames ? '#166534' : '#64748b',
+                  marginBottom: '16px'
+                }}>
+                  {hasGames ? '🎮 Juego disponible' : '⏳ En desarrollo'}
+                </span>
+              </div>
+
+              {/* Botón dinámico que incluye el grado y el tema en la URL */}
+              {hasGames ? (
+                <Link
+                  to={`/matematicas/grado/${currentGrade}/tema/${topic.id}`}
+                  style={{
+                    display: 'block',
+                    textAlign: 'center',
+                    backgroundColor: '#2563eb',
+                    color: '#fff',
+                    padding: '8px 12px',
+                    borderRadius: '8px',
+                    textDecoration: 'none',
+                    fontWeight: 'bold'
+                  }}
+                >
+                  ¡Jugar Ahora!
+                </Link>
+              ) : (
+                <button
+                  disabled
+                  style={{
+                    backgroundColor: '#e2e8f0',
+                    color: '#94a3b8',
+                    border: 'none',
+                    padding: '8px 12px',
+                    borderRadius: '8px',
+                    fontWeight: 'bold',
+                    cursor: 'not-allowed'
+                  }}
+                >
+                  Próximamente
+                </button>
+              )}
+            </div>
+          );
+        })}
+      </div>
     </main>
   );
 }
-
-export default TopicSelectionPage;
