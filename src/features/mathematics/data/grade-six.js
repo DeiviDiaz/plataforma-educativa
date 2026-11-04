@@ -10,7 +10,7 @@ export const gradeSixMathematics = {
         {
           id: 'operaciones-naturales',
           title: 'Operaciones básicas con números naturales',
-          gameIds: [],
+          gameIds: ['basic-operations'],
         },
         {
           id: 'estructura-naturales',
