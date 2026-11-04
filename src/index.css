@@ -451,6 +451,18 @@ a {
   margin-top: auto;
 }
 
+.mission-card__action {
+  display: inline-block;
+  margin-top: auto;
+  border: 2px solid #26344c;
+  border-radius: 12px;
+  padding: 10px 16px;
+  background: #ffe18b;
+  color: #26344c;
+  text-decoration: none;
+  font-weight: 800;
+}
+
 .game-page {
   width: min(1120px, calc(100% - 40px));
   margin: 0 auto;

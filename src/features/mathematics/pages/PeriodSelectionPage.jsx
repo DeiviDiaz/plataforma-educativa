@@ -1,4 +1,5 @@
 import { useParams, Link } from 'react-router-dom';
+import { Compass, DoorOpen, Hammer, Sparkles, Target, Wrench } from 'lucide-react';
 import { gradeFivePeriods } from '../data/grade-five-games.js';
 import { gradeSixMathematics } from '../data/grade-six.js';
 import { gradesCurriculum } from '../data/grades-data.js';
@@ -11,6 +12,12 @@ export default function PeriodSelectionPage() {
     : currentGrade === 6
       ? gradeSixMathematics
       : gradesCurriculum[currentGrade];
+  const periodIcons = {
+    1: Compass,
+    2: Wrench,
+    3: DoorOpen,
+    4: Sparkles,
+  };
 
   if (!curriculum) {
     return (
@@ -22,52 +29,39 @@ export default function PeriodSelectionPage() {
   }
 
   return (
-    <main className="page-container" style={{ maxWidth: '800px', margin: '0 auto', padding: '24px' }}>
-      <header style={{ marginBottom: '24px' }}>
-        <Link to="/matematicas" style={{ color: '#2563eb', textDecoration: 'none', fontWeight: 'bold' }}>
+    <main className="page-container">
+      <Link className="back-link" to="/matematicas">
           ← Volver a Grados
-        </Link>
-        <h1 style={{ fontSize: '2rem', color: '#0f172a', margin: '12px 0 6px' }}>
-          Matemáticas - Grado {currentGrade}°
-        </h1>
-        <p style={{ color: '#64748b' }}>Selecciona el periodo que deseas repasar</p>
+      </Link>
+      <header className="page-heading">
+        <p className="page-eyebrow">MATEMÁTICAS · GRADO {currentGrade}</p>
+        <h1>Selecciona un periodo</h1>
+        <p>Explora los contenidos y prepárate para resolver nuevos retos.</p>
       </header>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '16px' }}>
+      <section className="periods-grid" aria-label="Periodos académicos">
         {curriculum.periods.map((period) => (
-          <div
+          <Link
             key={period.id}
-            style={{
-              backgroundColor: '#fff',
-              border: '2px solid #e2e8f0',
-              borderRadius: '16px',
-              padding: '20px',
-              boxShadow: '0 4px 6px rgba(0,0,0,0.04)'
-            }}
+            className={`period-card period-card--${period.color ?? ['green', 'orange', 'purple', 'red'][(period.id - 1) % 4]}`}
+            to={`/matematicas/grado/${currentGrade}/periodo/${period.id}`}
           >
-            <h3 style={{ marginTop: 0, color: '#1e293b' }}>{period.title}</h3>
-            <p style={{ fontSize: '0.9rem', color: '#64748b' }}>
-              {currentGrade === 5 ? period.description : `${period.topics.length} temas disponibles`}
-            </p>
-            <Link
-              to={`/matematicas/grado/${currentGrade}/periodo/${period.id}`}
-              style={{
-                display: 'inline-block',
-                marginTop: '10px',
-                padding: '8px 16px',
-                backgroundColor: '#2563eb',
-                color: '#fff',
-                borderRadius: '8px',
-                textDecoration: 'none',
-                fontWeight: 'bold',
-                fontSize: '0.9rem'
-              }}
-            >
-              Ver temas →
-            </Link>
-          </div>
+            <span className="period-number">{String(period.id).padStart(2, '0')}</span>
+            <h2>{period.title}</h2>
+            <p>{period.description ?? `${period.topics.length} temas disponibles para explorar.`}</p>
+            <span className="period-status">
+              {(() => {
+                const Icon = currentGrade === 5
+                  ? [Compass, Target, Sparkles, Hammer][period.id - 1]
+                  : periodIcons[period.id];
+                return Icon ? <Icon aria-hidden="true" size={18} /> : null;
+              })()}
+              {period.action ?? 'Explorar periodo'}
+              <span aria-hidden="true">→</span>
+            </span>
+          </Link>
         ))}
-      </div>
+      </section>
     </main>
   );
 }
