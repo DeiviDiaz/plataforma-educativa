@@ -1,15 +1,16 @@
-import React from 'react';
 import { useParams, Link } from 'react-router-dom';
+import { gradeFivePeriods } from '../data/grade-five-games.js';
 import { gradeSixMathematics } from '../data/grade-six.js';
 import { gradesCurriculum } from '../data/grades-data.js';
 
 export default function PeriodSelectionPage() {
-  // 1. Lee el número de grado de la URL (/matematicas/grado/:gradeId)
   const { gradeId } = useParams();
-  const currentGrade = Number(gradeId) || 6;
-
-  // 2. Busca los datos correspondientes: si es 6 usa el archivo viejo, si es 7, 8 o 9 usa gradesCurriculum
-  const curriculum = currentGrade === 6 ? gradeSixMathematics : gradesCurriculum[currentGrade];
+  const currentGrade = Number(gradeId);
+  const curriculum = currentGrade === 5
+    ? { periods: gradeFivePeriods }
+    : currentGrade === 6
+      ? gradeSixMathematics
+      : gradesCurriculum[currentGrade];
 
   if (!curriculum) {
     return (
@@ -46,10 +47,8 @@ export default function PeriodSelectionPage() {
           >
             <h3 style={{ marginTop: 0, color: '#1e293b' }}>{period.title}</h3>
             <p style={{ fontSize: '0.9rem', color: '#64748b' }}>
-              {period.topics.length} temas disponibles
+              {currentGrade === 5 ? period.description : `${period.topics.length} temas disponibles`}
             </p>
-
-            {/* Enlace dinámico con el grado actual y el periodo */}
             <Link
               to={`/matematicas/grado/${currentGrade}/periodo/${period.id}`}
               style={{
@@ -64,7 +63,7 @@ export default function PeriodSelectionPage() {
                 fontSize: '0.9rem'
               }}
             >
-              Ver Temas →
+              Ver temas →
             </Link>
           </div>
         ))}

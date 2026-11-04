@@ -1,4 +1,3 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
 
 const GRADES = [
@@ -13,8 +12,7 @@ const GRADES = [
   { id: 9, label: '9.° grado' },
 ];
 
-// Grados habilitados actualmente para matemáticas
-const AVAILABLE_GRADES = [6, 7, 8, 9];
+const AVAILABLE_GRADES = [5, 6, 7, 8, 9];
 
 export default function GradeSelectionPage({ subject = 'matematicas' }) {
   return (

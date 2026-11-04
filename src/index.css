@@ -310,6 +310,9 @@ a {
 
 .grade-status,
 .period-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
   color: var(--color-muted);
   font-size: 0.85rem;
 }
@@ -383,6 +386,12 @@ a {
   gap: 18px;
 }
 
+.mission-grid-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+
 .mission-card {
   display: flex;
   min-height: 260px;
@@ -398,6 +407,12 @@ a {
 
 .mission-card__icon {
   font-size: 2.6rem;
+}
+
+.mission-card__icon svg {
+  width: 2.6rem;
+  height: 2.6rem;
+  stroke-width: 2.5;
 }
 
 .mission-card__number {
@@ -442,6 +457,39 @@ a {
   padding: 32px 0 64px;
 }
 
+.game-complete-card {
+  width: min(560px, calc(100% - 40px));
+  margin: 64px auto;
+  padding: 48px 28px;
+  border: 3px solid #26344c;
+  border-radius: 24px;
+  background: #d9edfc;
+  box-shadow: 6px 7px 0 #26344c;
+  color: #26344c;
+  text-align: center;
+}
+
+.game-complete-card svg {
+  color: #f0b429;
+  stroke-width: 2.5;
+}
+
+.game-complete-card h2 {
+  margin: 18px 0 8px;
+  font-size: 2rem;
+}
+
+.game-complete-card p {
+  margin: 0 0 24px;
+  color: var(--color-muted);
+  font-weight: 700;
+}
+
+.game-complete-card .game-secondary-button,
+.game-complete-card .game-next-button {
+  margin: 6px;
+}
+
 .game-back {
   border: 0;
   background: transparent;
@@ -472,6 +520,30 @@ a {
   font-size: 3.5rem;
 }
 
+.mission-icon svg {
+  width: 3.5rem;
+  height: 3.5rem;
+  stroke-width: 2.5;
+}
+
+.lesson-box h2,
+.reward-hint,
+.game-heading-row h2,
+.game-back,
+.game-secondary-button,
+.game-next-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.visual-item-icon {
+  width: 32px;
+  height: 32px;
+  color: #f05d7b;
+  stroke-width: 3;
+}
+
 .mission-intro h1 {
   margin: 8px 0 20px;
   font-size: clamp(1.7rem, 4vw, 2.5rem);
@@ -499,6 +571,234 @@ a {
   font-size: 1.1rem;
   font-weight: 750;
   line-height: 1.6;
+}
+
+.first-period-visual {
+  margin: 18px 0;
+  padding: 16px;
+  border: 2px solid #26344c;
+  border-radius: 16px;
+  background: #d9edfc;
+  text-align: center;
+}
+
+.first-period-visual strong {
+  display: block;
+  margin-bottom: 12px;
+}
+
+.first-period-visual__drawing {
+  display: flex;
+  min-height: 62px;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.first-period-visual__drawing span {
+  display: inline-flex;
+  min-width: 42px;
+  min-height: 42px;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 10px;
+  border: 2px solid #26344c;
+  border-radius: 10px;
+  background: #fff;
+  font-size: 1.15rem;
+  font-weight: 800;
+}
+
+.first-period-visual--1 .first-period-visual__drawing span {
+  border-radius: 50%;
+  background: #ffdc76;
+}
+
+.first-period-visual--3 .first-period-visual__drawing span {
+  background: #fff8df;
+}
+
+.first-period-visual small {
+  display: block;
+  margin-top: 12px;
+  color: var(--color-muted);
+  font-weight: 700;
+}
+
+.grade-five-visual {
+  margin: 18px 0;
+  padding: 16px;
+  border: 2px solid #26344c;
+  border-radius: 16px;
+  background: #e4f4df;
+  text-align: center;
+}
+
+.grade-five-visual--period-2 {
+  background: #fff0d6;
+}
+
+.grade-five-visual--period-3 {
+  background: #e1f1ff;
+}
+
+.grade-five-visual--period-4 {
+  background: #f8e4f1;
+}
+
+.grade-five-visual strong {
+  display: block;
+  margin-bottom: 12px;
+}
+
+.grade-five-visual__drawing {
+  display: flex;
+  min-height: 62px;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.grade-five-visual__drawing span {
+  display: inline-flex;
+  min-width: 42px;
+  min-height: 42px;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 10px;
+  border: 2px solid #26344c;
+  border-radius: 10px;
+  background: #fff;
+  font-size: 1.15rem;
+  font-weight: 800;
+}
+
+.grade-five-visual--period-3 .grade-five-visual__drawing span:nth-child(odd) {
+  background: #bfe2ff;
+}
+
+.grade-five-visual--period-4 .grade-five-visual__drawing span:nth-child(odd) {
+  background: #ffd2e8;
+}
+
+.grade-five-visual small {
+  display: block;
+  margin-top: 12px;
+  color: var(--color-muted);
+  font-weight: 700;
+}
+
+.visual-shape-svg {
+  width: 42px;
+  height: 42px;
+  overflow: visible;
+}
+
+.visual-shape {
+  stroke: #26344c;
+  stroke-width: 7;
+  stroke-linejoin: round;
+}
+
+.visual-shape--triangle {
+  fill: #ff6b8a;
+}
+
+.visual-shape--square {
+  fill: #ffd166;
+}
+
+.visual-shape--pentagon {
+  fill: #6ed6a0;
+}
+
+.visual-shape--cube {
+  fill: #73b9ff;
+}
+
+.visual-shape--sphere {
+  fill: #b991ff;
+}
+
+.visual-shape-line {
+  fill: none;
+  stroke: #26344c;
+  stroke-width: 6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.game-heading-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.game-heading-row span,
+.build-total {
+  color: var(--color-muted);
+  font-weight: 800;
+}
+
+.game-input-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 420px;
+  font-weight: 800;
+}
+
+.game-input-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.game-input-row input {
+  min-width: 180px;
+  padding: 10px 12px;
+  border: 2px solid #26344c;
+  border-radius: 10px;
+  background: #fff;
+}
+
+.order-result {
+  min-height: 54px;
+  margin: 0 0 16px;
+  padding: 14px;
+  border: 2px dashed #768398;
+  border-radius: 10px;
+  background: #fff;
+  font-weight: 800;
+}
+
+.coordinate-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(48px, 1fr));
+  max-width: 430px;
+  gap: 5px;
+  padding: 8px;
+  border: 2px solid #26344c;
+  border-radius: 12px;
+  background: #d9edfc;
+}
+
+.coordinate-cell {
+  min-height: 48px;
+  border: 1px solid #768398;
+  border-radius: 6px;
+  background: #fff;
+  color: #243249;
+  font-size: 0.75rem;
+  font-weight: 800;
+}
+
+.coordinate-cell:hover,
+.coordinate-cell--selected {
+  background: #ffdc76;
 }
 
 .play-area {
@@ -590,6 +890,10 @@ a {
 
   .mission-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .mission-grid-list {
+    grid-template-columns: 1fr;
   }
 
   .game-layout {
