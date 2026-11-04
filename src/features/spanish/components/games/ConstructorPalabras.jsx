@@ -20,7 +20,7 @@ const NIVELES_PALABRAS = {
       { palabra: 'RANA', silabas: ['RA', 'NA'], pista: 'Salta en los charcos y rima con campana.', icono: '🐸' },
       { palabra: 'ROSA', silabas: ['RO', 'SA'], pista: 'Flor hermosa y aromática de suaves pétalos.', icono: '🌹' },
       { palabra: 'NUBE', silabas: ['NU', 'BE'], pista: 'Algodón blanco en el cielo que trae la lluvia.', icono: '☁️' },
-      { palabra: 'PESZ', silabas: ['PE', 'CEZ'], pista: 'Nadan en cardumen en las aguas limpias del río.', icono: '🐟' }
+      { palabra: 'PECES', silabas: ['PE', 'CES'], pista: 'Nadan en cardumen en las aguas limpias del río.', icono: '🐟' }
     ]
   },
   intermedio: {

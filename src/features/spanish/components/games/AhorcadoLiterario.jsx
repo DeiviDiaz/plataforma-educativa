@@ -229,7 +229,7 @@ export default function AhorcadoLiterario({ gradoNumero = 1 }) {
                 key={i}
                 className={`w-12 h-16 sm:w-16 sm:h-20 rounded-2xl flex items-center justify-center font-black text-2xl sm:text-4xl shadow-xl transition-all border-b-4 ${
                   revelada
-                    ? 'bg-gradient-to-b from-amber-300 to-amber-500 text-amber-950 border-amber-600 animate-bounce'
+                    ? 'bg-gradient-to-b from-amber-300 to-amber-500 text-amber-950 border-amber-600 scale-102 shadow-md'
                     : 'bg-slate-800 text-transparent border-indigo-800'
                 }`}
               >

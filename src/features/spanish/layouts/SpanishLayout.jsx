@@ -141,7 +141,7 @@ export default function SpanishLayout() {
 
   return (
     <div className="spanish-area">
-      <div className="min-h-screen flex flex-col bg-[#f8fafc] font-sans text-slate-800 antialiased selection:bg-indigo-100 selection:text-indigo-900">
+      <div className="min-h-screen flex flex-col bg-playful-universe font-sans text-slate-800 antialiased selection:bg-indigo-100 selection:text-indigo-900">
         
         {/* ══════════ HEADER PRINCIPAL ELEGANTE ══════════ */}
         <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-xl border-b border-slate-200/80 shadow-xs">
