@@ -5,7 +5,7 @@ import { Compass, Hammer, Sparkles, Target } from 'lucide-react';
 import { gradeFiveGames, gradeFivePeriods } from '../data/grade-five-games.js';
 import { gradeSixMathematics } from '../data/grade-six.js';
 import { gradesCurriculum } from '../data/grades-data.js';
-import { interactiveMissions } from '../data/interactive-missions.js';
+import { interactiveMissions, interactivePeriods } from '../data/interactive-missions.js';
 import GradeFiveGame from '../games/GradeFiveGame.jsx';
 import InteractiveMissionGame from '../games/InteractiveMissionGame.jsx';
 
@@ -63,6 +63,71 @@ function TopicSelectionPage() {
               <button type="button" onClick={() => setActiveGameIndex(index)}>Mira y aprende →</button>
             </article>
           ))}
+        </section>
+      </main>
+    );
+  }
+
+  if (currentGrade === 6) {
+    const selectedPeriod = interactivePeriods.find(
+      (item) => item.id === Number(periodId),
+    );
+    const missions = interactiveMissions.filter(
+      (mission) => mission.period === selectedPeriod?.id,
+    );
+    const activeMission = missions.find((mission) => mission.id === activeMissionId);
+
+    if (!selectedPeriod) {
+      return (
+        <main className="page-container">
+          <Link className="back-link" to="/matematicas/grado/6">
+            ← Volver a los periodos
+          </Link>
+          <section className="message-card">
+            <h1>Periodo no encontrado</h1>
+            <p>El periodo que buscas no está disponible.</p>
+          </section>
+        </main>
+      );
+    }
+
+    if (activeMission) {
+      const nextMission = missions[missions.indexOf(activeMission) + 1];
+      return (
+        <InteractiveMissionGame
+          mission={activeMission}
+          onBack={() => setActiveMissionId(null)}
+          onNext={() => setActiveMissionId(nextMission?.id ?? null)}
+        />
+      );
+    }
+
+    return (
+      <main className="page-container">
+        <Link className="back-link" to="/matematicas/grado/6">
+          ← Volver a los periodos
+        </Link>
+        <header className="page-heading">
+          <p className="page-eyebrow">MATEMÁTICAS · SEXTO GRADO</p>
+          <h1>{selectedPeriod.title}</h1>
+          <p>{selectedPeriod.description}</p>
+        </header>
+        <section aria-label={`Temas de ${selectedPeriod.title}`}>
+          <div className="mission-grid">
+            {missions.map((mission) => (
+              <article className="mission-card" key={mission.id}>
+                <span className="mission-card__icon" aria-hidden="true">{mission.icon}</span>
+                <span className="mission-card__number">
+                  Misión {String(mission.number).padStart(2, '0')}
+                </span>
+                <h2>{mission.title}</h2>
+                <p>{mission.lesson}</p>
+                <button type="button" onClick={() => setActiveMissionId(mission.id)}>
+                  Jugar misión →
+                </button>
+              </article>
+            ))}
+          </div>
         </section>
       </main>
     );
