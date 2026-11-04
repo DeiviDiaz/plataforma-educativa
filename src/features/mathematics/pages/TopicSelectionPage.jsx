@@ -3,6 +3,7 @@ import { Link, useParams } from 'react-router-dom';
 import { Compass, Hammer, Sparkles, Target } from 'lucide-react';
 
 import { gradeFiveGames, gradeFivePeriods } from '../data/grade-five-games.js';
+import { gradeFourPeriods } from '../data/grade-four-games.js';
 import { gradeSixMathematics } from '../data/grade-six.js';
 import { gradesCurriculum } from '../data/grades-data.js';
 import { interactiveMissions, interactivePeriods } from '../data/interactive-missions.js';
@@ -16,6 +17,57 @@ function TopicSelectionPage() {
   const currentGrade = Number(gradeId);
   const [activeMissionId, setActiveMissionId] = useState(null);
   const [activeGameIndex, setActiveGameIndex] = useState(null);
+
+  if (currentGrade === 4) {
+    const selectedPeriod = gradeFourPeriods.find((period) => period.id === Number(periodId));
+    const games = selectedPeriod?.games ?? [];
+    const activeGame = games[activeGameIndex];
+
+    if (!selectedPeriod) {
+      return (
+        <main className="page-container">
+          <Link className="back-link" to={`/matematicas/grado/${currentGrade}`}>← Volver a los periodos</Link>
+          <section className="message-card"><h1>Periodo no encontrado</h1></section>
+        </main>
+      );
+    }
+
+    if (activeGame) {
+      return (
+        <GradeFiveGame
+          period={selectedPeriod}
+          game={activeGame}
+          gameNumber={activeGameIndex}
+          onBack={() => setActiveGameIndex(null)}
+          onNextGame={() => setActiveGameIndex(activeGameIndex === games.length - 1 ? null : activeGameIndex + 1)}
+        />
+      );
+    }
+
+    return (
+      <main className="page-container">
+        <Link className="back-link" to={`/matematicas/grado/${currentGrade}`}>← Volver a los periodos</Link>
+        <header className="page-heading">
+          <p className="page-eyebrow">MATEMÁTICAS · CUARTO GRADO · PERIODO {selectedPeriod.id}</p>
+          <h1>{selectedPeriod.title}</h1>
+          <p>{selectedPeriod.description}</p>
+        </header>
+        <section className="mission-grid-list" aria-label={`Minijuegos de ${selectedPeriod.title}`}>
+          {games.map((game, index) => (
+            <article className="mission-card" key={game.name}>
+              <span className="mission-card__icon" aria-hidden="true">
+                {selectedPeriod.icon}
+              </span>
+              <span className="mission-card__number">Minijuego {String(index + 1).padStart(2, '0')}</span>
+              <h2>{game.name}</h2>
+              <p>{game.topics}</p>
+              <button type="button" onClick={() => setActiveGameIndex(index)}>Ver instrucciones y jugar →</button>
+            </article>
+          ))}
+        </section>
+      </main>
+    );
+  }
 
   if (currentGrade === 5) {
     const selectedPeriod = gradeFivePeriods.find((period) => period.id === Number(periodId));

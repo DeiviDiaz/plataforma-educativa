@@ -1,14 +1,17 @@
 import { useParams, Link } from 'react-router-dom';
 import { Compass, DoorOpen, Hammer, Sparkles, Target, Wrench } from 'lucide-react';
 import { gradeFivePeriods } from '../data/grade-five-games.js';
+import { gradeFourPeriods } from '../data/grade-four-games.js';
 import { gradesCurriculum } from '../data/grades-data.js';
 import { interactivePeriods } from '../data/interactive-missions.js';
 
 export default function PeriodSelectionPage() {
   const { gradeId } = useParams();
   const currentGrade = Number(gradeId);
-  const curriculum = currentGrade === 5
-    ? { periods: gradeFivePeriods }
+  const curriculum = currentGrade === 4
+    ? { periods: gradeFourPeriods }
+    : currentGrade === 5
+      ? { periods: gradeFivePeriods }
     : currentGrade === 6
       ? { periods: interactivePeriods }
       : gradesCurriculum[currentGrade];
