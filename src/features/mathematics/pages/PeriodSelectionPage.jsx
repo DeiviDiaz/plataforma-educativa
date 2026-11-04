@@ -1,8 +1,8 @@
 import { useParams, Link } from 'react-router-dom';
 import { Compass, DoorOpen, Hammer, Sparkles, Target, Wrench } from 'lucide-react';
 import { gradeFivePeriods } from '../data/grade-five-games.js';
-import { gradeSixMathematics } from '../data/grade-six.js';
 import { gradesCurriculum } from '../data/grades-data.js';
+import { interactivePeriods } from '../data/interactive-missions.js';
 
 export default function PeriodSelectionPage() {
   const { gradeId } = useParams();
@@ -10,7 +10,7 @@ export default function PeriodSelectionPage() {
   const curriculum = currentGrade === 5
     ? { periods: gradeFivePeriods }
     : currentGrade === 6
-      ? gradeSixMathematics
+      ? { periods: interactivePeriods }
       : gradesCurriculum[currentGrade];
   const periodIcons = {
     1: Compass,
@@ -50,7 +50,7 @@ export default function PeriodSelectionPage() {
             <h2>{period.title}</h2>
             <p>{period.description ?? `${period.topics.length} temas disponibles para explorar.`}</p>
             <span className="period-status">
-              {(() => {
+              {currentGrade === 6 ? period.icon : (() => {
                 const Icon = currentGrade === 5
                   ? [Compass, Target, Sparkles, Hammer][period.id - 1]
                   : periodIcons[period.id];
