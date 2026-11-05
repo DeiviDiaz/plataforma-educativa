@@ -2,9 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import ArcadeDidactico from '../components/games/ArcadeDidactico';
 import { sounds } from '../utils/audio';
+import { useAppTheme } from '../utils/theme';
 
 export default function JuegosHub() {
   const [searchParams, setSearchParams] = useSearchParams();
+  const { tema } = useAppTheme();
   const gradoParam = parseInt(searchParams.get('grado') || '1', 10);
   const juegoParam = searchParams.get('juego');
 
@@ -20,15 +22,15 @@ export default function JuegosHub() {
   }, [searchParams]);
 
   const niveles = [
-    { grado: 1, label: '1° Grado', desc: 'Fonética, vocales y letras con voz', icono: '🐥', badge: 'Lectoescritura' },
-    { grado: 2, label: '2° Grado', desc: 'Sílabas sonoras y palabras', icono: '🐰', badge: 'Primeras lecturas' },
-    { grado: 3, label: '3° Grado', desc: 'Fábulas, rimas y memoria', icono: '🦊', badge: 'Rimas y fábulas' },
-    { grado: 4, label: '4° Grado', desc: 'Mitos, trivia y detective', icono: '🦉', badge: 'Tradición y mitos' },
-    { grado: 5, label: '5° Grado', desc: 'Sintaxis, ahorcado y concursos', icono: '🦁', badge: 'Cuentos y novelas' },
-    { grado: 6, label: '6° Grado', desc: 'Duelos, crucigramas y tradición oral', icono: '🐺', badge: 'Secundaria' },
-    { grado: 7, label: '7° Grado', desc: 'Argumentación, figuras y detectives', icono: '🦅', badge: 'Secundaria' },
-    { grado: 8, label: '8° Grado', desc: 'Literatura precolombina y crónicas', icono: '🐆', badge: 'Secundaria' },
-    { grado: 9, label: '9° Grado', desc: 'Realismo mágico, oratoria y sintaxis', icono: '🦋', badge: 'Secundaria' }
+    { grado: 1, label: '1.°', desc: 'Fonética, vocales y letras con voz', badge: 'Lectoescritura' },
+    { grado: 2, label: '2.°', desc: 'Sílabas sonoras y palabras', badge: 'Primeras lecturas' },
+    { grado: 3, label: '3.°', desc: 'Fábulas, rimas y memoria', badge: 'Rimas y fábulas' },
+    { grado: 4, label: '4.°', desc: 'Mitos, trivia y detective', badge: 'Tradición y mitos' },
+    { grado: 5, label: '5.°', desc: 'Sintaxis, ahorcado y concursos', badge: 'Cuentos y novelas' },
+    { grado: 6, label: '6.°', desc: 'Duelos, crucigramas y tradición oral', badge: 'Secundaria' },
+    { grado: 7, label: '7.°', desc: 'Argumentación, figuras y detectives', badge: 'Secundaria' },
+    { grado: 8, label: '8.°', desc: 'Literatura precolombina y crónicas', badge: 'Secundaria' },
+    { grado: 9, label: '9.°', desc: 'Realismo mágico, oratoria y sintaxis', badge: 'Secundaria' }
   ];
 
   const handleCambiarGrado = (g) => {
@@ -43,41 +45,31 @@ export default function JuegosHub() {
   };
 
   return (
-    <div className="space-y-8 animate-fade-in pb-16">
+    <div className="space-y-6 animate-fade-in pb-16">
       
-      {/* ══════════ HERO DE LA SALA DE JUEGOS ══════════ */}
-      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#0f172a] via-[#1e293b] to-[#1e3a8a] p-6 sm:p-10 text-white shadow-xl border border-slate-700/60">
-        
-        {/* Glow de fondo */}
-        <div className="absolute top-0 right-0 -mr-16 -mt-16 w-80 h-80 rounded-full bg-blue-500/15 blur-3xl pointer-events-none" />
-
-        <div className="relative z-10 max-w-3xl space-y-3">
-          <div className="inline-flex items-center gap-2 bg-amber-400/10 border border-amber-400/30 text-amber-300 font-bold text-xs px-3.5 py-1.5 rounded-full uppercase tracking-wider backdrop-blur-sm">
-            <span>🎮</span> Sala Central de Juegos Didácticos • 100% Sin Internet
-          </div>
-          
-          <h1 className="text-2xl sm:text-4xl lg:text-5xl font-black tracking-tight text-white">
-            Arcade de Lengua Castellana 🕹️✨
+      {/* ══════════ ENCABEZADO: SALA DE 15 MINIJUEGOS ══════════ */}
+      <section className={`${tema.headerBg} rounded-3xl p-5 sm:p-6 text-white ${tema.headerShadow} border ${tema.headerBorder} text-center relative overflow-hidden transition-all duration-300`}>
+        <div className="relative z-10 max-w-2xl mx-auto space-y-1.5">
+          <span className={`inline-block ${tema.headerBadge} font-title font-black text-[10px] sm:text-xs uppercase tracking-widest px-3.5 py-1 rounded-full shadow-xs`}>
+            ZONA ARCADE DIDÁCTICA • 100% OFFLINE
+          </span>
+          <h1 className="font-title font-black text-2xl sm:text-4xl uppercase tracking-wide drop-shadow-sm">
+            SALA DE 15 MINIJUEGOS
           </h1>
-          
-          <p className="text-slate-300 text-sm sm:text-base leading-relaxed">
-            Selecciona el grado escolar para activar los <strong className="text-white">15 juegos didácticos interactivos</strong> calibrados por edad: desde fonética con pronunciación real para primer grado, hasta el Tribunal de Falacias, Escape Room de Macondo y duelos de vocabulario para secundaria.
+          <p className={`text-xs sm:text-sm ${tema.headerSubtext} font-medium`}>
+            Selecciona tu grado para filtrar los juegos didácticos interactivos adaptados pedagógicamente.
           </p>
         </div>
+      </section>
 
-        <div className="absolute -right-6 -bottom-6 text-9xl opacity-10 select-none pointer-events-none">
-          🎮
-        </div>
-      </div>
-
-      {/* ══════════ SELECTOR TÁCTIL DE GRADO ELEGANTE ══════════ */}
+      {/* ══════════ SELECTOR TÁCTIL DE GRADO ══════════ */}
       <div className="bg-white rounded-2xl p-4 sm:p-5 shadow-xs border border-slate-200/90">
         <div className="flex items-center justify-between mb-3">
-          <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500">
-            Paso 1: Selecciona el Grado para Cargar su Catálogo:
+          <span className="text-[11px] font-title font-black uppercase tracking-wider text-slate-400">
+            Filtro de Grado Escolar:
           </span>
-          <span className="text-xs font-semibold text-[#3659d9] bg-indigo-50 px-2.5 py-0.5 rounded-full border border-indigo-100">
-            Grado Activo: {gradoSeleccionado}°
+          <span className={`text-xs font-title font-black px-3 py-1 rounded-full border ${tema.cardBadge}`}>
+            Grado Activo: {gradoSeleccionado}.° Grado
           </span>
         </div>
 
@@ -88,17 +80,14 @@ export default function JuegosHub() {
               <button
                 key={n.grado}
                 onClick={() => handleCambiarGrado(n.grado)}
-                className={`p-3 rounded-xl flex flex-col items-center justify-center transition-all cursor-pointer border select-none btn-press ${
+                className={`py-3 px-2 rounded-2xl flex flex-col items-center justify-center transition-all cursor-pointer border ${
                   activo
-                    ? 'bg-[#3659d9] text-white border-[#2563eb] shadow-md shadow-indigo-500/25 ring-2 ring-indigo-200'
-                    : 'bg-slate-50 hover:bg-slate-100/90 text-slate-700 border-slate-200/80 hover:border-slate-300'
+                    ? `${tema.btnDock} font-black`
+                    : 'bg-slate-50 hover:bg-slate-100 text-slate-700 border-slate-200 font-bold'
                 }`}
               >
-                <span className="text-2xl mb-1">{n.icono}</span>
-                <span className="font-bold text-xs sm:text-sm">{n.label}</span>
-                <span className={`text-[8px] font-extrabold uppercase mt-1 px-1.5 py-0.5 rounded-full ${
-                  activo ? 'bg-white/20 text-white' : 'text-slate-400'
-                }`}>
+                <span className="text-xl font-title font-black leading-none">{n.label}</span>
+                <span className={`text-[10px] mt-1 font-bold truncate max-w-full ${activo ? 'text-white/90' : 'text-slate-400'}`}>
                   {n.badge}
                 </span>
               </button>
@@ -107,10 +96,8 @@ export default function JuegosHub() {
         </div>
       </div>
 
-      {/* ══════════ COMPONENTE ARCADE ACTIVO ══════════ */}
-      <div className="space-y-4">
-        <ArcadeDidactico gradoNumero={gradoSeleccionado} juegoInicial={juegoParam} />
-      </div>
+      {/* ══════════ SALA DE JUEGOS EMBEBIDA DIRECTAMENTE ══════════ */}
+      <ArcadeDidactico gradoNumero={gradoSeleccionado} juegoInicial={juegoParam} />
     </div>
   );
 }

@@ -29,6 +29,16 @@ export default function TeoriaPedagogicaEnriquecida({
     ? lecturaOriginal
     : sabiduria.lecturaViva;
 
+  // Conceptos a mostrar: si la guía tiene conceptos propios no genéricos con definición, usarlos; de lo contrario sabiduria.conceptosClave
+  const conceptosGuia = guia.leccion?.conceptosClave || [];
+  const conceptosValidos = conceptosGuia.filter(
+    (c) => c && c.concepto && !c.ejemplo?.includes('Eje central: comprender y aplicar')
+  );
+  const conceptosMostrar =
+    conceptosValidos.length > 0 && conceptosValidos[0].definicion
+      ? conceptosValidos
+      : sabiduria.conceptosClave;
+
   // Modos de Aprendizaje (Pestañas Interactivas de Sabiduría)
   const [pestanaActiva, setPestanaActiva] = useState('lectura'); // 'lectura', 'laboratorio', 'desafio', 'pergamino'
   const [pasoActivoFormula, setPasoActivoFormula] = useState(0);
@@ -55,6 +65,19 @@ export default function TeoriaPedagogicaEnriquecida({
     };
   }, []);
 
+  // Reiniciar estados interactivos cuando el usuario cambia de guía
+  useEffect(() => {
+    setIndicePregunta(0);
+    setOpcionElegida(null);
+    setFeedbackActual(null);
+    setAciertosDesafio([false, false, false]);
+    setDesafioCompletado(false);
+    setPasoActivoFormula(0);
+    setPestanaActiva('lectura');
+    voiceReader.stop();
+    setLeyendoVoz(false);
+  }, [guia.id]);
+
   // Locución Text-to-Speech
   const toggleLecturaVoz = () => {
     if (leyendoVoz) {
@@ -63,7 +86,7 @@ export default function TeoriaPedagogicaEnriquecida({
     } else {
       sounds.playClick();
       setLeyendoVoz(true);
-      const texto = `${sabiduria.tituloAtractivo}. Lección oficial de ${gradoNombre}. ${lecturaMostrar}`;
+      const texto = `${tituloGuia}. Lección oficial de ${gradoNombre}. ${sabiduria.tituloAtractivo}. ${lecturaMostrar}`;
       voiceReader.speak(texto, () => {
         setLeyendoVoz(false);
       });
@@ -91,7 +114,7 @@ export default function TeoriaPedagogicaEnriquecida({
       try {
         const jsConfetti = new JSConfetti();
         jsConfetti.addConfetti({
-          emojis: ['⭐', '🎉', '🦉', '✨', '📚'],
+          emojis: ['', '', '', '', ''],
           emojiSize: 32,
           confettiNumber: 35
         });
@@ -135,13 +158,13 @@ export default function TeoriaPedagogicaEnriquecida({
   // Copiar Ficha de Oro al portapapeles
   const handleCopiarFichaOro = () => {
     sounds.playClick();
-    const textoFicha = `📜 PERGAMINO DE SABIDURÍA: ${sabiduria.tituloAtractivo}\n` +
+    const textoFicha = ` PERGAMINO DE SABIDURÍA: ${sabiduria.tituloAtractivo}\n` +
       `Curso: ${gradoNombre} • Guía: ${tituloGuia}\n\n` +
-      `⭐ REGLA DE ORO:\n${sabiduria.fichaOro.reglaPrincipal}\n\n` +
-      `✨ EJEMPLO ESTRELLA:\n${sabiduria.fichaOro.ejemploEstrella}\n\n` +
-      `💡 APLICACIÓN PARA LA VIDA:\n${sabiduria.fichaOro.aplicacionVida}\n\n` +
-      `🦉 TRUCO SECRETO DEL BÚHO:\n${sabiduria.trucoMnemotecnico.truco}\n\n` +
-      `¡Registrado en mi Cuaderno de Español! 📖✨`;
+      ` REGLA DE ORO:\n${sabiduria.fichaOro.reglaPrincipal}\n\n` +
+      ` EJEMPLO ESTRELLA:\n${sabiduria.fichaOro.ejemploEstrella}\n\n` +
+      ` APLICACIÓN PARA LA VIDA:\n${sabiduria.fichaOro.aplicacionVida}\n\n` +
+      ` TRUCO SECRETO DEL BÚHO:\n${sabiduria.trucoMnemotecnico.truco}\n\n` +
+      `¡Registrado en mi Cuaderno de Español! `;
 
     navigator.clipboard.writeText(textoFicha).then(() => {
       setCopiadoExito(true);
@@ -171,22 +194,22 @@ export default function TeoriaPedagogicaEnriquecida({
           <div className="space-y-3">
             <div className="flex flex-wrap items-center gap-2">
               <span className="bg-amber-400 text-slate-950 font-title font-black text-xs px-3.5 py-1 rounded-full shadow-xs flex items-center gap-1.5 border border-yellow-200 uppercase">
-                <span>🦉</span> Academia de Lengua Viva • {gradoNombre}
+                 Academia de Lengua Viva • {gradoNombre}
               </span>
               <span className="bg-white/20 backdrop-blur-md text-white font-title font-bold text-xs px-3 py-1 rounded-full border border-white/30 uppercase">
-                {guia.componente || 'Español'}
+                {guia.numero ? `${guia.numero} • ` : ''}{guia.componente || 'Español'}
               </span>
               <span className="bg-emerald-500/90 text-white font-title font-bold text-xs px-3 py-1 rounded-full border border-emerald-300 flex items-center gap-1">
-                <span>🇨🇴</span> Estándar MEN Colombia
+                 Estándar MEN Colombia
               </span>
             </div>
 
             <h1 className="font-title font-black text-2xl sm:text-4xl text-white tracking-tight leading-tight">
-              {sabiduria.tituloAtractivo}
+              {tituloGuia}
             </h1>
 
-            <p className="text-blue-100 text-xs sm:text-sm font-semibold max-w-2xl leading-relaxed">
-              {sabiduria.subtituloPedagogico}
+            <p className="text-amber-200 text-xs sm:text-sm font-extrabold max-w-2xl leading-relaxed">
+              {sabiduria.tituloAtractivo} — <span className="text-blue-100 font-semibold">{sabiduria.subtituloPedagogico}</span>
             </p>
           </div>
 
@@ -200,14 +223,14 @@ export default function TeoriaPedagogicaEnriquecida({
                   : 'bg-gradient-to-r from-amber-400 to-yellow-300 hover:from-amber-300 hover:to-yellow-200 text-slate-950 shadow-[0_4px_0_#b45309]'
               }`}
             >
-              <span>{leyendoVoz ? '⏹️ Detener Voz' : '🔊 Escuchar Clase Narrada'}</span>
+              <span>{leyendoVoz ? ' Detener Voz' : ' Escuchar Clase Narrada'}</span>
             </button>
 
             <button
               onClick={() => setModalGlosario(true)}
               className="px-4 py-3.5 rounded-2xl font-title font-black text-xs sm:text-sm bg-white/15 hover:bg-white/25 text-white border-2 border-white/40 flex items-center gap-1.5 cursor-pointer backdrop-blur-md transition-all"
             >
-              <span>📖</span>
+              
               <span>Glosario</span>
             </button>
           </div>
@@ -218,7 +241,7 @@ export default function TeoriaPedagogicaEnriquecida({
           <div className="mt-5 bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-4 text-xs sm:text-sm text-blue-100">
             <div className="flex items-center justify-between gap-3">
               <div className="flex items-start gap-2.5">
-                <span className="text-xl">📘</span>
+                
                 <div>
                   <strong className="text-yellow-300 block font-title font-black text-xs uppercase tracking-wider">
                     Derecho Básico de Aprendizaje (DBA Oficial):
@@ -255,7 +278,7 @@ export default function TeoriaPedagogicaEnriquecida({
                 : 'bg-slate-50 hover:bg-slate-100 text-slate-700 border-slate-200'
             }`}
           >
-            <span className="text-2xl sm:text-3xl shrink-0">📖</span>
+            
             <div className="min-w-0">
               <span className="font-title font-black text-xs sm:text-sm block truncate leading-tight">
                 1. Lectura Viva
@@ -277,7 +300,7 @@ export default function TeoriaPedagogicaEnriquecida({
                 : 'bg-slate-50 hover:bg-slate-100 text-slate-700 border-slate-200'
             }`}
           >
-            <span className="text-2xl sm:text-3xl shrink-0">🧪</span>
+            
             <div className="min-w-0">
               <span className="font-title font-black text-xs sm:text-sm block truncate leading-tight">
                 2. Laboratorio de Reglas
@@ -299,7 +322,7 @@ export default function TeoriaPedagogicaEnriquecida({
                 : 'bg-slate-50 hover:bg-slate-100 text-slate-700 border-slate-200'
             }`}
           >
-            <span className="text-2xl sm:text-3xl shrink-0">🎯</span>
+            
             <div className="min-w-0">
               <span className="font-title font-black text-xs sm:text-sm block truncate leading-tight">
                 3. Desafío Mente de Oro
@@ -321,7 +344,7 @@ export default function TeoriaPedagogicaEnriquecida({
                 : 'bg-slate-50 hover:bg-slate-100 text-slate-700 border-slate-200'
             }`}
           >
-            <span className="text-2xl sm:text-3xl shrink-0">📜</span>
+            
             <div className="min-w-0">
               <span className="font-title font-black text-xs sm:text-sm block truncate leading-tight">
                 4. Pergamino Coleccionable
@@ -342,10 +365,10 @@ export default function TeoriaPedagogicaEnriquecida({
           <div className="bg-white rounded-3xl p-6 sm:p-10 shadow-sm border-2 border-slate-200 space-y-6">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 pb-4">
               <div className="flex items-center gap-3">
-                <span className="text-3xl">📖</span>
+                
                 <div>
                   <h3 className="font-title font-black text-xl text-slate-900">
-                    Lectura Oficial y Fundamentación Viva
+                    Lectura Oficial y Fundamentación: {tituloGuia}
                   </h3>
                   <p className="text-xs text-slate-500 font-bold">
                     Descubre el conocimiento detrás de las palabras y su aplicación real
@@ -406,7 +429,7 @@ export default function TeoriaPedagogicaEnriquecida({
             {sabiduria.curiosidadAsombrosa && (
               <div className="bg-gradient-to-r from-amber-50 to-yellow-50 border-2 border-amber-300 p-5 sm:p-6 rounded-2xl flex items-start gap-4 shadow-xs">
                 <div className="w-12 h-12 rounded-2xl bg-amber-400 text-slate-950 flex items-center justify-center text-3xl shadow-[0_3px_0_#b45309] shrink-0">
-                  💡
+                  
                 </div>
                 <div className="space-y-1">
                   <h4 className="font-title font-black text-amber-950 text-sm uppercase tracking-wide">
@@ -416,7 +439,7 @@ export default function TeoriaPedagogicaEnriquecida({
                     {sabiduria.curiosidadAsombrosa.texto}
                   </p>
                   <span className="inline-block bg-amber-200/80 text-amber-950 text-xs font-black px-2.5 py-0.5 rounded-md mt-1">
-                    ✨ {sabiduria.curiosidadAsombrosa.datoCurioso}
+                     {sabiduria.curiosidadAsombrosa.datoCurioso}
                   </span>
                 </div>
               </div>
@@ -432,7 +455,7 @@ export default function TeoriaPedagogicaEnriquecida({
                 className="btn-3d-purple px-6 py-3.5 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-title font-black text-sm rounded-2xl shadow-lg flex items-center gap-2 cursor-pointer transition-all"
               >
                 <span>Paso Siguiente: Entrar al Laboratorio de Reglas</span>
-                <span>➔</span>
+                
               </button>
             </div>
           </div>
@@ -449,7 +472,7 @@ export default function TeoriaPedagogicaEnriquecida({
             <div className="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border-2 border-slate-200 space-y-5">
               <div className="flex items-center justify-between border-b border-slate-100 pb-3">
                 <div className="flex items-center gap-2.5">
-                  <span className="text-2xl">🧪</span>
+                  
                   <div>
                     <h3 className="font-title font-black text-lg sm:text-xl text-slate-900">
                       {sabiduria.formulaVisual.titulo}
@@ -495,8 +518,8 @@ export default function TeoriaPedagogicaEnriquecida({
                     </div>
 
                     <div className="pt-3 border-t border-white/20 mt-3 flex items-center justify-between text-[11px] font-black text-white/80">
-                      <span>{pasoActivoFormula === idx ? '✓ Seleccionado' : 'Toca para ver'}</span>
-                      <span>➔</span>
+                      <span>{pasoActivoFormula === idx ? ' Seleccionado' : 'Toca para ver'}</span>
+                      
                     </div>
                   </div>
                 ))}
@@ -508,7 +531,7 @@ export default function TeoriaPedagogicaEnriquecida({
           <div className="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border-2 border-slate-200 space-y-6">
             <div className="flex items-center justify-between border-b border-slate-100 pb-3">
               <div className="flex items-center gap-2.5">
-                <span className="text-2xl">🧠</span>
+                
                 <div>
                   <h3 className="font-title font-black text-lg sm:text-xl text-slate-900">
                     Cazador de Conceptos: Leyes de Oro
@@ -519,12 +542,12 @@ export default function TeoriaPedagogicaEnriquecida({
                 </div>
               </div>
               <span className="bg-blue-100 text-blue-900 font-black text-xs px-3 py-1 rounded-full border border-blue-200">
-                {sabiduria.conceptosClave.length} Conceptos
+                {conceptosMostrar.length} Conceptos
               </span>
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
-              {sabiduria.conceptosClave.map((c, i) => (
+              {conceptosMostrar.map((c, i) => (
                 <div
                   key={i}
                   className="bg-slate-50/80 rounded-2xl p-6 border-2 border-slate-200 hover:border-indigo-400 transition-all shadow-xs flex flex-col justify-between space-y-4"
@@ -533,7 +556,7 @@ export default function TeoriaPedagogicaEnriquecida({
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-3">
                         <span className="w-12 h-12 rounded-2xl bg-white border-2 border-slate-200 shadow-xs flex items-center justify-center text-2xl">
-                          {c.icono || '📌'}
+                          {c.icono || c.dibujo || ''}
                         </span>
                         <div>
                           <span className="text-[10px] font-black uppercase text-indigo-700 tracking-wider block">
@@ -546,7 +569,7 @@ export default function TeoriaPedagogicaEnriquecida({
                       </div>
 
                       <button
-                        onClick={() => hablarTexto(`${c.concepto}. ${c.definicion}. Ejemplo: ${c.ejemplo}`)}
+                        onClick={() => hablarTexto(`${c.concepto}. ${c.definicion || c.ejemplo}. Ejemplo: ${c.ejemplo}`)}
                         className="w-9 h-9 rounded-xl bg-indigo-50 hover:bg-indigo-100 text-indigo-700 flex items-center justify-center cursor-pointer transition-colors"
                         title="Escuchar locución del concepto"
                       >
@@ -555,13 +578,13 @@ export default function TeoriaPedagogicaEnriquecida({
                     </div>
 
                     <p className="text-xs sm:text-sm font-semibold text-slate-700 leading-relaxed">
-                      {c.definicion}
+                      {c.definicion || c.ejemplo}
                     </p>
 
                     {/* Ejemplo Real */}
                     <div className="bg-white p-3.5 rounded-xl border border-emerald-200 space-y-1">
                       <span className="text-[10px] font-black uppercase text-emerald-800 flex items-center gap-1">
-                        <span>✅</span> Ejemplo en Acción:
+                         Ejemplo en Acción:
                       </span>
                       <p className="text-xs font-bold text-slate-800 leading-relaxed">
                         {c.ejemplo}
@@ -571,7 +594,7 @@ export default function TeoriaPedagogicaEnriquecida({
                     {/* Truco del Sabio */}
                     {c.trucoSabio && (
                       <div className="bg-amber-50 p-3 rounded-xl border border-amber-200 text-xs font-bold text-amber-950 flex items-start gap-2">
-                        <span className="text-base shrink-0">🦉</span>
+                        
                         <span>{c.trucoSabio}</span>
                       </div>
                     )}
@@ -580,7 +603,7 @@ export default function TeoriaPedagogicaEnriquecida({
                   {/* Error común a evitar */}
                   {c.errorComun && (
                     <div className="pt-2 border-t border-slate-200/80 text-[11px] font-bold text-rose-700 flex items-start gap-1.5">
-                      <span className="shrink-0">⚠️</span>
+                      
                       <span><strong>Ojo:</strong> {c.errorComun}</span>
                     </div>
                   )}
@@ -595,7 +618,7 @@ export default function TeoriaPedagogicaEnriquecida({
             {sabiduria.trucoMnemotecnico && (
               <div className="bg-gradient-to-br from-amber-400 to-yellow-300 text-slate-950 p-6 rounded-3xl shadow-lg border-3 border-amber-500 space-y-2">
                 <div className="flex items-center gap-2.5">
-                  <span className="text-3xl">{sabiduria.trucoMnemotecnico.icono || '🗝️'}</span>
+                  <span className="text-3xl">{sabiduria.trucoMnemotecnico.icono || ''}</span>
                   <h4 className="font-title font-black text-lg leading-tight">
                     {sabiduria.trucoMnemotecnico.titulo}
                   </h4>
@@ -610,7 +633,7 @@ export default function TeoriaPedagogicaEnriquecida({
             {sabiduria.errorTipico && (
               <div className="bg-rose-50 text-rose-950 p-6 rounded-3xl shadow-sm border-3 border-rose-300 space-y-2">
                 <div className="flex items-center gap-2.5 text-rose-700">
-                  <span className="text-3xl">🚫</span>
+                  
                   <h4 className="font-title font-black text-lg leading-tight text-rose-950">
                     El Error que Todos Cometen
                   </h4>
@@ -619,7 +642,7 @@ export default function TeoriaPedagogicaEnriquecida({
                   <strong>Confusión típica:</strong> {sabiduria.errorTipico.queConfunden}
                 </p>
                 <p className="text-xs font-extrabold text-emerald-800 bg-emerald-100/70 p-2.5 rounded-xl border border-emerald-300">
-                  <strong>✅ Cómo se hace bien:</strong> {sabiduria.errorTipico.comoSeHace}
+                  <strong> Cómo se hace bien:</strong> {sabiduria.errorTipico.comoSeHace}
                 </p>
               </div>
             )}
@@ -635,7 +658,7 @@ export default function TeoriaPedagogicaEnriquecida({
               className="btn-3d-amber px-6 py-3.5 bg-gradient-to-r from-amber-400 to-yellow-400 text-slate-950 font-title font-black text-sm rounded-2xl shadow-lg flex items-center gap-2 cursor-pointer transition-all border border-yellow-200"
             >
               <span>¡Pruébate! Ir al Desafío Mente de Oro (Quiz)</span>
-              <span>➔</span>
+              
             </button>
           </div>
         </div>
@@ -651,7 +674,7 @@ export default function TeoriaPedagogicaEnriquecida({
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-white/10 pb-5">
               <div className="flex items-center gap-3">
                 <div className="w-14 h-14 rounded-2xl bg-amber-400 text-slate-950 flex items-center justify-center text-3xl shadow-[0_4px_0_#b45309]">
-                  🏆
+                  
                 </div>
                 <div>
                   <span className="text-[10px] font-black uppercase tracking-widest text-amber-300 block">
@@ -667,14 +690,7 @@ export default function TeoriaPedagogicaEnriquecida({
               <div className="flex items-center gap-2 bg-slate-950/80 px-4 py-2 rounded-2xl border border-white/20">
                 <span className="text-xs font-black text-amber-300 mr-1">Maestría:</span>
                 {aciertosDesafio.map((acierto, idx) => (
-                  <span
-                    key={idx}
-                    className={`text-xl transition-all ${
-                      acierto ? 'text-amber-400 scale-120 drop-shadow-[0_0_8px_rgba(251,191,36,0.8)]' : 'text-slate-600'
-                    }`}
-                  >
-                    ★
-                  </span>
+                  
                 ))}
               </div>
             </div>
@@ -730,7 +746,7 @@ export default function TeoriaPedagogicaEnriquecida({
                 }`}
               >
                 <span className="text-3xl shrink-0">
-                  {feedbackActual === 'correcto' ? '🎉' : '💡'}
+                  {feedbackActual === 'correcto' ? '' : ''}
                 </span>
                 <div className="space-y-1">
                   <h4 className="font-title font-black text-base">
@@ -757,7 +773,7 @@ export default function TeoriaPedagogicaEnriquecida({
                   className="btn-3d-amber px-6 py-3 bg-gradient-to-r from-amber-400 to-yellow-300 text-slate-950 font-title font-black text-xs sm:text-sm rounded-xl cursor-pointer shadow-md flex items-center gap-2"
                 >
                   <span>Siguiente Nivel de Pregunta</span>
-                  <span>➔</span>
+                  
                 </button>
               )}
 
@@ -767,7 +783,7 @@ export default function TeoriaPedagogicaEnriquecida({
                     onClick={reiniciarDesafio}
                     className="px-4 py-2.5 rounded-xl bg-white/20 hover:bg-white/30 text-white font-title font-black text-xs cursor-pointer border border-white/30"
                   >
-                    🔄 Reintentar Quiz
+                     Reintentar Quiz
                   </button>
                   <button
                     onClick={() => {
@@ -777,7 +793,7 @@ export default function TeoriaPedagogicaEnriquecida({
                     className="btn-3d-emerald px-6 py-3 bg-emerald-500 hover:bg-emerald-600 text-white font-title font-black text-xs sm:text-sm rounded-xl cursor-pointer shadow-md flex items-center gap-2 border border-emerald-300"
                   >
                     <span>¡Desafío Superado! Ver Pergamino</span>
-                    <span>➔</span>
+                    
                   </button>
                 </div>
               )}
@@ -795,7 +811,7 @@ export default function TeoriaPedagogicaEnriquecida({
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b-2 border-amber-200 pb-5">
               <div className="flex items-center gap-3.5">
                 <div className="w-14 h-14 rounded-2xl bg-amber-400 text-slate-950 flex items-center justify-center text-3xl shadow-[0_3px_0_#b45309] border-2 border-yellow-200">
-                  📜
+                  
                 </div>
                 <div>
                   <span className="text-[10px] font-black uppercase tracking-wider text-amber-900 block">
@@ -821,7 +837,7 @@ export default function TeoriaPedagogicaEnriquecida({
                   onClick={handleCopiarFichaOro}
                   className="btn-3d-amber px-5 py-2.5 rounded-xl bg-gradient-to-r from-amber-400 to-yellow-400 text-slate-950 font-title font-black text-xs flex items-center gap-1.5 cursor-pointer shadow-xs border border-yellow-200"
                 >
-                  <span>{copiadoExito ? '✓ ¡Copiado con Éxito!' : '📋 Copiar Pergamino'}</span>
+                  <span>{copiadoExito ? ' ¡Copiado con Éxito!' : ' Copiar Pergamino'}</span>
                 </button>
               </div>
             </div>
@@ -830,7 +846,7 @@ export default function TeoriaPedagogicaEnriquecida({
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className="bg-white p-5 rounded-2xl border-2 border-amber-200 shadow-xs space-y-2">
                 <span className="text-xs font-black text-amber-900 uppercase block tracking-wider">
-                  ⭐ 1. Regla de Oro
+                   1. Regla de Oro
                 </span>
                 <p className="text-xs sm:text-sm font-bold text-slate-800 leading-relaxed">
                   {sabiduria.fichaOro.reglaPrincipal}
@@ -839,7 +855,7 @@ export default function TeoriaPedagogicaEnriquecida({
 
               <div className="bg-white p-5 rounded-2xl border-2 border-amber-200 shadow-xs space-y-2">
                 <span className="text-xs font-black text-amber-900 uppercase block tracking-wider">
-                  ✨ 2. Ejemplo Estrella
+                   2. Ejemplo Estrella
                 </span>
                 <p className="text-xs sm:text-sm font-bold text-slate-800 leading-relaxed">
                   {sabiduria.fichaOro.ejemploEstrella}
@@ -848,7 +864,7 @@ export default function TeoriaPedagogicaEnriquecida({
 
               <div className="bg-white p-5 rounded-2xl border-2 border-amber-200 shadow-xs space-y-2">
                 <span className="text-xs font-black text-amber-900 uppercase block tracking-wider">
-                  💡 3. Sabiduría para la Vida
+                   3. Sabiduría para la Vida
                 </span>
                 <p className="text-xs sm:text-sm font-bold text-slate-800 leading-relaxed">
                   {sabiduria.fichaOro.aplicacionVida}
@@ -858,7 +874,7 @@ export default function TeoriaPedagogicaEnriquecida({
 
             {/* Consejo especial del búho */}
             <div className="bg-white/80 p-4 rounded-2xl border border-amber-300 flex items-center gap-3">
-              <span className="text-3xl">🦉</span>
+              
               <p className="text-xs font-bold text-amber-950 leading-relaxed">
                 <strong>Consejo de Plumita:</strong> Anota este resumen en las primeras páginas de tu cuaderno físico. ¡Será tu guía antes de cualquier prueba o taller!
               </p>
@@ -872,7 +888,7 @@ export default function TeoriaPedagogicaEnriquecida({
           ══════════════════════════════════════════════════════════════ */}
       <div className="flex flex-col sm:flex-row items-center justify-between gap-4 p-6 bg-white rounded-3xl border-2 border-slate-200 shadow-sm">
         <div className="flex items-center gap-3 text-slate-600">
-          <span className="text-4xl">🚀</span>
+          
           <div>
             <span className="font-title font-black text-slate-900 block text-base">
               ¿Listo para aplicar esta sabiduría?
@@ -891,7 +907,7 @@ export default function TeoriaPedagogicaEnriquecida({
           className="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-indigo-600 via-blue-600 to-indigo-700 hover:from-indigo-500 hover:to-blue-500 text-white font-title font-black text-sm rounded-2xl shadow-xl hover:scale-102 active:scale-98 transition-all flex items-center justify-center gap-2 cursor-pointer border border-indigo-400"
         >
           <span>Paso 2: Taller de Comprensión y Cuaderno</span>
-          <span>➔</span>
+          
         </button>
       </div>
 
@@ -908,7 +924,7 @@ export default function TeoriaPedagogicaEnriquecida({
             {/* Header del modal */}
             <div className="p-5 border-b border-slate-200 flex items-center justify-between bg-indigo-50">
               <div className="flex items-center gap-2.5">
-                <span className="text-2xl">📚</span>
+                
                 <div>
                   <h3 className="font-title font-black text-lg text-slate-900">
                     Glosario Pedagógico en Contexto
@@ -922,7 +938,7 @@ export default function TeoriaPedagogicaEnriquecida({
                 onClick={() => setModalGlosario(false)}
                 className="w-9 h-9 rounded-xl bg-white hover:bg-slate-200 text-slate-700 flex items-center justify-center font-black text-sm cursor-pointer border border-slate-300"
               >
-                ✕
+                
               </button>
             </div>
 

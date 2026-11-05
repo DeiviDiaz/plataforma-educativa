@@ -14,6 +14,8 @@ import SpanishLayout from '../features/spanish/layouts/SpanishLayout.jsx';
 import SpanishHome from '../features/spanish/pages/Home.jsx';
 import SpanishGradoView from '../features/spanish/pages/GradoView.jsx';
 import SpanishJuegosHub from '../features/spanish/pages/JuegosHub.jsx';
+import SpanishAdminView from '../features/spanish/pages/AdminView.jsx';
+import SpanishLetrasView from '../features/spanish/pages/LetrasView.jsx';
 
 function AppRouter() {
   return (
@@ -32,8 +34,14 @@ function AppRouter() {
         {/* Dashboard de Español con selector de 1° a 9° */}
         <Route index element={<SpanishHome />} />
 
+        {/* Abecedario y Fonética Interactiva (Diapositivas 4 y 5) */}
+        <Route path="letras" element={<SpanishLetrasView />} />
+
         {/* Sala Central de Juegos Didácticos (Arcade de 15 juegos) */}
         <Route path="juegos" element={<SpanishJuegosHub />} />
+
+        {/* Flujo Docente y Gestión de Aula (Diapositiva 6) */}
+        <Route path="admin" element={<SpanishAdminView />} />
 
         {/* Malla Curricular, Lecciones y Comprensión por Grado */}
         <Route path="grado/:gradoId" element={<SpanishGradoView />} />
