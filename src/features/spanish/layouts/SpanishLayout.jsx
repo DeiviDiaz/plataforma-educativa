@@ -6,7 +6,6 @@ import { voiceReader } from '../utils/speech';
 import { GameProgress, RANGOS_JUGADOR, INSIGNIAS_LOGROS } from '../utils/gamification';
 import { lanzarConfeti } from '../utils/confetti';
 import '../spanish.css';
-import NombreEstudiante from '../components/NombreEstudiante';
 
 /**
  * SpanishLayout — Envoltorio profesional de alta fidelidad para el Módulo de Español ("Lengua Viva").
@@ -211,7 +210,6 @@ export default function SpanishLayout() {
 
             {/* Herramientas & Navegación */}
             <div className="flex items-center gap-2">
-              <NombreEstudiante />
               
               {/* Botón Volver al Portal Principal */}
               <Link
