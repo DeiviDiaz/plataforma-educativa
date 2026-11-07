@@ -1,4 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import { useState } from 'react';
+import RetoDeGuia from './RetoDeGuia';
+import { retosPorGuia, secuenciasPorGuia } from '../data/retosPorGuia';
 import ArcadeDidactico from './games/ArcadeDidactico';
 import PizarraDigital from './PizarraDigital';
 import TemporizadorClase from './TemporizadorClase';
@@ -16,111 +18,46 @@ import TeoriaPedagogicaEnriquecida from './classroom/TeoriaPedagogicaEnriquecida
 import { sounds } from '../utils/audio';
 import { voiceReader } from '../utils/speech';
 
-export default function ModuloLeccion({ guia, gradoNombre, gradoNumero = 1, mascota }) {
+export default function ModuloLeccion({ guia, gradoNombre, gradoNumero = 1, onSiguienteGuia }) {
   const esSecundaria = gradoNumero >= 6;
 
   // 4 Pilares Maestros de Aprendizaje
-  const [seccionPrincipal, setSeccionPrincipal] = useState('leccion'); // 'leccion', 'comprension', 'juegos', 'herramientas'
+  const rondas = retosPorGuia[guia.id];
+  const [seccionPrincipal, setSeccionPrincipal] = useState(rondas && !esSecundaria ? 'reto' : 'leccion'); // 'leccion', 'comprension', 'juegos', 'herramientas'
   const [subSeccion, setSubSeccion] = useState('principal'); // sub-vistas dentro de cada pilar
-  const [tamanoFuente, setTamanoFuente] = useState('text-lg');
-  const [leyendoVoz, setLeyendoVoz] = useState(false);
-
   const tituloGuia = guia.titulo || guia.nombre || 'Guía de Aprendizaje';
-
-  useEffect(() => {
-    return () => {
-      voiceReader.stop();
-    };
-  }, []);
 
   const cambiarSeccion = (sec, sub = 'principal') => {
     sounds.playClick();
     voiceReader.stop();
-    setLeyendoVoz(false);
     setSeccionPrincipal(sec);
     setSubSeccion(sub);
   };
 
-  const toggleLecturaVoz = () => {
-    if (leyendoVoz) {
-      voiceReader.stop();
-      setLeyendoVoz(false);
-    } else {
-      sounds.playClick();
-      setLeyendoVoz(true);
-      const textoCompleto = `${tituloGuia}. ${guia.leccion?.lectura || ''}`;
-      voiceReader.speak(textoCompleto, () => {
-        setLeyendoVoz(false);
-      });
-    }
-  };
-
   const pilares = [
-    {
-      id: 'leccion',
-      label: '1. Lectura y Lección',
-      icono: '📖',
-      desc: 'Lectura oficial, conceptos y teatro',
-      color: esSecundaria ? 'bg-violet-600 border-violet-700' : 'bg-emerald-600 border-emerald-700'
-    },
-    {
-      id: 'comprension',
-      label: '2. Comprensión y Cuaderno',
-      icono: '🧠',
-      desc: 'Preguntas en 3 niveles, cuaderno y glosario',
-      color: 'bg-indigo-600 border-indigo-700'
-    },
-    {
-      id: 'juegos',
-      label: '3. Sala de Juegos Didácticos',
-      icono: '🎮',
-      desc: 'Arcade adaptado con 15 juegos',
-      color: 'bg-amber-500 border-amber-600'
-    },
-    {
-      id: 'herramientas',
-      label: '4. Taller y Herramientas',
-      icono: '🛠️',
-      desc: 'Pizarra, fichas imprimibles y retos',
-      color: 'bg-slate-800 border-slate-900'
-    }
+    ...(!esSecundaria && rondas ? [{ id: 'reto', label: 'Aprender jugando' }] : []),
+    { id: 'leccion', label: gradoNumero <= 2 ? 'Leer' : 'Lectura' },
+    { id: 'comprension', label: gradoNumero <= 2 ? 'Responder' : 'Comprensión' },
+    ...(esSecundaria && rondas ? [{ id: 'reto', label: 'Reto de la guía' }] : []),
+    { id: 'juegos', label: !esSecundaria && rondas ? 'Más juegos' : 'Juegos' },
+    { id: 'herramientas', label: gradoNumero <= 2 ? 'Crear' : 'Taller y recursos' },
   ];
 
   return (
     <div className="space-y-6">
-      {/* ══════════ MENÚ SUPERIOR DE LOS 4 PILARES PEDAGÓGICOS ══════════ */}
-      <div className="bg-white rounded-3xl p-3 shadow-md border-2 border-slate-200">
-        <span className="text-[11px] font-black uppercase tracking-wider text-slate-400 block px-2 mb-2 text-center sm:text-left">
-          Pasos de la Guía: Aprende ➔ Comprende ➔ Juega ➔ Aplica
-        </span>
-
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-2">
-          {pilares.map((p) => {
-            const activo = seccionPrincipal === p.id;
-            return (
-              <button
-                key={p.id}
-                onClick={() => cambiarSeccion(p.id)}
-                className={`p-3.5 rounded-2xl border-b-4 text-left transition-all duration-150 flex items-center gap-3 cursor-pointer select-none active:border-b-0 active:translate-y-1 ${
-                  activo
-                    ? `${p.color} text-white shadow-lg scale-102 ring-4 ring-amber-300`
-                    : 'bg-slate-50 hover:bg-slate-100 text-slate-700 border-slate-200'
-                }`}
-              >
-                <span className="text-2xl sm:text-3xl shrink-0">{p.icono}</span>
-                <div className="min-w-0">
-                  <span className="font-black text-xs sm:text-sm block truncate leading-tight">
-                    {p.label}
-                  </span>
-                  <p className={`text-[10px] mt-0.5 truncate ${activo ? 'text-white/80' : 'text-slate-400'}`}>
-                    {p.desc}
-                  </p>
-                </div>
-              </button>
-            );
-          })}
-        </div>
+      <div className="lengua-actividades" role="group" aria-label="Actividades de la guía">
+        {pilares.map((pilar) => (
+          <button key={pilar.id} type="button" className="lengua-pestana"
+            aria-pressed={seccionPrincipal === pilar.id} onClick={() => cambiarSeccion(pilar.id)}>
+            {pilar.label}
+          </button>
+        ))}
       </div>
+
+      {seccionPrincipal === 'reto' && rondas && (
+        <RetoDeGuia rondas={rondas} secuencia={secuenciasPorGuia[guia.id]}
+          explorarVocales={guia.id === '1-1-3'} grado={gradoNumero} guiaId={guia.id} onSiguienteGuia={onSiguienteGuia} />
+      )}
 
       {/* ══════════ PILAR 1: LECTURA Y LECCIÓN PRINCIPAL ══════════ */}
       {seccionPrincipal === 'leccion' && (
@@ -140,7 +77,7 @@ export default function ModuloLeccion({ guia, gradoNombre, gradoNumero = 1, masc
               </button>
 
               <button
-                onClick={() => setSubSeccion('teatro')}
+                onClick={() => cambiarSeccion('leccion', 'teatro')}
                 className={`px-4 py-2 rounded-xl text-xs font-black transition-all cursor-pointer ${
                   subSeccion === 'teatro'
                     ? 'bg-white text-slate-900 shadow-sm'
@@ -151,27 +88,7 @@ export default function ModuloLeccion({ guia, gradoNombre, gradoNumero = 1, masc
               </button>
             </div>
 
-            <div className="hidden sm:flex items-center gap-1">
-              <span className="text-[10px] font-bold text-slate-400 mr-1">Letra:</span>
-              <button
-                onClick={() => setTamanoFuente('text-base')}
-                className={`px-2 py-1 rounded-lg text-xs font-bold ${tamanoFuente === 'text-base' ? 'bg-white shadow-xs font-black' : 'text-slate-500'}`}
-              >
-                A
-              </button>
-              <button
-                onClick={() => setTamanoFuente('text-lg')}
-                className={`px-2 py-1 rounded-lg text-xs font-bold ${tamanoFuente === 'text-lg' ? 'bg-white shadow-xs font-black' : 'text-slate-500'}`}
-              >
-                A+
-              </button>
-              <button
-                onClick={() => setTamanoFuente('text-xl')}
-                className={`px-2 py-1 rounded-lg text-xs font-bold ${tamanoFuente === 'text-xl' ? 'bg-white shadow-xs font-black' : 'text-slate-500'}`}
-              >
-                A++
-              </button>
-            </div>
+
           </div>
 
           {subSeccion === 'principal' ? (
@@ -179,7 +96,6 @@ export default function ModuloLeccion({ guia, gradoNombre, gradoNumero = 1, masc
               guia={guia}
               gradoNumero={gradoNumero}
               gradoNombre={gradoNombre}
-              mascota={mascota}
               onAvanzarPaso={(sec) => cambiarSeccion(sec)}
             />
           ) : (
@@ -194,7 +110,7 @@ export default function ModuloLeccion({ guia, gradoNombre, gradoNumero = 1, masc
       {seccionPrincipal === 'comprension' && (
         <div className="space-y-6 animate-fade-in">
           {/* Sub-navegación de comprensión */}
-          <div className="flex items-center gap-2 bg-slate-100 p-1.5 rounded-2xl border border-slate-200">
+          <div className="flex flex-wrap items-center gap-2 bg-slate-100 p-1.5 rounded-2xl border border-slate-200">
             <button
               onClick={() => setSubSeccion('principal')}
               className={`px-4 py-2 rounded-xl text-xs font-black transition-all cursor-pointer ${
@@ -291,7 +207,7 @@ export default function ModuloLeccion({ guia, gradoNombre, gradoNumero = 1, masc
       {seccionPrincipal === 'juegos' && (
         <div className="space-y-6 animate-fade-in">
           {/* Sub-selector de juegos */}
-          <div className="flex items-center gap-2 bg-slate-100 p-1.5 rounded-2xl border border-slate-200">
+          <div className="flex flex-wrap items-center gap-2 bg-slate-100 p-1.5 rounded-2xl border border-slate-200">
             <button
               onClick={() => setSubSeccion('principal')}
               className={`px-4 py-2 rounded-xl text-xs font-black transition-all cursor-pointer ${

@@ -1,35 +1,46 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { NavLink, Outlet, Link, useNavigate, useLocation } from 'react-router-dom';
 import mallaData from '../data/mallaCurricularEspanol.json';
 import { sounds } from '../utils/audio';
 import { voiceReader } from '../utils/speech';
-import { GameProgress, RANGOS_JUGADOR, INSIGNIAS_LOGROS } from '../utils/gamification';
 import { lanzarConfeti } from '../utils/confetti';
 import '../spanish.css';
 
-/**
- * SpanishLayout — Envoltorio profesional de alta fidelidad para el Módulo de Español ("Lengua Viva").
- * Armonizado estéticamente con la paleta de la plataforma (Azul real #3659d9, blanco nítido y acentos dorados).
- */
+const grados = Object.values(mallaData.grados);
+const normalizarBusqueda = (texto) => texto.toLocaleLowerCase('es').normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+
+const indiceGuias = grados.flatMap((grado) => grado.periodos.flatMap((periodo) =>
+  periodo.unidades.flatMap((unidad) => unidad.guias.map((guia) => {
+    const titulo = guia.nombre || guia.titulo;
+    return {
+      gradoId: grado.id,
+      gradoNombre: grado.nombre,
+      guiaId: guia.id,
+      titulo,
+      texto: normalizarBusqueda(`${grado.nombre} ${titulo} ${guia.contenidos || ''} ${guia.leccion?.lectura || ''}`),
+    };
+  }))
+));
+
 export default function SpanishLayout() {
-  const [estaEnLinea, setEstaEnLinea] = useState(navigator.onLine);
   const [enPantallaCompleta, setEnPantallaCompleta] = useState(false);
   const [busqueda, setBusqueda] = useState('');
-  const [resultadosBusqueda, setResultadosBusqueda] = useState([]);
-  const [progreso, setProgreso] = useState(() => GameProgress.getProgress());
-  const [modalTrofeosAbierto, setModalTrofeosAbierto] = useState(false);
+  const [buscadorAbierto, setBuscadorAbierto] = useState(false);
   const [celebracionNivel, setCelebracionNivel] = useState(null);
   const [vozSilenciada, setVozSilenciada] = useState(() => voiceReader.isMuted());
   const navigate = useNavigate();
   const location = useLocation();
+  const esPortada = location.pathname.replace(/\/$/, '') === '/espanol';
 
   useEffect(() => {
-    const handleOnline = () => setEstaEnLinea(true);
-    const handleOffline = () => setEstaEnLinea(false);
+    if (location.hash === '#grados') {
+      document.getElementById('grados')?.scrollIntoView();
+    } else if (!location.hash) {
+      window.scrollTo(0, 0);
+    }
+  }, [location.pathname, location.hash]);
 
-    window.addEventListener('online', handleOnline);
-    window.addEventListener('offline', handleOffline);
-
+  useEffect(() => {
     const handleFullscreenChange = () => {
       setEnPantallaCompleta(Boolean(document.fullscreenElement));
     };
@@ -37,8 +48,6 @@ export default function SpanishLayout() {
 
     const handleProgresoActualizado = (e) => {
       const data = e.detail || {};
-      const actual = GameProgress.getProgress();
-      setProgreso(actual);
 
       if (data.subioDeNivel && data.rangoNuevo) {
         sounds.playLevelUp();
@@ -49,7 +58,6 @@ export default function SpanishLayout() {
     };
 
     window.addEventListener('lengua_viva_progreso_actualizado', handleProgresoActualizado);
-    window.addEventListener('storage', handleProgresoActualizado);
 
     const handleVozCambiada = (e) => {
       if (e.detail) setVozSilenciada(e.detail.muted);
@@ -57,11 +65,8 @@ export default function SpanishLayout() {
     window.addEventListener('lengua_viva_voz_estado_cambiado', handleVozCambiada);
 
     return () => {
-      window.removeEventListener('online', handleOnline);
-      window.removeEventListener('offline', handleOffline);
       document.removeEventListener('fullscreenchange', handleFullscreenChange);
       window.removeEventListener('lengua_viva_progreso_actualizado', handleProgresoActualizado);
-      window.removeEventListener('storage', handleProgresoActualizado);
       window.removeEventListener('lengua_viva_voz_estado_cambiado', handleVozCambiada);
     };
   }, []);
@@ -69,9 +74,9 @@ export default function SpanishLayout() {
   const togglePantallaCompleta = () => {
     sounds.playClick();
     if (!document.fullscreenElement) {
-      document.documentElement.requestFullscreen().catch(() => {});
+      document.documentElement.requestFullscreen?.().catch(() => {});
     } else {
-      document.exitFullscreen().catch(() => {});
+      document.exitFullscreen?.().catch(() => {});
     }
   };
 
@@ -84,124 +89,62 @@ export default function SpanishLayout() {
     }
   };
 
-  const handleBuscar = (e) => {
-    const query = e.target.value;
-    setBusqueda(query);
+  const consulta = normalizarBusqueda(busqueda.trim());
+  const resultados = consulta.length >= 2
+    ? indiceGuias.filter((guia) => guia.texto.includes(consulta)).slice(0, 6)
+    : [];
 
-    if (query.trim().length < 2) {
-      setResultadosBusqueda([]);
-      return;
-    }
-
-    const matches = [];
-    Object.values(mallaData.grados).forEach((grado) => {
-      const todasLasGuias = grado.periodos
-        ? grado.periodos.flatMap((p) => p.unidades?.flatMap((u) => u.guias || []) || [])
-        : grado.guias || [];
-
-      todasLasGuias.forEach((guia) => {
-        const titulo = guia.titulo || guia.nombre || '';
-        const contenidos = guia.contenidos || '';
-        const lectura = guia.leccion?.lectura || '';
-        const textoBuscar = `${grado.nombre} ${titulo} ${contenidos} ${lectura}`.toLowerCase();
-
-        if (textoBuscar.includes(query.toLowerCase())) {
-          matches.push({
-            gradoId: grado.id || grado.grado,
-            gradoNombre: grado.nombre,
-            guiaId: guia.id,
-            guiaTitulo: titulo,
-            tema: contenidos || titulo,
-            icono: guia.icono || grado.icono
-          });
-        }
-      });
-    });
-
-    setResultadosBusqueda(matches.slice(0, 6));
-  };
-
-  const seleccionarResultado = (res) => {
+  const seleccionarResultado = (resultado) => {
     sounds.playClick();
     setBusqueda('');
-    setResultadosBusqueda([]);
-    navigate(`/espanol/grado/${res.gradoId}`);
+    setBuscadorAbierto(false);
+    navigate(`/espanol/grado/${resultado.gradoId}?guia=${encodeURIComponent(resultado.guiaId)}`, {
+      state: { enfocarGuia: true },
+    });
   };
-
-  const gradosList = Object.values(mallaData.grados);
-  const primaria = gradosList.filter((g) => g.numero <= 5);
-  const secundaria = gradosList.filter((g) => g.numero >= 6);
-
-  const rangoActual = GameProgress.getRangoPorXP(progreso.xpTotal);
-  const siguienteRango = GameProgress.getSiguienteRango(progreso.xpTotal);
-  const xpParaSiguiente = siguienteRango ? siguienteRango.xpMin - progreso.xpTotal : 0;
-  const progresoPorcentaje = siguienteRango
-    ? Math.min(100, Math.round(((progreso.xpTotal - rangoActual.xpMin) / (siguienteRango.xpMin - rangoActual.xpMin)) * 100))
-    : 100;
 
   return (
     <div className="spanish-area">
-      <div className="min-h-screen flex flex-col bg-playful-universe font-sans text-slate-800 antialiased selection:bg-indigo-100 selection:text-indigo-900">
+      <div className="min-h-screen flex flex-col bg-slate-50 font-sans text-slate-800 antialiased selection:bg-indigo-100 selection:text-indigo-900">
         
         {/* ══════════ HEADER PRINCIPAL ELEGANTE ══════════ */}
-        <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-xl border-b border-slate-200/80 shadow-xs">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between gap-4">
+        <header className="relative z-40 lg:sticky lg:top-0 bg-white/95 backdrop-blur-xl border-b border-slate-200/80 shadow-xs">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex flex-wrap items-center justify-between gap-x-3 gap-y-2">
             
-            {/* Identidad de Marca */}
-            <div className="flex items-center gap-3 shrink-0">
-              <Link
-                to="/espanol"
-                onClick={() => sounds.playClick()}
-                className="flex items-center gap-2.5 group"
-              >
-                <div className="w-10 h-10 bg-gradient-to-tr from-[#2563eb] via-[#3659d9] to-[#4f46e5] rounded-xl flex items-center justify-center shadow-md shadow-indigo-500/20 group-hover:scale-105 group-hover:shadow-indigo-500/30 transition-all duration-200 text-xl text-white">
-                  📖
-                </div>
-                <div>
-                  <div className="flex items-center gap-2">
-                    <span className="text-lg font-black text-slate-900 tracking-tight leading-none group-hover:text-[#3659d9] transition-colors">
-                      Lengua Viva
-                    </span>
-                    <span className="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full bg-amber-50 text-amber-700 border border-amber-200/80 tracking-wide">
-                      Español
-                    </span>
-                  </div>
-                  <p className="text-[11px] font-medium text-slate-400 leading-none mt-1">
-                    Grados 1° a 9° • Escuela Digital
+            <div className="relative w-full order-last sm:order-none sm:flex-1 sm:max-w-sm"
+              onBlur={(event) => {
+                if (!event.currentTarget.contains(event.relatedTarget)) setBuscadorAbierto(false);
+              }}
+              onKeyDown={(event) => {
+                if (event.key === 'Escape') {
+                  event.currentTarget.querySelector('input').focus();
+                  setBuscadorAbierto(false);
+                }
+              }}>
+              <form onSubmit={(event) => {
+                event.preventDefault();
+                if (resultados.length) seleccionarResultado(resultados[0]);
+              }}>
+                <label htmlFor="lengua-busqueda" className="sr-only">Buscar una guía de Español</label>
+                <input id="lengua-busqueda" type="search" value={busqueda}
+                  onFocus={() => setBuscadorAbierto(true)}
+                  onChange={(event) => {
+                    setBusqueda(event.target.value);
+                    setBuscadorAbierto(true);
+                  }}
+                  placeholder="Buscar una guía o un tema"
+                  className="lengua-select w-full" />
+              </form>
+              {buscadorAbierto && consulta.length >= 2 && (
+                <div className="absolute top-full mt-1 left-0 w-full bg-white rounded-xl shadow-xl border border-slate-200 overflow-hidden z-50">
+                  <p role="status" className="px-3 py-2 bg-slate-50 text-sm text-slate-600">
+                    {resultados.length ? 'Guías sugeridas' : 'No encontramos guías para esa búsqueda.'}
                   </p>
-                </div>
-              </Link>
-            </div>
-
-            {/* Buscador de Temas Curriculares */}
-            <div className="relative flex-1 max-w-sm hidden md:block">
-              <input
-                type="text"
-                value={busqueda}
-                onChange={handleBuscar}
-                placeholder="Buscar temas, fábulas, gramática..."
-                className="w-full py-2 px-3.5 pl-9 bg-slate-100/80 hover:bg-slate-100 focus:bg-white border border-slate-200 rounded-xl text-xs font-semibold text-slate-800 placeholder-slate-400 focus:border-[#3659d9] focus:ring-3 focus:ring-indigo-100 outline-none transition-all"
-              />
-              <span className="absolute left-3 top-2.5 text-xs text-slate-400">🔍</span>
-
-              {resultadosBusqueda.length > 0 && (
-                <div className="absolute top-11 left-0 w-full bg-white rounded-2xl shadow-xl border border-slate-200 overflow-hidden z-50 animate-slide-down">
-                  <div className="px-3 py-2 bg-slate-50 text-[10px] font-black text-slate-500 uppercase tracking-wider border-b border-slate-100">
-                    Contenidos sugeridos:
-                  </div>
-                  {resultadosBusqueda.map((r, i) => (
-                    <button
-                      key={i}
-                      onClick={() => seleccionarResultado(r)}
-                      className="w-full text-left p-3 hover:bg-indigo-50/70 flex items-center gap-3 border-b border-slate-100 last:border-b-0 cursor-pointer transition-colors"
-                    >
-                      <span className="text-xl">{r.icono}</span>
-                      <div className="min-w-0 flex-1">
-                        <span className="text-[10px] font-bold text-[#3659d9] uppercase tracking-wider block">
-                          {r.gradoNombre}
-                        </span>
-                        <p className="text-xs font-semibold text-slate-800 truncate">{r.guiaTitulo}</p>
-                      </div>
+                  {resultados.map((resultado) => (
+                    <button key={resultado.guiaId} type="button" onClick={() => seleccionarResultado(resultado)}
+                      className="w-full text-left p-3 hover:bg-indigo-50 border-t border-slate-100">
+                      <span className="block text-xs text-indigo-700">{resultado.gradoNombre}</span>
+                      <span className="font-semibold text-sm">{resultado.titulo}</span>
                     </button>
                   ))}
                 </div>
@@ -211,52 +154,9 @@ export default function SpanishLayout() {
             {/* Herramientas & Navegación */}
             <div className="flex items-center gap-2">
               
-              {/* Botón Volver al Portal Principal */}
-              <Link
-                to="/"
-                onClick={() => sounds.playClick()}
-                className="px-3 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 text-slate-600 hover:text-slate-900 hover:bg-slate-100 border border-transparent hover:border-slate-200"
-                title="Volver al portal principal de la escuela"
-              >
-                <span>🏠</span>
-                <span className="hidden lg:inline">Inicio General</span>
+              <Link to={esPortada ? '/' : '/espanol#grados'} onClick={() => sounds.playClick()} className="lengua-volver-inicio">
+                <span aria-hidden="true">←</span> {esPortada ? 'Regresar al inicio' : 'Volver a los grados'}
               </Link>
-
-              {/* Botón Sala de Juegos Arcade */}
-              <NavLink
-                to="/espanol/juegos"
-                onClick={() => sounds.playClick()}
-                className={({ isActive }) =>
-                  `px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 ${
-                    isActive
-                      ? 'bg-[#3659d9] text-white shadow-md shadow-indigo-500/25'
-                      : 'bg-indigo-50/80 text-indigo-700 hover:bg-indigo-100 border border-indigo-200/60'
-                  }`
-                }
-              >
-                <span>🎮</span>
-                <span className="hidden sm:inline">Sala de Juegos</span>
-              </NavLink>
-
-              {/* Nivel / XP Badge */}
-              <button
-                onClick={() => {
-                  sounds.playClick();
-                  setModalTrofeosAbierto(true);
-                }}
-                title="Ver medallas y rango alcanzado"
-                className="px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white border border-slate-700 shadow-xs flex items-center gap-2 cursor-pointer transition-all hover:scale-102 active:scale-98"
-              >
-                <span className="text-base">{rangoActual.icono}</span>
-                <div className="text-left leading-tight hidden sm:block">
-                  <span className="text-[9px] font-extrabold text-amber-400 uppercase tracking-wider block">
-                    Nivel {rangoActual.nivel}
-                  </span>
-                  <span className="text-xs font-bold text-slate-200">
-                    {progreso.xpTotal} XP
-                  </span>
-                </div>
-              </button>
 
               {/* Voz Pedagógica */}
               <button
@@ -282,62 +182,23 @@ export default function SpanishLayout() {
             </div>
           </div>
 
-          {/* ══════════ BARRA DE SELECCIÓN RÁPIDA DE GRADOS ══════════ */}
-          <div className="border-t border-slate-200/70 bg-slate-50/80 px-4 py-2">
-            <div className="max-w-7xl mx-auto flex items-center gap-2 overflow-x-auto scrollbar-none">
-              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mr-1 shrink-0">
-                Grados:
-              </span>
-
-              {/* Grados Primaria */}
-              <div className="flex items-center gap-1 shrink-0">
-                {primaria.map((g) => (
-                  <NavLink
-                    key={g.id}
-                    to={`/espanol/grado/${g.id}`}
-                    onClick={() => sounds.playClick()}
-                    className={({ isActive }) =>
-                      `px-3 py-1 rounded-lg text-xs font-semibold transition-all flex items-center gap-1.5 ${
-                        isActive
-                          ? 'bg-emerald-600 text-white shadow-xs font-bold'
-                          : 'bg-white text-slate-700 border border-slate-200/80 hover:border-emerald-300 hover:text-emerald-700'
-                      }`
-                    }
-                  >
-                    <span>{g.icono}</span>
-                    <span>{g.nombre.replace('Grado ', '')}</span>
-                  </NavLink>
-                ))}
-              </div>
-
-              <div className="h-4 w-px bg-slate-200 mx-1 shrink-0" />
-
-              {/* Grados Secundaria */}
-              <div className="flex items-center gap-1 shrink-0">
-                {secundaria.map((g) => (
-                  <NavLink
-                    key={g.id}
-                    to={`/espanol/grado/${g.id}`}
-                    onClick={() => sounds.playClick()}
-                    className={({ isActive }) =>
-                      `px-3 py-1 rounded-lg text-xs font-semibold transition-all flex items-center gap-1.5 ${
-                        isActive
-                          ? 'bg-[#3659d9] text-white shadow-xs font-bold'
-                          : 'bg-white text-slate-700 border border-slate-200/80 hover:border-indigo-300 hover:text-indigo-700'
-                      }`
-                    }
-                  >
-                    <span>{g.icono}</span>
-                    <span>{g.nombre.replace('Grado ', '')}</span>
-                  </NavLink>
-                ))}
-              </div>
+          <nav aria-label="Cambiar de grado" className="border-t border-slate-200 bg-white">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 py-1.5 flex items-center gap-2 flex-wrap">
+              <span className="text-sm font-semibold text-slate-600 hidden sm:inline">Grados</span>
+              {grados.map((grado) => (
+                <NavLink key={grado.id} to={`/espanol/grado/${grado.id}`} end
+                  aria-label={grado.nombre}
+                  onClick={() => sounds.playClick()}
+                  className="lengua-nav-grado">
+                  {grado.numero}.º
+                </NavLink>
+              ))}
             </div>
-          </div>
+          </nav>
         </header>
 
         {/* ══════════ CONTENIDO PRINCIPAL ══════════ */}
-        <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-6 sm:py-8">
+        <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-4 sm:py-5">
           <Outlet />
         </main>
 
@@ -350,109 +211,7 @@ export default function SpanishLayout() {
           <p className="text-slate-400 max-w-lg mx-auto">
             Diseñada para grados 1° a 9° de básica rural y urbana • Fonética con voz para primero • Arcade didáctico • 100% Funcional sin Internet
           </p>
-          <div className="pt-2">
-            <Link
-              to="/"
-              className="text-[#3659d9] hover:underline font-semibold inline-flex items-center gap-1"
-            >
-              <span>← Volver al portal general de la escuela</span>
-            </Link>
-          </div>
         </footer>
-
-        {/* ══════════ MODAL DE TROFEOS Y RANGOS ══════════ */}
-        {modalTrofeosAbierto && (
-          <div className="fixed inset-0 z-50 bg-slate-950/70 backdrop-blur-sm flex items-center justify-center p-4 animate-fade-in">
-            <div className="bg-slate-900 border border-slate-800 text-white rounded-3xl max-w-2xl w-full p-6 sm:p-8 shadow-2xl space-y-6 max-h-[90vh] overflow-y-auto">
-              {/* Encabezado */}
-              <div className="flex items-center justify-between border-b border-slate-800 pb-4">
-                <div className="flex items-center gap-3">
-                  <div className="w-14 h-14 rounded-2xl bg-amber-400/10 border border-amber-400/30 flex items-center justify-center text-3xl">
-                    {rangoActual.icono}
-                  </div>
-                  <div>
-                    <span className="text-[10px] font-bold uppercase tracking-widest text-amber-400 block">
-                      Rango Actual
-                    </span>
-                    <h3 className="text-xl font-black text-white">{rangoActual.titulo}</h3>
-                    <p className="text-xs text-slate-400 font-medium">{rangoActual.desc}</p>
-                  </div>
-                </div>
-
-                <button
-                  onClick={() => setModalTrofeosAbierto(false)}
-                  className="w-9 h-9 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white flex items-center justify-center font-bold text-sm cursor-pointer transition-colors"
-                >
-                  ✕
-                </button>
-              </div>
-
-              {/* Barra de Progreso XP */}
-              <div className="bg-slate-950/60 p-4 rounded-2xl border border-slate-800 space-y-2">
-                <div className="flex justify-between items-center text-xs font-semibold">
-                  <span className="text-amber-400">⭐ {progreso.xpTotal} XP Acumulados</span>
-                  {siguienteRango ? (
-                    <span className="text-slate-400">
-                      Siguiente: {siguienteRango.titulo} ({siguienteRango.xpMin} XP)
-                    </span>
-                  ) : (
-                    <span className="text-emerald-400">¡Rango Máximo Alcanzado!</span>
-                  )}
-                </div>
-
-                <div className="w-full bg-slate-800 rounded-full h-3 overflow-hidden p-0.5">
-                  <div
-                    className="bg-gradient-to-r from-amber-400 via-orange-500 to-amber-500 h-full rounded-full transition-all duration-500"
-                    style={{ width: `${progresoPorcentaje}%` }}
-                  />
-                </div>
-
-                {siguienteRango && (
-                  <p className="text-[11px] text-slate-400 text-center">
-                    Te faltan <strong className="text-white">{xpParaSiguiente} XP</strong> para ascender a <strong className="text-amber-400">{siguienteRango.titulo}</strong>
-                  </p>
-                )}
-              </div>
-
-              {/* Insignias y Logros */}
-              <div className="space-y-3">
-                <span className="text-xs font-bold uppercase tracking-wider text-amber-400 block">
-                  Insignias Obtenidas ({progreso.insignias?.length || 0} / {INSIGNIAS_LOGROS.length}):
-                </span>
-
-                <div className="grid grid-cols-2 sm:grid-cols-5 gap-2.5">
-                  {INSIGNIAS_LOGROS.map((ins) => {
-                    const desbloqueada = (progreso.insignias || []).includes(ins.id);
-                    return (
-                      <div
-                        key={ins.id}
-                        className={`p-3 rounded-2xl border text-center flex flex-col items-center justify-center transition-all ${
-                          desbloqueada
-                            ? 'bg-amber-400/10 border-amber-400/40 text-white shadow-xs'
-                            : 'bg-slate-950/40 border-slate-800/80 text-slate-500 opacity-40'
-                        }`}
-                      >
-                        <span className="text-2xl mb-1">{ins.icono}</span>
-                        <span className="text-xs font-bold block leading-tight">{ins.titulo}</span>
-                        <span className="text-[9px] mt-0.5 opacity-70 leading-tight block">{ins.desc}</span>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-
-              {/* Botón de cierre */}
-              <div className="pt-2 text-center">
-                <button
-                  onClick={() => setModalTrofeosAbierto(false)}
-                  className="px-6 py-3 bg-[#3659d9] hover:bg-[#2845b5] text-white font-bold text-sm rounded-xl shadow-lg transition-all cursor-pointer"
-                >
-                  ¡Continuar Aprendiendo!
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
 
         {/* ══════════ MODAL CELEBRACIÓN DE NIVEL ══════════ */}
         {celebracionNivel && (
