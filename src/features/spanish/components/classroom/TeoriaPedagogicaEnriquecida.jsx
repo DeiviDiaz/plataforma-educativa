@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import JSConfetti from 'js-confetti';
 import { sounds } from '../../utils/audio';
 import { voiceReader } from '../../utils/speech';
@@ -10,15 +10,13 @@ export default function TeoriaPedagogicaEnriquecida({
   guia,
   gradoNumero = 1,
   gradoNombre = 'Grado Escolar',
-  mascota = 'Plumita el Búho',
   onAvanzarPaso
 }) {
+  const esInicial = gradoNumero <= 2;
   const esSecundaria = gradoNumero >= 6;
   const tituloGuia = guia.titulo || guia.nombre || 'Guía de Aprendizaje';
   const lecturaOriginal = guia.leccion?.lectura || '';
   const dba = guia.dba || '';
-  const estandares = guia.estandares || '';
-  const contenidos = guia.contenidos || '';
 
   // Motor de Conocimiento Enriquecido
   const sabiduria = getEnrichedKnowledge(guia, gradoNumero);
@@ -34,7 +32,7 @@ export default function TeoriaPedagogicaEnriquecida({
   const [pasoActivoFormula, setPasoActivoFormula] = useState(0);
 
   // Estados de Accesibilidad y Voz
-  const [tamanoFuente, setTamanoFuente] = useState('text-lg');
+  const [tamanoFuente, setTamanoFuente] = useState(esInicial ? 'text-xl' : 'text-lg');
   const [modoDislexia, setModoDislexia] = useState(false);
   const [leyendoVoz, setLeyendoVoz] = useState(false);
   const [copiadoExito, setCopiadoExito] = useState(false);
@@ -95,7 +93,7 @@ export default function TeoriaPedagogicaEnriquecida({
           emojiSize: 32,
           confettiNumber: 35
         });
-      } catch (e) {}
+      } catch {}
 
       // Premiar con XP según el nivel
       const xpGanados = indicePregunta === 0 ? 15 : indicePregunta === 1 ? 20 : 25;
@@ -162,33 +160,20 @@ export default function TeoriaPedagogicaEnriquecida({
       {/* ══════════════════════════════════════════════════════════════
           1. CABECERA HERO DE SABIDURÍA (IDENTIDAD Y ALINEACIÓN MEN)
           ══════════════════════════════════════════════════════════════ */}
-      <div className="bg-gradient-to-br from-blue-700 via-indigo-700 to-purple-800 text-white rounded-3xl p-6 sm:p-8 shadow-xl border-4 border-yellow-300 relative overflow-hidden">
-        {/* Destellos de fondo */}
-        <div className="absolute top-0 right-0 w-80 h-80 bg-pink-500/20 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute bottom-0 left-0 w-72 h-72 bg-amber-400/20 rounded-full blur-2xl pointer-events-none" />
+      <div className="lengua-panel relative">
+        <div className="relative z-10 flex flex-col xl:flex-row xl:items-center justify-between gap-6">
+          {!esInicial && (
+            <div className="space-y-3">
+              <p className="text-sm font-semibold text-slate-600">{guia.componente || 'Español'} · Estándar MEN Colombia</p>
+              <h3 className="font-extrabold text-xl sm:text-2xl text-slate-900 leading-tight">
+                {sabiduria.tituloAtractivo}
+              </h3>
 
-        <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
-          <div className="space-y-3">
-            <div className="flex flex-wrap items-center gap-2">
-              <span className="bg-amber-400 text-slate-950 font-title font-black text-xs px-3.5 py-1 rounded-full shadow-xs flex items-center gap-1.5 border border-yellow-200 uppercase">
-                <span>🦉</span> Academia de Lengua Viva • {gradoNombre}
-              </span>
-              <span className="bg-white/20 backdrop-blur-md text-white font-title font-bold text-xs px-3 py-1 rounded-full border border-white/30 uppercase">
-                {guia.componente || 'Español'}
-              </span>
-              <span className="bg-emerald-500/90 text-white font-title font-bold text-xs px-3 py-1 rounded-full border border-emerald-300 flex items-center gap-1">
-                <span>🇨🇴</span> Estándar MEN Colombia
-              </span>
+              <p className="text-slate-700 text-sm max-w-2xl leading-relaxed">
+                {sabiduria.subtituloPedagogico}
+              </p>
             </div>
-
-            <h1 className="font-title font-black text-2xl sm:text-4xl text-white tracking-tight leading-tight">
-              {sabiduria.tituloAtractivo}
-            </h1>
-
-            <p className="text-blue-100 text-xs sm:text-sm font-semibold max-w-2xl leading-relaxed">
-              {sabiduria.subtituloPedagogico}
-            </p>
-          </div>
+          )}
 
           {/* Botones de Audio y Glosario Rápido */}
           <div className="flex flex-wrap items-center gap-2.5 shrink-0">
@@ -200,12 +185,12 @@ export default function TeoriaPedagogicaEnriquecida({
                   : 'bg-gradient-to-r from-amber-400 to-yellow-300 hover:from-amber-300 hover:to-yellow-200 text-slate-950 shadow-[0_4px_0_#b45309]'
               }`}
             >
-              <span>{leyendoVoz ? '⏹️ Detener Voz' : '🔊 Escuchar Clase Narrada'}</span>
+              <span>{leyendoVoz ? 'Detener lectura' : 'Escuchar lectura'}</span>
             </button>
 
             <button
               onClick={() => setModalGlosario(true)}
-              className="px-4 py-3.5 rounded-2xl font-title font-black text-xs sm:text-sm bg-white/15 hover:bg-white/25 text-white border-2 border-white/40 flex items-center gap-1.5 cursor-pointer backdrop-blur-md transition-all"
+              className="lengua-pestana"
             >
               <span>📖</span>
               <span>Glosario</span>
@@ -214,23 +199,24 @@ export default function TeoriaPedagogicaEnriquecida({
         </div>
 
         {/* Desglose de DBA Oficial Expandible */}
-        {dba && (
-          <div className="mt-5 bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-4 text-xs sm:text-sm text-blue-100">
+        {!esInicial && dba && (
+          <div className="mt-5 bg-slate-50 border border-slate-200 rounded-xl p-3 text-sm text-slate-700">
             <div className="flex items-center justify-between gap-3">
               <div className="flex items-start gap-2.5">
                 <span className="text-xl">📘</span>
                 <div>
-                  <strong className="text-yellow-300 block font-title font-black text-xs uppercase tracking-wider">
-                    Derecho Básico de Aprendizaje (DBA Oficial):
+                  <strong className="block font-bold text-sm text-slate-900">
+                    Derecho básico de aprendizaje
                   </strong>
-                  <p className="mt-0.5 text-white font-medium leading-relaxed">
+                  <p className="mt-0.5 leading-relaxed">
                     {verDbaDetalle ? dba : `${dba.slice(0, 150)}...`}
                   </p>
                 </div>
               </div>
               <button
+                aria-expanded={verDbaDetalle}
                 onClick={() => setVerDbaDetalle(!verDbaDetalle)}
-                className="text-yellow-300 hover:text-yellow-200 font-black text-xs underline shrink-0 cursor-pointer"
+                className="text-indigo-800 font-bold text-sm underline shrink-0 cursor-pointer"
               >
                 {verDbaDetalle ? 'Menos ▲' : 'Ver Completo ▼'}
               </button>
@@ -242,96 +228,21 @@ export default function TeoriaPedagogicaEnriquecida({
       {/* ══════════════════════════════════════════════════════════════
           2. SELECTOR DE PESTAÑAS INTERACTIVAS DE SABIDURÍA (4 MODOS)
           ══════════════════════════════════════════════════════════════ */}
-      <div className="bg-white rounded-3xl p-3 shadow-md border-2 border-slate-200">
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-2">
-          <button
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2" role="group" aria-label="Recursos de lectura">
+        {[
+          ['lectura', 'Texto'],
+          ['laboratorio', esInicial ? 'Ejemplos' : 'Reglas y ejemplos'],
+          ['desafio', 'Reto'],
+          ['pergamino', esInicial ? 'Repasar' : 'Ficha de repaso'],
+        ].map(([id, nombre]) => (
+          <button key={id} type="button" className="lengua-pestana" aria-pressed={pestanaActiva === id}
             onClick={() => {
               sounds.playClick();
-              setPestanaActiva('lectura');
-            }}
-            className={`p-3.5 rounded-2xl border-b-4 text-left transition-all flex items-center gap-3 cursor-pointer ${
-              pestanaActiva === 'lectura'
-                ? 'bg-blue-600 border-blue-800 text-white shadow-md scale-102 ring-4 ring-blue-200'
-                : 'bg-slate-50 hover:bg-slate-100 text-slate-700 border-slate-200'
-            }`}
-          >
-            <span className="text-2xl sm:text-3xl shrink-0">📖</span>
-            <div className="min-w-0">
-              <span className="font-title font-black text-xs sm:text-sm block truncate leading-tight">
-                1. Lectura Viva
-              </span>
-              <p className={`text-[10px] mt-0.5 truncate ${pestanaActiva === 'lectura' ? 'text-white/80' : 'text-slate-400'}`}>
-                Historia y narrativa guiada
-              </p>
-            </div>
+              setPestanaActiva(id);
+            }}>
+            {nombre}
           </button>
-
-          <button
-            onClick={() => {
-              sounds.playClick();
-              setPestanaActiva('laboratorio');
-            }}
-            className={`p-3.5 rounded-2xl border-b-4 text-left transition-all flex items-center gap-3 cursor-pointer ${
-              pestanaActiva === 'laboratorio'
-                ? 'bg-purple-600 border-purple-800 text-white shadow-md scale-102 ring-4 ring-purple-200'
-                : 'bg-slate-50 hover:bg-slate-100 text-slate-700 border-slate-200'
-            }`}
-          >
-            <span className="text-2xl sm:text-3xl shrink-0">🧪</span>
-            <div className="min-w-0">
-              <span className="font-title font-black text-xs sm:text-sm block truncate leading-tight">
-                2. Laboratorio de Reglas
-              </span>
-              <p className={`text-[10px] mt-0.5 truncate ${pestanaActiva === 'laboratorio' ? 'text-white/80' : 'text-slate-400'}`}>
-                Fórmulas, esquemas y trucos
-              </p>
-            </div>
-          </button>
-
-          <button
-            onClick={() => {
-              sounds.playClick();
-              setPestanaActiva('desafio');
-            }}
-            className={`p-3.5 rounded-2xl border-b-4 text-left transition-all flex items-center gap-3 cursor-pointer ${
-              pestanaActiva === 'desafio'
-                ? 'bg-amber-500 border-amber-700 text-slate-950 shadow-md scale-102 ring-4 ring-amber-200'
-                : 'bg-slate-50 hover:bg-slate-100 text-slate-700 border-slate-200'
-            }`}
-          >
-            <span className="text-2xl sm:text-3xl shrink-0">🎯</span>
-            <div className="min-w-0">
-              <span className="font-title font-black text-xs sm:text-sm block truncate leading-tight">
-                3. Desafío Mente de Oro
-              </span>
-              <p className={`text-[10px] mt-0.5 truncate ${pestanaActiva === 'desafio' ? 'text-slate-900 font-bold' : 'text-slate-400'}`}>
-                3 Niveles • +60 XP
-              </p>
-            </div>
-          </button>
-
-          <button
-            onClick={() => {
-              sounds.playClick();
-              setPestanaActiva('pergamino');
-            }}
-            className={`p-3.5 rounded-2xl border-b-4 text-left transition-all flex items-center gap-3 cursor-pointer ${
-              pestanaActiva === 'pergamino'
-                ? 'bg-emerald-600 border-emerald-800 text-white shadow-md scale-102 ring-4 ring-emerald-200'
-                : 'bg-slate-50 hover:bg-slate-100 text-slate-700 border-slate-200'
-            }`}
-          >
-            <span className="text-2xl sm:text-3xl shrink-0">📜</span>
-            <div className="min-w-0">
-              <span className="font-title font-black text-xs sm:text-sm block truncate leading-tight">
-                4. Pergamino Coleccionable
-              </span>
-              <p className={`text-[10px] mt-0.5 truncate ${pestanaActiva === 'pergamino' ? 'text-white/80' : 'text-slate-400'}`}>
-                Ficha de oro para tu cuaderno
-              </p>
-            </div>
-          </button>
-        </div>
+        ))}
       </div>
 
       {/* ══════════════════════════════════════════════════════════════
@@ -345,17 +256,16 @@ export default function TeoriaPedagogicaEnriquecida({
                 <span className="text-3xl">📖</span>
                 <div>
                   <h3 className="font-title font-black text-xl text-slate-900">
-                    Lectura Oficial y Fundamentación Viva
+                    Texto de la lección
                   </h3>
-                  <p className="text-xs text-slate-500 font-bold">
-                    Descubre el conocimiento detrás de las palabras y su aplicación real
-                  </p>
+                  {!esInicial && <p className="text-sm text-slate-600">Descubre cómo se usan las palabras en este texto.</p>}
                 </div>
               </div>
 
               {/* Controles de tipografía */}
-              <div className="flex items-center gap-2">
+              <div className="flex flex-wrap items-center gap-2">
                 <button
+                  aria-pressed={modoDislexia}
                   onClick={() => setModoDislexia(!modoDislexia)}
                   className={`px-3 py-1.5 rounded-xl text-xs font-title font-bold border transition-all cursor-pointer ${
                     modoDislexia
@@ -368,18 +278,24 @@ export default function TeoriaPedagogicaEnriquecida({
 
                 <div className="flex items-center gap-1 bg-slate-100 p-1 rounded-xl border border-slate-200">
                   <button
+                    aria-label="Letra normal"
+                    aria-pressed={tamanoFuente === 'text-base'}
                     onClick={() => setTamanoFuente('text-base')}
                     className={`px-2.5 py-1 rounded-lg text-xs font-bold ${tamanoFuente === 'text-base' ? 'bg-white shadow-xs font-black' : 'text-slate-500'}`}
                   >
                     A
                   </button>
                   <button
+                    aria-label="Letra grande"
+                    aria-pressed={tamanoFuente === 'text-lg'}
                     onClick={() => setTamanoFuente('text-lg')}
                     className={`px-2.5 py-1 rounded-lg text-xs font-bold ${tamanoFuente === 'text-lg' ? 'bg-white shadow-xs font-black' : 'text-slate-500'}`}
                   >
                     A+
                   </button>
                   <button
+                    aria-label="Letra muy grande"
+                    aria-pressed={tamanoFuente === 'text-xl'}
                     onClick={() => setTamanoFuente('text-xl')}
                     className={`px-2.5 py-1 rounded-lg text-xs font-bold ${tamanoFuente === 'text-xl' ? 'bg-white shadow-xs font-black' : 'text-slate-500'}`}
                   >
@@ -391,12 +307,12 @@ export default function TeoriaPedagogicaEnriquecida({
 
             {/* Texto de Lectura Principal */}
             <div
-              className={`text-slate-800 leading-relaxed font-body font-medium p-6 sm:p-8 rounded-2xl border ${
+              className={`lengua-lectura text-slate-800 font-body font-medium p-3 sm:p-6 rounded-xl border ${
                 esSecundaria ? 'bg-slate-50/70 border-indigo-100' : 'bg-emerald-50/30 border-emerald-100'
               } ${tamanoFuente}`}
             >
               {lecturaMostrar.split('\n\n').map((parrafo, i) => (
-                <p key={i} className="mb-4 last:mb-0 indent-4 leading-relaxed">
+                <p key={i} className="mb-4 last:mb-0">
                   {parrafo}
                 </p>
               ))}
@@ -404,22 +320,25 @@ export default function TeoriaPedagogicaEnriquecida({
 
             {/* Curiosidad Asombrosa */}
             {sabiduria.curiosidadAsombrosa && (
-              <div className="bg-gradient-to-r from-amber-50 to-yellow-50 border-2 border-amber-300 p-5 sm:p-6 rounded-2xl flex items-start gap-4 shadow-xs">
-                <div className="w-12 h-12 rounded-2xl bg-amber-400 text-slate-950 flex items-center justify-center text-3xl shadow-[0_3px_0_#b45309] shrink-0">
-                  💡
+              <details className="rounded-xl border border-amber-200 bg-amber-50 p-4" open={esInicial ? undefined : true}>
+                <summary className="lengua-summary">Dato curioso</summary>
+                <div className="flex items-start gap-4 mt-3">
+                  <div className="w-12 h-12 rounded-2xl bg-amber-400 text-slate-950 flex items-center justify-center text-3xl shadow-[0_3px_0_#b45309] shrink-0">
+                    💡
+                  </div>
+                  <div className="space-y-1">
+                    <h4 className="font-title font-black text-amber-950 text-sm uppercase tracking-wide">
+                      {sabiduria.curiosidadAsombrosa.titulo}
+                    </h4>
+                    <p className="text-amber-900 font-bold text-xs sm:text-sm leading-relaxed">
+                      {sabiduria.curiosidadAsombrosa.texto}
+                    </p>
+                    <span className="inline-block bg-amber-200/80 text-amber-950 text-xs font-black px-2.5 py-0.5 rounded-md mt-1">
+                      ✨ {sabiduria.curiosidadAsombrosa.datoCurioso}
+                    </span>
+                  </div>
                 </div>
-                <div className="space-y-1">
-                  <h4 className="font-title font-black text-amber-950 text-sm uppercase tracking-wide">
-                    {sabiduria.curiosidadAsombrosa.titulo}
-                  </h4>
-                  <p className="text-amber-900 font-bold text-xs sm:text-sm leading-relaxed">
-                    {sabiduria.curiosidadAsombrosa.texto}
-                  </p>
-                  <span className="inline-block bg-amber-200/80 text-amber-950 text-xs font-black px-2.5 py-0.5 rounded-md mt-1">
-                    ✨ {sabiduria.curiosidadAsombrosa.datoCurioso}
-                  </span>
-                </div>
-              </div>
+              </details>
             )}
 
             {/* Botón para pasar al Laboratorio */}
