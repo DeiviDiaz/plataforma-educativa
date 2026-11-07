@@ -75,7 +75,7 @@ export default function Home() {
             </div>
             <div>
               <h5 className="font-title font-black text-sm text-slate-900">Guía de Reglas</h5>
-              <p className="text-xs text-slate-500 font-bold">Ortografía y acentuación</p>
+              <p className="text-xs text-slate-500 font-bold">Ortografía y acentuación.</p>
             </div>
           </div>
           <button
