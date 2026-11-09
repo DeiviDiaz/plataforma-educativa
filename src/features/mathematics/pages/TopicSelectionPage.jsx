@@ -9,6 +9,10 @@ import { gradesCurriculum } from '../data/grades-data.js';
 import { interactiveMissions, interactivePeriods } from '../data/interactive-missions.js';
 import GradeFiveGame from '../games/GradeFiveGame.jsx';
 import InteractiveMissionGame from '../games/InteractiveMissionGame.jsx';
+import FirstGradeMathGame from '../games/FirstGradeMathGame.jsx';
+import FirstGradeSecondPeriodGame from '../games/FirstGradeSecondPeriodGame.jsx';
+import FirstGradeThirdPeriodGame from '../games/FirstGradeThirdPeriodGame.jsx';
+import FirstGradeFourthPeriodGame from '../games/FirstGradeFourthPeriodGame.jsx';
 
 const periodIcons = [Compass, Target, Sparkles, Hammer];
 
@@ -17,6 +21,21 @@ function TopicSelectionPage() {
   const currentGrade = Number(gradeId);
   const [activeMissionId, setActiveMissionId] = useState(null);
   const [activeGameIndex, setActiveGameIndex] = useState(null);
+
+  if (currentGrade === 1) {
+    if (![1, 2, 3, 4].includes(Number(periodId))) {
+      return (
+        <main className="page-container">
+          <Link className="back-link" to={`/matematicas/grado/${currentGrade}`}>← Volver a los periodos</Link>
+          <section className="message-card"><h1>Este periodo estará disponible próximamente.</h1></section>
+        </main>
+      );
+    }
+    if (Number(periodId) === 1) return <FirstGradeMathGame />;
+    if (Number(periodId) === 2) return <FirstGradeSecondPeriodGame />;
+    if (Number(periodId) === 3) return <FirstGradeThirdPeriodGame />;
+    return <FirstGradeFourthPeriodGame />;
+  }
 
   if (currentGrade === 4) {
     const selectedPeriod = gradeFourPeriods.find((period) => period.id === Number(periodId));

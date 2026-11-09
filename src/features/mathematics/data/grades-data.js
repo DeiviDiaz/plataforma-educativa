@@ -1,5 +1,44 @@
 // src/features/mathematics/data/grades-data.js
 export const gradesCurriculum = {
+  1: {
+    grade: 1,
+    subject: 'matematicas',
+    title: 'Matemáticas Primer Grado',
+    periods: [
+      {
+        id: 1,
+        title: 'Periodo 1: Aventuras matemáticas',
+        description: 'Descubre los números del 0 al 50, cuenta, ordena y resuelve adiciones y sustracciones jugando.',
+        topics: [
+          { id: 'aventuras-matematicas', title: 'Aventuras matemáticas: números y operaciones', gameIds: ['aventuras-matematicas'] },
+        ],
+      },
+      {
+        id: 2,
+        title: 'Periodo 2: Cuando contamos aprendemos',
+        description: 'Adiciona reagrupando, desagrupa para restar y resuelve situaciones con números hasta 99.',
+        topics: [
+          { id: 'cuando-contamos-aprendemos', title: 'Cuando contamos aprendemos', gameIds: ['cuando-contamos-aprendemos'] },
+        ],
+      },
+      {
+        id: 3,
+        title: 'Periodo 3: Exploremos y descubramos las centenas',
+        description: 'Construye centenas, representa números hasta 999 y resuelve operaciones en nuevas aventuras.',
+        topics: [
+          { id: 'aventuras-centenas', title: 'Aventuras de las centenas', gameIds: ['aventuras-centenas'] },
+        ],
+      },
+      {
+        id: 4,
+        title: 'Periodo 4: Juguemos con las operaciones matemáticas',
+        description: 'Explora unidades de mil, figuras, sólidos, medidas, tiempo y organización de datos.',
+        topics: [
+          { id: 'operaciones-matematicas', title: 'Juguemos con las operaciones matemáticas', gameIds: ['operaciones-matematicas'] },
+        ],
+      },
+    ],
+  },
   4: {
     grade: 4,
     subject: 'matematicas',
