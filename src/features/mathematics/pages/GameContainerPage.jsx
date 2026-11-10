@@ -18,6 +18,10 @@ import VariationSimulatorGame from '../games/VariationSimulatorGame.jsx';
 import VolumeConverterGame from '../games/VolumeConverterGame.jsx';
 import CapacityDispenserGame from '../games/CapacityDispenserGame.jsx';
 import VolumeCapacityLabGame from '../games/VolumeCapacityLabGame.jsx';
+import ExponentRootGame from '../games/ExponentRootGame.jsx';
+import MonomialDegreeGame from '../games/MonomialDegreeGame.jsx';
+import PolynomialOpsGame from '../games/PolynomialOpsGame.jsx';
+
 // Motor Universal y Registro
 import UniversalTopicEngine from '../games/UniversalTopicEngine.jsx';
 import { TOPIC_GENERATORS } from '../data/topics-game-registry.js';
@@ -51,45 +55,80 @@ export default function GameContainerPage() {
     );
   }
 
- const renderGame = () => {
-  // Grado 7° - Periodo 1: Relaciones y Ecuaciones
-  if (topicId === 'ecuaciones-lineales') return <AlgebraScaleGame />;
-  if (topicId === 'variables-incognitas') return <AlgebraClassifierGame />;
-  if (topicId === 'conjunto-solucion') return <NumberLineInequalityGame />;
-  // Grado 7° - Periodo 2: Números Racionales
-  if (topicId === 'racionales-recta') return <FractionNumberLineGame />;
-  if (topicId === 'operaciones-racionales') return <FractionPizzaGame />;
-  if (topicId === 'decimales-racionales') return <DecimalMatchGame />;
-  // Grado 7° - Periodo 3: Proporcionalidad y Variación
-  if (topicId === 'razones-proporciones') return <ProportionRecipeGame />;
-  if (topicId === 'porcentajes') return <PercentageTankGame />;
-  if (topicId === 'proporcionalidad-directa-inversa') return <VariationSimulatorGame />;
-  // Grado 7° - Periodo 4: Capacidad y Volumen
-  if (topicId === 'unidades-volumen') return <VolumeConverterGame />;
-  if (topicId === 'magnitud-capacidad') return <CapacityDispenserGame />;
-  if (topicId === 'equivalencias-volumen-capacidad') return <VolumeCapacityLabGame />;
+  const renderGame = () => {
+    // -------------------------------------------------------
+    // GRADO 7° - Periodo 1: Relaciones y Ecuaciones
+    // -------------------------------------------------------
+    if (topicId === 'ecuaciones-lineales') return <AlgebraScaleGame />;
+    if (topicId === 'variables-incognitas') return <AlgebraClassifierGame />;
+    if (topicId === 'conjunto-solucion') return <NumberLineInequalityGame />;
 
-  // Grado 8°
-  if (topicId === 'teorema-pitagoras') return <PythagorasGame />;
+    // -------------------------------------------------------
+    // GRADO 7° - Periodo 2: Números Racionales
+    // -------------------------------------------------------
+    if (topicId === 'racionales-recta') return <FractionNumberLineGame />;
+    if (topicId === 'operaciones-racionales') return <FractionPizzaGame />;
+    if (topicId === 'decimales-racionales') return <DecimalMatchGame />;
 
-  // Grado 9°
-  if (topicId === 'funcion-lineal-afin') return <LinearFunctionGame />;
+    // -------------------------------------------------------
+    // GRADO 7° - Periodo 3: Proporcionalidad y Variación
+    // -------------------------------------------------------
+    if (topicId === 'razones-proporciones') return <ProportionRecipeGame />;
+    if (topicId === 'porcentajes') return <PercentageTankGame />;
+    if (topicId === 'proporcionalidad-directa-inversa') return <VariationSimulatorGame />;
 
-  // Fallback con motor procedural para los demás temas del plan
-  const generatorFn = TOPIC_GENERATORS[topicId];
-  if (generatorFn) {
-    return <UniversalTopicEngine generatorFn={generatorFn} topicTitle={currentTopic.title} />;
-  }
+    // -------------------------------------------------------
+    // GRADO 7° - Periodo 4: Capacidad y Volumen
+    // -------------------------------------------------------
+    if (topicId === 'unidades-volumen') return <VolumeConverterGame />;
+    if (topicId === 'magnitud-capacidad') return <CapacityDispenserGame />;
+    if (topicId === 'equivalencias-volumen-capacidad') return <VolumeCapacityLabGame />;
 
-  // Fallback en caso de tema no registrado
-  return (
-    <div style={{ textAlign: 'center', padding: '40px', backgroundColor: '#fff', borderRadius: '16px' }}>
-      <p style={{ fontSize: '1.1rem', color: '#475569' }}>
-        El minijuego para <strong>{currentTopic.title}</strong> está en preparación.
-      </p>
-    </div>
-  );
-};
+    // -------------------------------------------------------
+    // GRADO 8° - Periodo 1: Reales y Polinomios
+    // Usamos includes() para atrapar cualquier variante de slug
+    // -------------------------------------------------------
+    if (topicId.includes('potenciacion') || topicId.includes('radicacion')) {
+      return <ExponentRootGame />;
+    }
+
+    if (
+      topicId.includes('monomio') ||
+      topicId.includes('terminos-semejantes') ||
+      topicId.includes('grados-semejantes') ||
+      topicId.includes('grado-absoluto')
+    ) {
+      return <MonomialDegreeGame />;
+    }
+
+    if (
+      topicId.includes('polinomio') ||
+      topicId.includes('operaciones-aditivas')
+    ) {
+      return <PolynomialOpsGame />;
+    }
+
+    // -------------------------------------------------------
+    // GRADO 8° y 9°
+    // -------------------------------------------------------
+    if (topicId === 'teorema-pitagoras') return <PythagorasGame />;
+    if (topicId === 'funcion-lineal-afin') return <LinearFunctionGame />;
+
+    // Fallback con motor procedural para los demás temas del plan
+    const generatorFn = TOPIC_GENERATORS[topicId];
+    if (generatorFn) {
+      return <UniversalTopicEngine generatorFn={generatorFn} topicTitle={currentTopic.title} />;
+    }
+
+    // Fallback en caso de tema no registrado
+    return (
+      <div style={{ textAlign: 'center', padding: '40px', backgroundColor: '#fff', borderRadius: '16px' }}>
+        <p style={{ fontSize: '1.1rem', color: '#475569' }}>
+          El minijuego para <strong>{currentTopic.title}</strong> está en preparación.
+        </p>
+      </div>
+    );
+  };
 
   return (
     <main style={{ minHeight: '90vh', padding: '24px 16px', backgroundColor: '#f8fafc' }}>
