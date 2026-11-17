@@ -1,6 +1,8 @@
 import { useEffect, useMemo, useState } from 'react';
+import { motion } from 'framer-motion';
 import { ArrowLeft, Volume2, VolumeX } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { useGameEffects } from '../effects/useGameEffects.js';
 
 const topics = [
   {
@@ -137,6 +139,7 @@ export default function FirstGradeFourthPeriodGame() {
   const [muted, setMuted] = useState(false);
   const [volume, setVolume] = useState(1);
   const [finalStep, setFinalStep] = useState(0);
+  const { celebrate } = useGameEffects();
   const isFinal = screen === 'final';
   const topic = topics[topicIndex];
   const task = isFinal ? finalTasks[finalStep] : topic.tasks[step];
@@ -146,6 +149,7 @@ export default function FirstGradeFourthPeriodGame() {
   const progress = useMemo(() => screen === 'map' ? 0 : screen === 'win' ? 100 : isFinal ? Math.round((finalStep / finalTasks.length) * 100) : Math.round((step / topic.tasks.length) * 100), [screen, isFinal, step, finalStep, topic.tasks.length]);
   const start = (index) => { setTopicIndex(index); setStep(0); setScreen('play'); };
   const done = () => {
+    celebrate();
     if (isFinal) {
       if (finalStep < finalTasks.length - 1) setFinalStep(finalStep + 1);
       else setScreen('complete');
@@ -153,10 +157,10 @@ export default function FirstGradeFourthPeriodGame() {
     else { setCompleted((items) => [...new Set([...items, topicIndex])]); setScreen('win'); }
   };
   const allTopicsDone = completed.length === topics.length;
-  return <main className="first-grade-game">
+  return <motion.main className="first-grade-game" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}>
     <header className="first-grade-header"><button className="back-link" type="button" onClick={() => navigate('/matematicas/grado/1')}><ArrowLeft size={18} /> Volver al periodo</button><span>⭐ {completed.length * 7} / 42</span><button className="voice-button" type="button" onClick={() => setMuted((value) => !value)} aria-label={muted ? 'Activar voz' : 'Silenciar voz'}>{muted ? <VolumeX /> : <Volume2 />}</button></header>
     <div className="first-grade-audio"><button type="button" onClick={() => speak(line, muted, volume)}>▶ Escuchar / repetir</button><label htmlFor="fourth-period-volume">Volumen</label><input id="fourth-period-volume" type="range" min="0" max="100" value={volume * 100} onChange={(event) => setVolume(Number(event.target.value) / 100)} /></div>
     {screen === 'map' && <><div className="page-heading"><p className="page-eyebrow">MATEMÁTICAS · PRIMER GRADO · PERIODO 4</p><h1>¡Juguemos con las operaciones matemáticas!</h1><p>Recorre las seis estaciones y descubre nuevas formas de aprender.</p></div><section className="mission-grid">{topics.map((item, index) => <button className="mission-card first-grade-adventure" type="button" key={item.title} onClick={() => start(index)}><span className="mission-card__icon">{item.icon}</span><span className="mission-card__number">AVENTURA {index + 1}</span><h2>{item.title}</h2><span className="period-status">{completed.includes(index) ? '⭐ ¡Completada!' : '✨ ¡Explorar!'}</span></button>)}</section>{allTopicsDone && <button className="game-primary-button" type="button" onClick={() => { setFinalStep(0); setScreen('final'); }}>🏅 Gran misión final</button>}</>}
     {screen !== 'map' && <section className="first-grade-play"><div className="first-grade-play-top"><button className="back-link" type="button" onClick={() => setScreen('map')}><ArrowLeft size={18} /> Mapa</button><h1>{isFinal ? '🏅 Gran misión final' : topic.title}</h1><span>{isFinal ? `Parada ${finalStep + 1} / 6` : `Reto ${step + 1} / 7`}</span></div><div className="first-grade-progress"><span style={{ width: `${progress}%` }} /></div><div className="first-grade-field">{screen === 'win' ? <div className="first-grade-intro"><div className="first-grade-art">🏆</div><h2>¡Aventura superada!</h2><p>Conseguiste 7 estrellas.</p><button className="game-secondary-button" type="button" onClick={() => setScreen('map')}>← Volver al mapa</button></div> : screen === 'complete' ? <div className="first-grade-intro"><div className="first-grade-art">🏅</div><h2>¡Gran explorador matemático!</h2><p>Completaste todas las estaciones y la misión final.</p><button className="game-primary-button" type="button" onClick={() => setScreen('map')}>Volver al mapa</button></div> : <><p className="page-eyebrow">{isFinal ? 'MISIÓN FINAL' : `RETO ${step + 1} DE 7`}</p><h2>{isFinal ? task[0] : task[1]}</h2>{isFinal ? <FinalTask task={task} onDone={done} /> : <Task task={task} onDone={done} />}</>}</div></section>}
-  </main>;
+  </motion.main>;
 }

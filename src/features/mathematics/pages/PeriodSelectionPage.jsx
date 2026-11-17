@@ -4,10 +4,14 @@ import { gradeFivePeriods } from '../data/grade-five-games.js';
 import { gradeFourPeriods } from '../data/grade-four-games.js';
 import { gradesCurriculum } from '../data/grades-data.js';
 import { interactivePeriods } from '../data/interactive-missions.js';
+import GradeOneAdventurePage from './GradeOneAdventurePage.jsx';
+import GradeTwoAdventurePage from './GradeTwoAdventurePage.jsx';
 
 export default function PeriodSelectionPage() {
   const { gradeId } = useParams();
   const currentGrade = Number(gradeId);
+  if (currentGrade === 1) return <GradeOneAdventurePage />;
+  if (currentGrade === 2) return <GradeTwoAdventurePage />;
   const curriculum = currentGrade === 4
     ? { periods: gradeFourPeriods }
     : currentGrade === 5
