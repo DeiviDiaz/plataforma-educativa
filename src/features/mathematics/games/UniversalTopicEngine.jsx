@@ -1,4 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
+import { useGameEffects } from '../effects/useGameEffects.js';
+import { buttonMotion } from '../effects/motionVariants.js';
 
 export default function UniversalTopicEngine({ generatorFn, topicTitle }) {
   const [level, setLevel] = useState(null);
@@ -6,6 +9,7 @@ export default function UniversalTopicEngine({ generatorFn, topicTitle }) {
   const [lives, setLives] = useState(3);
   const [streak, setStreak] = useState(0);
   const [feedback, setFeedback] = useState(null);
+  const { playSelection, playError, celebrate } = useGameEffects();
 
 
 const nextChallenge = () => {
@@ -36,6 +40,7 @@ const nextChallenge = () => {
       setScore((s) => s + 15 + streak * 5);
       setStreak((st) => st + 1);
       setFeedback({ type: 'success', msg: '¡Excelente! ' + (level.explanation || '') });
+      celebrate();
       setTimeout(() => {
         setFeedback(null);
         nextChallenge();
@@ -47,6 +52,7 @@ const nextChallenge = () => {
         type: 'error',
         msg: `Incorrecto. La respuesta era: "${level.correct}". ${level.explanation || ''}`
       });
+      playError();
       setTimeout(() => setFeedback(null), 1800);
     }
   };
@@ -76,7 +82,7 @@ const nextChallenge = () => {
   }
 
   return (
-    <div style={styles.container}>
+    <motion.div style={styles.container} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}>
       <div style={styles.hud}>
         <span>❤️ {lives}</span>
         <span>🔥 Racha: {streak}</span>
@@ -91,7 +97,8 @@ const nextChallenge = () => {
           {level.options.map((opt, i) => (
             <button
               key={i}
-              onClick={() => handleSelect(opt)}
+              onClick={() => { playSelection(); handleSelect(opt); }}
+              {...buttonMotion}
               style={styles.optionBtn}
             >
               {opt}
@@ -112,7 +119,7 @@ const nextChallenge = () => {
           </div>
         )}
       </div>
-    </div>
+    </motion.div>
   );
 }
 

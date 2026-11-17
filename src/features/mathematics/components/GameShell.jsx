@@ -1,4 +1,5 @@
 import React from 'react';
+import { motion } from 'framer-motion';
 
 export default function GameShell({
   period = 1,
@@ -17,9 +18,12 @@ export default function GameShell({
   children,
 }) {
   return (
-    <div
+    <motion.div
       translate="no"
       className="notranslate"
+      initial={{ opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3 }}
       style={{
         maxWidth: '1100px',
         margin: '0 auto',
@@ -259,6 +263,6 @@ export default function GameShell({
           )}
         </section>
       </div>
-    </div>
+    </motion.div>
   );
 }

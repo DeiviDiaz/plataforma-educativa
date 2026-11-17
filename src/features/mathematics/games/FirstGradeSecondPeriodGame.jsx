@@ -1,6 +1,8 @@
 import { useEffect, useMemo, useState } from 'react';
+import { motion } from 'framer-motion';
 import { ArrowLeft, ArrowRight, Volume2, VolumeX } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { useGameEffects } from '../effects/useGameEffects.js';
 
 const missions = [
   {
@@ -109,6 +111,7 @@ export default function FirstGradeSecondPeriodGame() {
   const [completed, setCompleted] = useState([]);
   const [muted, setMuted] = useState(false);
   const [volume, setVolume] = useState(1);
+  const { celebrate } = useGameEffects();
   const mission = missions[missionIndex];
   const task = mission.tasks[step];
   const line = screen === 'map' ? 'Elige una misión del segundo periodo.' : screen === 'win' ? 'Terminaste esta misión y ganaste una estrella.' : task.text;
@@ -116,11 +119,11 @@ export default function FirstGradeSecondPeriodGame() {
   useEffect(() => { speak(line, muted, volume); }, [line, muted, volume]);
   const progress = useMemo(() => screen === 'map' ? 0 : screen === 'win' ? 100 : Math.round((step / mission.tasks.length) * 100), [screen, step, mission.tasks.length]);
   const start = (index) => { setMissionIndex(index); setStep(0); setScreen('play'); };
-  const done = () => { if (step < mission.tasks.length - 1) setStep(step + 1); else { setCompleted((items) => [...new Set([...items, missionIndex])]); setScreen('win'); } };
-  return <main className="first-grade-game">
+  const done = () => { celebrate(); if (step < mission.tasks.length - 1) setStep(step + 1); else { setCompleted((items) => [...new Set([...items, missionIndex])]); setScreen('win'); } };
+  return <motion.main className="first-grade-game" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}>
     <header className="first-grade-header"><button className="back-link" type="button" onClick={() => navigate('/matematicas/grado/1')}><ArrowLeft size={18} /> Volver al periodo</button><span>⭐ {completed.length} / 42</span><button className="voice-button" type="button" onClick={() => setMuted((value) => !value)} aria-label={muted ? 'Activar voz' : 'Silenciar voz'}>{muted ? <VolumeX /> : <Volume2 />}</button></header>
     <div className="first-grade-audio"><button type="button" onClick={() => speak(line, muted, volume)}>▶ Escuchar / repetir</button><label htmlFor="second-period-volume">Volumen</label><input id="second-period-volume" type="range" min="0" max="100" value={volume * 100} onChange={(event) => setVolume(Number(event.target.value) / 100)} /></div>
     {screen === 'map' && <><div className="page-heading"><p className="page-eyebrow">MATEMÁTICAS · PRIMER GRADO · PERIODO 2</p><h1>¡Cuando contamos aprendemos!</h1><p>Elige una misión y sigue el sendero con Lila 🦜</p></div><section className="mission-grid">{missions.map((item, index) => <button className="mission-card first-grade-adventure" type="button" key={item.number} onClick={() => start(index)}><span className="mission-card__icon">{item.art}</span><span className="mission-card__number">MISIÓN {item.number}</span><h2>{item.title}</h2><span className="period-status">{completed.includes(index) ? '⭐ ¡Completada!' : '✨ ¡Explorar!'}</span></button>)}</section></>}
     {screen !== 'map' && <section className="first-grade-play"><div className="first-grade-play-top"><button className="back-link" type="button" onClick={() => setScreen('map')}><ArrowLeft size={18} /> Mapa</button><h1>{mission.title}</h1><span>Reto {step + 1} / 7</span></div><div className="first-grade-progress"><span style={{ width: `${progress}%` }} /></div><div className="first-grade-field">{screen === 'win' ? <div className="first-grade-intro"><div className="first-grade-art">⭐</div><h2>¡Misión superada!</h2><button className="game-secondary-button" type="button" onClick={() => setScreen('map')}>🗺️ Mapa</button><button className="game-primary-button" type="button" onClick={() => missionIndex < missions.length - 1 && start(missionIndex + 1)}><ArrowRight size={18} /> Siguiente misión</button></div> : <><p className="page-eyebrow">MISIÓN {mission.number} · RETO {step + 1} DE 7</p><h2>{task.text}</h2><Task task={task} onDone={done} /></>}</div></section>}
-  </main>;
+  </motion.main>;
 }

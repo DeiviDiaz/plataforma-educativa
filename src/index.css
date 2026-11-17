@@ -26,6 +26,104 @@ body {
   margin: 0;
 }
 
+.grade-two-adventure {
+  min-height: 100vh;
+  padding: 18px clamp(16px, 4vw, 42px) 42px;
+  color: #183f39;
+  background: linear-gradient(#a9e4ee, #dcf5dd 53%, #b9e4a6);
+}
+
+.grade-two-topbar,
+.grade-two-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.grade-two-eyebrow,
+.grade-two-kicker {
+  color: #145e4f;
+  font-weight: 900;
+}
+
+.grade-two-audio-controls { display: flex; align-items: center; justify-content: flex-end; gap: 8px; flex-wrap: wrap; }
+.grade-two-eyebrow {
+  display: inline-block;
+  padding: 9px 16px;
+  border-radius: 24px;
+  background: #fff9e8;
+}
+.grade-two-kicker { margin: 28px 0 7px; text-transform: uppercase; letter-spacing: .08em; }
+.grade-two-adventure h1 { max-width: 800px; margin: 12px 0; font-size: clamp(2rem, 5vw, 4rem); line-height: 1.04; }
+.grade-two-adventure h2 { font-size: clamp(1.35rem, 3vw, 2rem); }
+.grade-two-adventure p { line-height: 1.4; font-weight: 700; }
+.grade-two-hero { display: grid; grid-template-columns: 1fr .8fr; align-items: center; gap: 28px; min-height: 640px; }
+.grade-two-guide { font-size: clamp(4rem, 10vw, 8rem); text-align: center; filter: drop-shadow(0 12px 0 rgb(38 105 71 / 18%)); }
+.grade-two-primary,
+.grade-two-secondary,
+.grade-two-options button,
+.grade-two-measure button {
+  border: 0;
+  border-radius: 16px;
+  padding: 12px 19px;
+  color: #23463b;
+  background: #ffd45a;
+  box-shadow: 0 5px 0 #d99f39;
+  font-weight: 900;
+  cursor: pointer;
+}
+.grade-two-secondary { background: #fff; box-shadow: 0 5px 0 #aed6b4; }
+.grade-two-worlds,
+.grade-two-trail { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; margin-top: 24px; }
+.grade-two-world-card,
+.grade-two-task-card,
+.grade-two-play-card {
+  border: 4px solid #fff;
+  border-radius: 26px;
+  padding: 20px;
+  color: #183f39;
+  background: #fffbed;
+  box-shadow: 0 10px 0 rgb(22 85 69 / 14%), 0 18px 28px rgb(22 85 69 / 10%);
+  text-align: left;
+}
+.grade-two-world-card,
+.grade-two-task-card { display: flex; flex-direction: column; gap: 10px; cursor: pointer; }
+.grade-two-world-card > span,
+.grade-two-task-card > span { font-size: 2.8rem; }
+.grade-two-world-card strong,
+.grade-two-task-card strong { font-size: 1.1rem; line-height: 1.2; }
+.grade-two-world-card small,
+.grade-two-task-card small { font-weight: 900; color: #47816d; }
+.grade-two-final { background: #ffe19b; }
+.grade-two-progress { max-width: 520px; height: 14px; margin: 14px 0 20px; overflow: hidden; border-radius: 20px; background: #d4e8d6; }
+.grade-two-progress span { display: block; height: 100%; border-radius: inherit; background: #ffbc50; }
+.grade-two-play { max-width: 950px; margin: 0 auto; }
+.grade-two-play-card { margin-top: 22px; text-align: center; }
+.grade-two-play-card h2 span { font-size: 2.8rem; }
+.grade-two-instructions { font-size: 1.2rem; }
+.grade-two-options { display: flex; justify-content: center; flex-wrap: wrap; gap: 12px; margin: 22px 0; }
+.grade-two-options button { min-width: 80px; background: #fff; border: 3px solid #a4d2b4; box-shadow: 0 4px 0 #a4d2b4; }
+.grade-two-options button.selected { background: #ffda70; border-color: #ecad41; }
+.grade-two-measure { display: flex; align-items: center; justify-content: center; gap: 12px; margin: 24px 0; font-size: 1.4rem; font-weight: 900; }
+.grade-two-feedback { min-height: 28px; color: #176754; }
+.grade-two-drawing { display: flex; flex-direction: column; align-items: center; gap: 12px; }
+.grade-two-drawpad { width: min(100%, 430px); height: 180px; border: 3px dashed #6baf8f; border-radius: 20px; background: #fff; touch-action: none; cursor: crosshair; }
+.grade-two-build, .grade-two-move, .grade-two-pictogram { display: grid; justify-items: center; gap: 12px; }
+.grade-two-build > div { display: flex; align-items: center; gap: 8px; }
+.grade-two-basket { min-width: 120px; min-height: 100px; border: 3px dashed #7eb897; border-radius: 19px; background: #fff; font-size: 1.5rem; }
+.grade-two-basket small { display: block; font-size: .9rem; }
+.grade-two-grid { display: grid; grid-template-columns: repeat(4, 55px); gap: 6px; }
+.grade-two-grid span { display: grid; place-items: center; min-width: 55px; min-height: 55px; border: 3px dashed #70a78a; border-radius: 10px; background: #fff; font-size: 1.5rem; }
+.grade-two-pictogram span { min-width: 190px; padding: 10px; border: 3px dashed #70a78a; background: #fff; }
+@media (max-width: 700px) {
+  .grade-two-hero { grid-template-columns: 1fr; min-height: 0; padding: 42px 0; }
+  .grade-two-guide { order: -1; }
+  .grade-two-worlds,
+  .grade-two-trail { grid-template-columns: 1fr; }
+}
+
 button,
 a {
   font: inherit;
@@ -222,6 +320,325 @@ a {
   width: min(1120px, calc(100% - 40px));
   margin: 0 auto;
   padding: 32px 0 64px;
+}
+
+.grade-one-adventure {
+  min-height: 100vh;
+  padding-bottom: 64px;
+  color: #173c38;
+  background: #d7f2e5;
+}
+
+.grade-one-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 12px clamp(15px, 4vw, 55px);
+  border-bottom: 4px solid #d5ebd6;
+  background: #fffdf4;
+}
+
+.grade-one-back,
+.grade-one-crumb {
+  color: #16745c;
+  font-weight: 900;
+  text-decoration: none;
+}
+
+.grade-one-crumb {
+  color: #53736c;
+  font-size: .9rem;
+}
+
+.grade-one-icon-button {
+  width: 45px;
+  height: 45px;
+  border: 0;
+  border-radius: 15px;
+  background: #e6f4eb;
+  cursor: pointer;
+  font-size: 1.25rem;
+}
+
+.grade-one-hero {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 34px 20px 20px;
+  text-align: center;
+}
+
+.grade-one-eyebrow {
+  color: #26806b;
+  font-size: .9rem;
+  font-weight: 900;
+  letter-spacing: .08em;
+}
+
+.grade-one-hero h1 {
+  margin: 5px 0 8px;
+  color: #173c38;
+  font-size: clamp(2.2rem, 5vw, 3.8rem);
+  line-height: 1.05;
+}
+
+.grade-one-hero p {
+  margin: 0;
+  color: #55756b;
+  font-weight: 800;
+}
+
+.grade-one-map {
+  position: relative;
+  width: min(1200px, calc(100% - 28px));
+  min-height: 650px;
+  margin: 0 auto;
+  overflow: hidden;
+  padding: 46px 32px 55px;
+  border: 7px solid #fff9dc;
+  border-radius: 35px;
+  background: linear-gradient(#a5e6ed 0 29%, #bce9bb 29% 62%, #83c991 100%);
+  box-shadow: 0 22px 40px #275b4933;
+}
+
+.grade-one-sun {
+  position: absolute;
+  top: 32px;
+  right: 8%;
+  width: 95px;
+  height: 95px;
+  border-radius: 50%;
+  background: #ffe17a;
+  box-shadow: 0 0 0 14px #ffe17a44;
+}
+
+.grade-one-mountains {
+  position: absolute;
+  inset: 12% 0 auto;
+  height: 210px;
+  opacity: .6;
+  background: linear-gradient(140deg, transparent 30%, #6aa9a0 30% 52%, transparent 52%) 0 0 / 300px 210px repeat-x;
+}
+
+.grade-one-trail {
+  position: absolute;
+  top: 28%;
+  left: 18%;
+  width: 64%;
+  height: 50%;
+  border: 17px dashed #f8dd94;
+  border-radius: 47%;
+  transform: rotate(-10deg);
+  opacity: .9;
+}
+
+.grade-one-worlds {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 42px 12%;
+  max-width: 1050px;
+  margin: auto;
+}
+
+.grade-one-world {
+  display: flex;
+  min-height: 257px;
+  align-items: center;
+  gap: 14px;
+  padding: 16px;
+  border: 5px solid #fff;
+  border-radius: 30px;
+  background: #fffdf3;
+  box-shadow: 0 11px 0 #4a9a74, 0 17px 26px #174b3835;
+}
+
+.grade-one-world:nth-child(even) { transform: translateY(30px); }
+.grade-one-world:nth-child(3) { transform: translateX(25px); }
+
+.grade-one-scene {
+  display: grid;
+  flex: 0 0 43%;
+  height: 195px;
+  place-items: center;
+  overflow: hidden;
+  border-radius: 22px;
+  background: linear-gradient(#a7e4ef 0 52%, #9ad88f 52%);
+  font-size: 4.2rem;
+}
+
+.grade-one-scene small {
+  align-self: end;
+  margin-bottom: 12px;
+  font-size: 2.2rem;
+}
+
+.grade-one-world-copy { flex: 1; min-width: 0; }
+.grade-one-number { color: #e6824e; font-size: 2.5rem; line-height: 1; }
+.grade-one-world h2 { margin: 7px 0 8px; font-size: clamp(1rem, 1.5vw, 1.3rem); line-height: 1.15; }
+.grade-one-world p { margin: 0 0 6px; color: #55756b; font-size: .9rem; font-weight: 800; }
+.grade-one-world-copy > small { display: block; min-height: 38px; color: #53736c; font-weight: 800; }
+
+.grade-one-enter {
+  display: inline-flex;
+  margin-top: 10px;
+  padding: 10px 16px;
+  border-radius: 18px;
+  background: #ffd35b;
+  box-shadow: 0 5px 0 #df9d37;
+  color: #173c38;
+  font-weight: 900;
+  text-decoration: none;
+}
+
+.grade-one-guide {
+  display: flex;
+  max-width: 760px;
+  align-items: center;
+  gap: 14px;
+  margin: 25px auto 0;
+  padding: 9px 18px;
+  border: 3px solid #d8eac9;
+  border-radius: 24px;
+  background: #fffdf4;
+  font-weight: 900;
+}
+
+.grade-one-guide > span:first-child { font-size: 2.75rem; }
+.grade-one-guide button { margin-left: auto; border: 0; border-radius: 13px; background: #e6f4eb; padding: 10px; cursor: pointer; }
+
+@media (max-width: 760px) {
+  .grade-one-crumb { display: none; }
+  .grade-one-map { padding: 25px 13px; }
+  .grade-one-worlds { grid-template-columns: 1fr; gap: 24px; }
+  .grade-one-world,
+  .grade-one-world:nth-child(even),
+  .grade-one-world:nth-child(3) { transform: none; }
+  .grade-one-world { min-height: 180px; }
+  .grade-one-scene { height: 155px; }
+  .grade-one-trail { top: 10%; left: 43%; width: 20%; height: 75%; }
+}
+
+/* La capa visual común conserva intactas las mecánicas originales de grado 1. */
+.first-grade-game {
+  width: 100%;
+  min-height: 100vh;
+  padding: 0 0 64px;
+  color: #173c38;
+  background: #d7f2e5;
+}
+
+.first-grade-header {
+  margin: 0;
+  padding: 12px clamp(15px, 4vw, 55px);
+  border-bottom: 4px solid #d5ebd6;
+  background: #fffdf4;
+}
+
+.first-grade-header .back-link,
+.first-grade-play-top .back-link {
+  color: #16745c;
+  font-weight: 900;
+}
+
+.first-grade-header > span,
+.first-grade-play-top > span {
+  color: #53736c;
+  font-weight: 900;
+}
+
+.first-grade-audio {
+  width: min(1120px, calc(100% - 40px));
+  margin: 18px auto 26px;
+  border: 3px solid #d8eac9;
+  border-radius: 24px;
+  background: #fffdf4;
+}
+
+.first-grade-audio button,
+.voice-button {
+  background: #e6f4eb;
+  color: #16745c;
+}
+
+.first-grade-game .page-heading {
+  max-width: 900px;
+  margin: 0 auto 24px;
+  padding: 0 20px;
+  text-align: center;
+}
+
+.first-grade-game .page-heading h1,
+.first-grade-play-top h1 {
+  color: #173c38;
+}
+
+.first-grade-game .mission-grid {
+  width: min(1120px, calc(100% - 40px));
+  margin: 0 auto;
+  gap: 18px;
+}
+
+.first-grade-game .mission-card {
+  border: 4px solid #fff;
+  border-radius: 25px;
+  background: #fffdf5;
+  box-shadow: 0 7px 0 #b1d6ac;
+}
+
+.first-grade-game .mission-card:hover {
+  border-color: #fff;
+  box-shadow: 0 10px 0 #4a9a74;
+}
+
+.first-grade-game .first-grade-play {
+  width: min(1120px, calc(100% - 40px));
+  margin: 0 auto;
+}
+
+.first-grade-progress {
+  height: 14px;
+  background: #c5e6ca;
+}
+
+.first-grade-progress span {
+  background: linear-gradient(90deg, #167a63, #7ad7a0);
+}
+
+.first-grade-field {
+  border: 5px solid #fff;
+  border-radius: 34px;
+  background: #fffdf3;
+  box-shadow: 0 12px 0 #93cba6;
+}
+
+.first-grade-field .first-grade-sequence span,
+.first-grade-field .first-grade-equation {
+  background: #e6f4eb;
+  color: #16745c;
+}
+
+.first-grade-field .first-grade-basket {
+  border-color: #268b70;
+  background: #fff9dcaa;
+}
+
+.first-grade-field .game-primary-button {
+  background: #ffd35b;
+  box-shadow: 0 5px 0 #df9d37;
+  color: #173c38;
+}
+
+.first-grade-field .game-secondary-button,
+.first-grade-field .token {
+  border-color: #fff;
+  background: #e6f4eb;
+  color: #173c38;
+}
+
+.first-grade-field .token--selected {
+  border-color: #268b70;
+  background: #ffe178;
 }
 
 .first-grade-game {

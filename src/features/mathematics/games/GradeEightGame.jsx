@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import GameShell from '../components/GameShell.jsx';
 import { generateGradeEightChallenge } from '../data/grade-eight-games.js';
+import { useGameEffects } from '../effects/useGameEffects.js';
 
 export default function GradeEightGame({ topicId }) {
   const [levelIndex, setLevelIndex] = useState(1);
   const [score, setScore] = useState(0);
   const [feedback, setFeedback] = useState(null);
   const [level, setLevel] = useState(() => generateGradeEightChallenge(topicId));
+  const { celebrate, playError } = useGameEffects();
 
   const [userNum, setUserNum] = useState('');
   const [userChoice, setUserChoice] = useState('');
@@ -21,6 +23,7 @@ export default function GradeEightGame({ topicId }) {
   }, [topicId]);
 
   const nextLevel = (msg) => {
+    celebrate();
     setScore((s) => s + 20);
     setFeedback({ type: 'success', text: msg });
     setTimeout(() => {
@@ -33,6 +36,7 @@ export default function GradeEightGame({ topicId }) {
   };
 
   const failLevel = (msg) => {
+    playError();
     setFeedback({ type: 'error', text: msg });
     setTimeout(() => setFeedback(null), 1900);
   };

@@ -1,6 +1,8 @@
 import { useEffect, useMemo, useState } from 'react';
+import { motion } from 'framer-motion';
 import { ArrowLeft, ArrowRight, Volume2, VolumeX } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { useGameEffects } from '../effects/useGameEffects.js';
 
 const adventures = [
   {
@@ -121,6 +123,7 @@ export default function FirstGradeMathGame() {
   const [completed, setCompleted] = useState([]);
   const [muted, setMuted] = useState(false);
   const [volume, setVolume] = useState(1);
+  const { celebrate } = useGameEffects();
   const adventure = adventures[adventureIndex];
   const task = adventure.tasks[step];
   const line = screen === 'map' ? 'Elige una aventura del primer periodo.' : screen === 'intro' ? adventure.intro : screen === 'win' ? 'Terminaste esta aventura y ganaste una estrella.' : task.voice;
@@ -130,15 +133,16 @@ export default function FirstGradeMathGame() {
 
   const start = (index) => { setAdventureIndex(index); setStep(0); setState({}); setScreen('intro'); };
   const next = () => {
+    celebrate();
     if (step < adventure.tasks.length - 1) { setStep(step + 1); setState({}); }
     else { setCompleted((items) => [...new Set([...items, adventureIndex])]); setScreen('win'); }
   };
   const progress = useMemo(() => screen === 'intro' ? 0 : screen === 'win' ? 100 : Math.round((step / adventure.tasks.length) * 100), [screen, step, adventure.tasks.length]);
 
-  return <main className="first-grade-game">
+  return <motion.main className="first-grade-game" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}>
     <header className="first-grade-header"><button className="back-link" type="button" onClick={() => navigate('/matematicas/grado/1')}><ArrowLeft size={18} /> Volver al periodo</button><span>⭐ {completed.length}</span><button className="voice-button" type="button" onClick={() => setMuted((value) => !value)} aria-label={muted ? 'Activar voz' : 'Silenciar voz'}>{muted ? <VolumeX /> : <Volume2 />}</button></header>
     <div className="first-grade-audio"><button type="button" onClick={() => speak(line, muted, volume)}>▶ Escuchar / repetir</button><label htmlFor="first-grade-volume">Volumen</label><input id="first-grade-volume" type="range" min="0" max="100" value={volume * 100} onChange={(event) => setVolume(Number(event.target.value) / 100)} /></div>
     {screen === 'map' && <><div className="page-heading"><p className="page-eyebrow">MATEMÁTICAS · PRIMER GRADO · PERIODO 1</p><h1>Aventuras matemáticas</h1><p>Un viaje para descubrir, tocar y jugar.</p></div><section className="mission-grid">{adventures.map((item, index) => <button className="mission-card first-grade-adventure" type="button" key={item.title} onClick={() => start(index)}><span className="mission-card__icon">{item.icon}</span><span className="mission-card__number">AVENTURA {String(index + 1).padStart(2, '0')}</span><h2>{item.title}</h2><span className="period-status">{completed.includes(index) ? '⭐ ¡Completada!' : '✨ ¡Vamos!'}</span></button>)}</section></>}
     {screen !== 'map' && <section className="first-grade-play"><div className="first-grade-play-top"><button className="back-link" type="button" onClick={() => setScreen('map')}><ArrowLeft size={18} /> Aventuras</button><h1>{adventure.title}</h1><span>⭐ {completed.includes(adventureIndex) ? 'Ganada' : 'Por ganar'}</span></div><div className="first-grade-progress"><span style={{ width: `${progress}%` }} /></div><div className="first-grade-field">{screen === 'intro' && <Intro adventure={adventure} onStart={() => setScreen('play')} />}{screen === 'win' && <div className="first-grade-intro"><div className="first-grade-art">⭐</div><h2>¡Lo lograste!</h2><button className="game-secondary-button" type="button" onClick={() => setScreen('map')}>🗺️ Aventuras</button>{adventureIndex < adventures.length - 1 ? <button className="game-primary-button" type="button" onClick={() => start(adventureIndex + 1)}><ArrowRight size={18} /> Siguiente</button> : <button className="game-primary-button" type="button" onClick={() => setScreen('map')}>🏠 Volver al mapa</button>}</div>}{screen === 'play' && <><p className="page-eyebrow">RETO {step + 1} DE {adventure.tasks.length}</p><h2>{task.prompt}</h2><Task task={task} state={state} setState={setState} onDone={next} /></>}</div></section>}
-  </main>;
+  </motion.main>;
 }
