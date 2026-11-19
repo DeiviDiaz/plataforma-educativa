@@ -104,7 +104,7 @@ export default function SpanishLayout() {
   };
 
   return (
-    <div className="spanish-area">
+    <div className={esPortada ? "spanish-area" : "spanish-area lengua-interior"}>
       <div className="min-h-screen flex flex-col bg-slate-50 font-sans text-slate-800 antialiased selection:bg-indigo-100 selection:text-indigo-900">
         
         {/* ══════════ HEADER PRINCIPAL ELEGANTE ══════════ */}

@@ -38,7 +38,6 @@ export default function TeoriaPedagogicaEnriquecida({
   const [copiadoExito, setCopiadoExito] = useState(false);
   const [modalGlosario, setModalGlosario] = useState(false);
   const [busquedaGlosario, setBusquedaGlosario] = useState('');
-  const [verDbaDetalle, setVerDbaDetalle] = useState(false);
 
   // Estados del Desafío Progresivo de Sabiduría (3 Niveles)
   const [indicePregunta, setIndicePregunta] = useState(0);
@@ -156,98 +155,33 @@ export default function TeoriaPedagogicaEnriquecida({
   );
 
   return (
-    <div className={`space-y-8 animate-fade-in ${modoDislexia ? 'tracking-wider font-sans' : ''}`}>
-      {/* ══════════════════════════════════════════════════════════════
-          1. CABECERA HERO DE SABIDURÍA (IDENTIDAD Y ALINEACIÓN MEN)
-          ══════════════════════════════════════════════════════════════ */}
-      <div className="lengua-panel relative">
-        <div className="relative z-10 flex flex-col xl:flex-row xl:items-center justify-between gap-6">
-          {!esInicial && (
-            <div className="space-y-3">
-              <p className="text-sm font-semibold text-slate-600">{guia.componente || 'Español'} · Estándar MEN Colombia</p>
-              <h3 className="font-extrabold text-xl sm:text-2xl text-slate-900 leading-tight">
-                {sabiduria.tituloAtractivo}
-              </h3>
-
-              <p className="text-slate-700 text-sm max-w-2xl leading-relaxed">
-                {sabiduria.subtituloPedagogico}
-              </p>
-            </div>
-          )}
-
-          {/* Botones de Audio y Glosario Rápido */}
-          <div className="flex flex-wrap items-center gap-2.5 shrink-0">
-            <button
-              onClick={toggleLecturaVoz}
-              className={`px-5 py-3.5 rounded-2xl font-title font-black text-xs sm:text-sm flex items-center gap-2 shadow-lg transition-all cursor-pointer ${
-                leyendoVoz
-                  ? 'bg-rose-500 hover:bg-rose-600 text-white animate-pulse'
-                  : 'bg-gradient-to-r from-amber-400 to-yellow-300 hover:from-amber-300 hover:to-yellow-200 text-slate-950 shadow-[0_4px_0_#b45309]'
-              }`}
-            >
-              <span>{leyendoVoz ? 'Detener lectura' : 'Escuchar lectura'}</span>
-            </button>
-
-            <button
-              onClick={() => setModalGlosario(true)}
-              className="lengua-pestana"
-            >
-              <span>📖</span>
-              <span>Glosario</span>
-            </button>
-          </div>
-        </div>
-
-        {/* Desglose de DBA Oficial Expandible */}
-        {!esInicial && dba && (
-          <div className="mt-5 bg-slate-50 border border-slate-200 rounded-xl p-3 text-sm text-slate-700">
-            <div className="flex items-center justify-between gap-3">
-              <div className="flex items-start gap-2.5">
-                <span className="text-xl">📘</span>
-                <div>
-                  <strong className="block font-bold text-sm text-slate-900">
-                    Derecho básico de aprendizaje
-                  </strong>
-                  <p className="mt-0.5 leading-relaxed">
-                    {verDbaDetalle ? dba : `${dba.slice(0, 150)}...`}
-                  </p>
-                </div>
-              </div>
-              <button
-                aria-expanded={verDbaDetalle}
-                onClick={() => setVerDbaDetalle(!verDbaDetalle)}
-                className="text-indigo-800 font-bold text-sm underline shrink-0 cursor-pointer"
-              >
-                {verDbaDetalle ? 'Menos ▲' : 'Ver Completo ▼'}
-              </button>
-            </div>
-          </div>
+    <div className={`lengua-lector space-y-4 animate-fade-in ${modoDislexia ? 'tracking-wider font-sans' : ''}`}>
+      <div className="lengua-barra-lectura">
+        <label>
+          <span className="sr-only">Recurso de lectura</span>
+          <select className="lengua-select" value={pestanaActiva} onChange={(event) => {
+            sounds.playClick();
+            setPestanaActiva(event.target.value);
+          }}>
+            <option value="lectura">Leer el texto</option>
+            <option value="laboratorio">Reglas y ejemplos</option>
+            <option value="desafio">Resolver el reto</option>
+            <option value="pergamino">Ficha de repaso</option>
+          </select>
+        </label>
+        <button type="button" className="lengua-pestana" onClick={toggleLecturaVoz}>
+          {leyendoVoz ? 'Detener lectura' : 'Escuchar'}
+        </button>
+        <button type="button" className="lengua-pestana" onClick={() => setModalGlosario(true)}>Glosario</button>
+        {!esInicial && (
+          <details className="lengua-objetivo">
+            <summary className="lengua-summary">Objetivo</summary>
+            <p>{sabiduria.subtituloPedagogico}</p>
+            {dba && <p>{dba}</p>}
+          </details>
         )}
       </div>
 
-      {/* ══════════════════════════════════════════════════════════════
-          2. SELECTOR DE PESTAÑAS INTERACTIVAS DE SABIDURÍA (4 MODOS)
-          ══════════════════════════════════════════════════════════════ */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2" role="group" aria-label="Recursos de lectura">
-        {[
-          ['lectura', 'Texto'],
-          ['laboratorio', esInicial ? 'Ejemplos' : 'Reglas y ejemplos'],
-          ['desafio', 'Reto'],
-          ['pergamino', esInicial ? 'Repasar' : 'Ficha de repaso'],
-        ].map(([id, nombre]) => (
-          <button key={id} type="button" className="lengua-pestana" aria-pressed={pestanaActiva === id}
-            onClick={() => {
-              sounds.playClick();
-              setPestanaActiva(id);
-            }}>
-            {nombre}
-          </button>
-        ))}
-      </div>
-
-      {/* ══════════════════════════════════════════════════════════════
-          PESTAÑA 1: LECTURA VIVA Y AVENTURA
-          ══════════════════════════════════════════════════════════════ */}
       {pestanaActiva === 'lectura' && (
         <div className="space-y-6 animate-fade-in">
           <div className="bg-white rounded-3xl p-6 sm:p-10 shadow-sm border-2 border-slate-200 space-y-6">
@@ -320,7 +254,7 @@ export default function TeoriaPedagogicaEnriquecida({
 
             {/* Curiosidad Asombrosa */}
             {sabiduria.curiosidadAsombrosa && (
-              <details className="rounded-xl border border-amber-200 bg-amber-50 p-4" open={esInicial ? undefined : true}>
+              <details className="rounded-xl border border-amber-200 bg-amber-50 p-4">
                 <summary className="lengua-summary">Dato curioso</summary>
                 <div className="flex items-start gap-4 mt-3">
                   <div className="w-12 h-12 rounded-2xl bg-amber-400 text-slate-950 flex items-center justify-center text-3xl shadow-[0_3px_0_#b45309] shrink-0">
@@ -350,7 +284,7 @@ export default function TeoriaPedagogicaEnriquecida({
                 }}
                 className="btn-3d-purple px-6 py-3.5 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-title font-black text-sm rounded-2xl shadow-lg flex items-center gap-2 cursor-pointer transition-all"
               >
-                <span>Paso Siguiente: Entrar al Laboratorio de Reglas</span>
+                <span>Ver reglas y ejemplos</span>
                 <span>➔</span>
               </button>
             </div>
@@ -789,19 +723,7 @@ export default function TeoriaPedagogicaEnriquecida({
       {/* ══════════════════════════════════════════════════════════════
           BOTÓN GLOBAL DE PASO AL SIGUIENTE PILAR (COMPRENSIÓN Y CUADERNO)
           ══════════════════════════════════════════════════════════════ */}
-      <div className="flex flex-col sm:flex-row items-center justify-between gap-4 p-6 bg-white rounded-3xl border-2 border-slate-200 shadow-sm">
-        <div className="flex items-center gap-3 text-slate-600">
-          <span className="text-4xl">🚀</span>
-          <div>
-            <span className="font-title font-black text-slate-900 block text-base">
-              ¿Listo para aplicar esta sabiduría?
-            </span>
-            <p className="text-xs text-slate-500 font-bold">
-              Pasa al Paso 2: Taller de Comprensión en 3 Niveles y Actividades al Cuaderno.
-            </p>
-          </div>
-        </div>
-
+      <div className="flex justify-end">
         <button
           onClick={() => {
             sounds.playClick();
@@ -809,7 +731,7 @@ export default function TeoriaPedagogicaEnriquecida({
           }}
           className="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-indigo-600 via-blue-600 to-indigo-700 hover:from-indigo-500 hover:to-blue-500 text-white font-title font-black text-sm rounded-2xl shadow-xl hover:scale-102 active:scale-98 transition-all flex items-center justify-center gap-2 cursor-pointer border border-indigo-400"
         >
-          <span>Paso 2: Taller de Comprensión y Cuaderno</span>
+          <span>Practicar lo leído →</span>
           <span>➔</span>
         </button>
       </div>
