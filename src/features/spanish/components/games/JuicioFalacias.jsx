@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { sounds } from '../../utils/audio';
 import { voiceReader } from '../../utils/speech';
 import { lanzarConfeti } from '../../utils/confetti';
@@ -317,18 +317,18 @@ export default function JuicioFalacias() {
   };
 
   return (
-    <div className="bg-gradient-to-br from-slate-950 via-amber-950/40 to-slate-950 rounded-4xl p-5 sm:p-8 shadow-2xl border-4 border-amber-500/80 text-white space-y-6">
+    <div className="lengua-tribunal bg-gradient-to-br from-slate-950 via-amber-950/40 to-slate-950 rounded-4xl p-5 sm:p-8 shadow-2xl border-4 border-amber-500/80 text-white space-y-6">
       {/* Barra de Título del Tribunal */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-amber-700/60 pb-5">
         <div>
           <div className="inline-flex items-center gap-2 bg-amber-500/20 text-amber-300 border border-amber-400/50 text-xs font-black px-3.5 py-1 rounded-full uppercase tracking-wider mb-1">
-            <span>⚖️</span> Sala de Debate, Oratoria y Falacias (6° a 9°)
+            <span>⚖️</span> Argumentación
           </div>
           <h3 className="text-2xl sm:text-4xl font-black text-white mt-1 flex items-center gap-2">
-            <span>🔨</span> El Tribunal de las Falacias
+            <span>🔨</span> Tribunal de argumentos
           </h3>
           <p className="text-xs sm:text-sm text-amber-200/90 font-medium">
-            Caso {indiceCaso + 1} de {CASOS_TRIBUNAL.length} • Analiza el discurso y ¡estampa tu objeción antes de que caiga el martillo!
+            Caso {indiceCaso + 1} de {CASOS_TRIBUNAL.length} · Identifica el argumento antes de que termine el tiempo.
           </p>
         </div>
 
@@ -378,7 +378,7 @@ export default function JuicioFalacias() {
         <>
           {/* El Estrado del Acusador */}
           <div className="bg-gradient-to-b from-slate-900 to-amber-950/60 rounded-3xl p-5 sm:p-7 border-3 border-amber-600/70 shadow-xl relative overflow-hidden">
-            <div className="flex items-center justify-between gap-2 border-b border-amber-800/60 pb-3 mb-4">
+            <div className="flex flex-wrap items-center justify-between gap-2 border-b border-amber-800/60 pb-3 mb-4">
               <div className="flex items-center gap-3">
                 <span className="text-4xl p-2 bg-amber-950/80 rounded-2xl border border-amber-500">
                   {casoActual.avatar}

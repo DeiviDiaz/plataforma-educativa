@@ -40,30 +40,18 @@ export default function GradoView() {
   }
 
   return (
-    <div className={`space-y-5 ${nivelVisual}`}>
-      <nav aria-label="Ubicación" className="flex flex-wrap items-center gap-2 text-sm text-slate-600">
-        <Link to="/espanol" className="font-semibold underline underline-offset-4">Español</Link>
-        <span aria-hidden="true">/</span>
-        <span aria-current="page">{grado.nombre}</span>
-      </nav>
-
-      <header className="lengua-hero lengua-curso">
-        <div>
-          <p className="lengua-kicker">{esInicial ? 'Primeras lecturas' : esPrimaria ? 'Primaria' : 'Secundaria'}</p>
-          <h1>{grado.nombre}</h1>
-          <p>{esInicial ? (grado.numero === 1 ? 'Escucha y juega con las letras.' : 'Lee, canta y descubre rimas.') : grado.lema}</p>
-        </div>
-        {esPrimaria && <span className="lengua-mascota-curso" aria-hidden="true">{grado.icono}</span>}
-        <Link to={`/espanol/juegos?grado=${grado.numero}`} className={esInicial ? "lengua-action" : "lengua-action lengua-action-outline"} onClick={() => sounds.playClick()}>
-          {esInicial ? "Jugar" : `Juegos de ${grado.numero}.º`}
+    <div className={`lengua-grado space-y-4 ${nivelVisual}`}>
+      <header className="lengua-cabecera-grado">
+        <h1>{grado.nombre}</h1>
+        <Link to={'/espanol/juegos?' + new URLSearchParams({ grado: String(grado.numero), guia: guia.id })} className="lengua-nav-guia" onClick={() => sounds.playClick()}>
+          Juegos del grado →
         </Link>
       </header>
 
       <div className="lengua-curso-grid">
-        <aside className="lengua-panel space-y-4" aria-labelledby="ruta-grado">
-          <h2 id="ruta-grado" className="text-xl font-extrabold">{esInicial ? "Elige qué leer" : "Guías del grado"}</h2>
-          <div className="lg:hidden">
-            <label htmlFor="lengua-periodo" className="block mb-1 font-semibold">Periodo</label>
+        <aside className="lengua-ruta" aria-label="Elegir guía">
+          <div>
+            <label htmlFor="lengua-periodo">Periodo</label>
             <select id="lengua-periodo" className="lengua-select" value={periodo.numero}
               onChange={(event) => {
                 const destino = periodos.find((item) => item.numero === Number(event.target.value));
@@ -72,56 +60,17 @@ export default function GradoView() {
               {periodos.map((item) => <option key={item.numero} value={item.numero}>{item.nombre}</option>)}
             </select>
           </div>
-          <div className="hidden lg:grid grid-cols-2 gap-2" role="group" aria-label="Periodos">
-            {periodos.map((item) => (
-              <button key={item.numero} type="button" className="lengua-periodo-card"
-                aria-pressed={item.numero === periodo.numero}
-                onClick={() => seleccionarGuia(item.guias[0].id, false)}>
-                <strong>{String(item.numero).padStart(2, '0')}</strong>
-                <span>{item.nombre}</span>
-              </button>
-            ))}
+          <div>
+            <label htmlFor="lengua-guia">Guía</label>
+            <select id="lengua-guia" className="lengua-select" value={guia.id}
+              onChange={(event) => seleccionarGuia(event.target.value, false)}>
+              {periodo.guias.map((item) => <option key={item.id} value={item.id}>{item.nombre || item.titulo}</option>)}
+            </select>
           </div>
-          {esInicial && (
-            <div className="lg:hidden">
-              <label htmlFor="lengua-guia-movil" className="block mb-1 font-semibold">Guía</label>
-              <select id="lengua-guia-movil" className="lengua-select" value={guia.id}
-                onChange={(event) => seleccionarGuia(event.target.value, false)}>
-                {periodo.guias.map((item) => <option key={item.id} value={item.id}>{item.nombre || item.titulo}</option>)}
-              </select>
-            </div>
-          )}
-          <ol className={esInicial ? "hidden lg:block space-y-2" : "space-y-2"}>
-            {periodo.guias.map((item, index) => (
-              <li key={item.id}>
-                <button type="button" className="lengua-guia" aria-current={item.id === guia.id ? 'step' : undefined}
-                  onClick={() => seleccionarGuia(item.id)}>
-                  <span aria-hidden="true">{index + 1}</span>
-                  {item.nombre || item.titulo}
-                </button>
-              </li>
-            ))}
-          </ol>
-          <details className="border-t border-slate-200 pt-3">
-            <summary className="lengua-summary text-sm">Ver todas las guías del año</summary>
-            {periodos.map((item) => (
-              <div key={item.numero} className="mt-3">
-                <h3 className="font-bold text-sm mb-1">{item.nombre}</h3>
-                <ul className="space-y-1">
-                  {item.guias.map((tema) => (
-                    <li key={tema.id}>
-                      <button type="button" className="lengua-guia" aria-current={tema.id === guia.id ? 'step' : undefined}
-                        onClick={() => seleccionarGuia(tema.id)}>{tema.nombre || tema.titulo}</button>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
-          </details>
         </aside>
 
         <section className="min-w-0 space-y-4" aria-labelledby="lengua-guia-titulo">
-          <header className="lengua-panel">
+          <header className="lengua-titulo-actividad">
             <p className="text-sm font-semibold text-slate-600">{esInicial ? periodo.nombre : `${periodo.nombre} · Guía ${indice + 1} de ${guias.length} del grado`}</p>
             <h2 id="lengua-guia-titulo" ref={tituloGuiaRef} tabIndex={-1} className="lengua-guia-titulo">
               {guia.nombre || guia.titulo}

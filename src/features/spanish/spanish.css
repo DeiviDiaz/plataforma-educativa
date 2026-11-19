@@ -840,3 +840,229 @@
     margin-top: .2rem;
   }
 }
+
+/* Recorrido interno de grados y juegos. */
+.spanish-area.lengua-interior main {
+  padding-block: .85rem;
+}
+
+.spanish-area.lengua-interior > div > header {
+  position: relative;
+}
+
+.spanish-area.lengua-interior nav[aria-label="Cambiar de grado"] > div {
+  flex-wrap: nowrap;
+  overflow-x: auto;
+}
+
+.spanish-area .lengua-cabecera-grado {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: .6rem;
+}
+
+.spanish-area .lengua-cabecera-grado h1 {
+  font-size: clamp(1.3rem, 2.4vw, 1.8rem);
+  font-weight: 800;
+  margin: 0;
+}
+
+.spanish-area .lengua-grado .lengua-curso-grid {
+  grid-template-columns: minmax(0, 1fr);
+  gap: .8rem;
+}
+
+.spanish-area .lengua-ruta {
+  display: grid;
+  grid-template-columns: minmax(9rem, 1fr) minmax(0, 3fr);
+  gap: .75rem;
+  padding: .75rem;
+  background: #eef2f8;
+  border-radius: 12px;
+}
+
+.spanish-area .lengua-ruta > div {
+  min-width: 0;
+}
+
+.spanish-area .lengua-ruta label {
+  display: block;
+  margin-bottom: .25rem;
+  font-size: .8rem;
+  font-weight: 700;
+}
+
+.spanish-area .lengua-titulo-actividad p {
+  font-size: .8rem;
+}
+
+.spanish-area .lengua-grado .lengua-guia-titulo {
+  font-size: clamp(1.15rem, 2.2vw, 1.65rem);
+  scroll-margin-top: 1rem;
+}
+
+.spanish-area .lengua-elegir-grado {
+  display: flex;
+  align-items: center;
+  gap: .65rem;
+  font-weight: 700;
+}
+
+.spanish-area .lengua-elegir-grado select {
+  width: auto;
+  max-width: 100%;
+}
+
+.spanish-area .lengua-selector-juegos .lengua-juegos-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem;
+}
+
+.spanish-area .lengua-selector-juegos .lengua-juego-card {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  padding: .6rem .8rem;
+  min-height: 44px;
+}
+
+.spanish-area .lengua-selector-juegos .lengua-juego-card strong {
+  font-size: .9rem;
+}
+
+.spanish-area .lengua-selector-juegos .lengua-juego-card > span {
+  font-size: 1.2rem;
+}
+
+.spanish-area .lengua-leccion .lengua-actividades {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .4rem;
+}
+
+.spanish-area .lengua-mas-recursos {
+  position: relative;
+}
+
+.spanish-area .lengua-mas-recursos > button {
+  margin-top: .4rem;
+}
+
+.spanish-area .lengua-objetivo {
+  margin-top: .65rem;
+  font-size: .9rem;
+}
+
+.spanish-area .lengua-objetivo p {
+  margin-top: .6rem;
+  max-width: 75ch;
+}
+
+.spanish-area .lengua-lector .lengua-panel {
+  padding: .85rem;
+}
+
+.spanish-area .lengua-lector :is(.p-6, .sm\:p-10, .sm\:p-8),
+.spanish-area .lengua-juego-activo :is(.p-8, .p-6, .sm\:p-8, .sm\:p-7) {
+  padding: clamp(.85rem, 1.8vw, 1.25rem);
+}
+
+.spanish-area .lengua-juego-activo > div {
+  min-width: 0;
+  border-radius: 16px;
+  padding: clamp(.85rem, 2vw, 1.4rem);
+}
+
+.spanish-area .lengua-juego-activo h3 {
+  font-size: clamp(1.2rem, 2.5vw, 1.75rem);
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+}
+
+.spanish-area .lengua-juego-activo .space-y-6 > :not([hidden]) ~ :not([hidden]),
+.spanish-area .lengua-lector .space-y-6 > :not([hidden]) ~ :not([hidden]) {
+  margin-top: 1rem;
+}
+
+.spanish-area .lengua-tribunal {
+  background: #141c30;
+}
+
+.spanish-area .lengua-tribunal > div:first-child {
+  padding-bottom: .75rem;
+}
+
+.spanish-area.lengua-interior main :is(section, article, select, input) {
+  min-width: 0;
+  max-width: 100%;
+}
+
+@media (max-width: 540px) {
+  .spanish-area .lengua-ruta {
+    grid-template-columns: minmax(0, 1fr);
+    gap: .5rem;
+  }
+
+  .spanish-area .lengua-selector-juegos .lengua-juego-card {
+    flex: 1 1 100%;
+  }
+
+  .spanish-area .lengua-leccion .lengua-pestana {
+    padding-inline: .65rem;
+  }
+}
+
+.spanish-area .lengua-barra-lectura {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .5rem;
+}
+
+.spanish-area .lengua-barra-lectura label {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.spanish-area .lengua-barra-lectura .lengua-objetivo {
+  margin-top: 0;
+  flex: 1 1 8rem;
+}
+
+@media (min-width: 1100px) {
+  .spanish-area .lengua-tribunal {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 1rem;
+    align-items: start;
+  }
+
+  .spanish-area .lengua-tribunal > div:first-child,
+  .spanish-area .lengua-tribunal > .max-w-xl {
+    grid-column: 1 / -1;
+  }
+
+  .spanish-area .lengua-juego-activo .lengua-tribunal > :not([hidden]) ~ :not([hidden]) {
+    margin-top: 0;
+  }
+}
+
+.spanish-area .lengua-elegir-juego {
+  display: none;
+}
+
+@media (max-width: 540px) {
+  .spanish-area .lengua-selector-juegos .lengua-juegos-grid {
+    display: none;
+  }
+
+  .spanish-area .lengua-elegir-juego {
+    display: grid;
+    gap: .3rem;
+    font-size: .85rem;
+    font-weight: 700;
+  }
+}

@@ -54,11 +54,21 @@ export default function ArcadeDidactico({ gradoNumero = 1, juegoInicial = null }
 
   return (
     <div className="space-y-5">
-      <section className="lengua-panel space-y-3" aria-labelledby="lengua-juegos-recomendados">
-        <h2 id="lengua-juegos-recomendados" className="text-xl font-extrabold">Juegos para {gradoNumero}.º</h2>
+      <section className="lengua-selector-juegos" aria-labelledby="lengua-juegos-recomendados">
+        <h2 id="lengua-juegos-recomendados" className="sr-only">Juegos para {gradoNumero}.º</h2>
+        <label className="lengua-elegir-juego">
+          Juego
+          <select className="lengua-select" value={juegoSeleccionado} onChange={(event) => {
+            sounds.playClick();
+            setSeleccion(event.target.value);
+          }}>
+            {!catalogo.includes(juegoSeleccionado) && <option value={juegoSeleccionado}>{juegos[juegoSeleccionado]?.[1] || 'Juego actual'}</option>}
+            {catalogo.map((id) => <option key={id} value={id}>{juegos[id][1]}</option>)}
+          </select>
+        </label>
         <div className="lengua-juegos-grid">
           {catalogo.map((id) => {
-            const [icono, nombre, descripcion] = juegos[id];
+            const [icono, nombre] = juegos[id];
             return (
               <button key={id} type="button" className="lengua-juego-card" aria-pressed={juegoSeleccionado === id}
                 onClick={() => {
@@ -67,14 +77,13 @@ export default function ArcadeDidactico({ gradoNumero = 1, juegoInicial = null }
                 }}>
                 <span aria-hidden="true">{icono}</span>
                 <strong>{nombre}</strong>
-                <small>{descripcion}</small>
               </button>
             );
           })}
         </div>
       </section>
 
-      <div key={juegoSeleccionado} className="animate-fade-in">
+      <div key={juegoSeleccionado} className="lengua-juego-activo animate-fade-in">
         {juegoSeleccionado === 'abecedario' && <AbecedarioSonoro />}
         {juegoSeleccionado === 'ninja' && <LluviaSilabasNinja gradoNumero={gradoNumero} />}
         {juegoSeleccionado === 'juicio' && <JuicioFalacias />}

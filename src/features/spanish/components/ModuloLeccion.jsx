@@ -40,11 +40,10 @@ export default function ModuloLeccion({ guia, gradoNombre, gradoNumero = 1, onSi
     { id: 'comprension', label: gradoNumero <= 2 ? 'Responder' : 'Comprensión' },
     ...(esSecundaria && rondas ? [{ id: 'reto', label: 'Reto de la guía' }] : []),
     { id: 'juegos', label: !esSecundaria && rondas ? 'Más juegos' : 'Juegos' },
-    { id: 'herramientas', label: gradoNumero <= 2 ? 'Crear' : 'Taller y recursos' },
   ];
 
   return (
-    <div className="space-y-6">
+    <div className="lengua-leccion space-y-4">
       <div className="lengua-actividades" role="group" aria-label="Actividades de la guía">
         {pilares.map((pilar) => (
           <button key={pilar.id} type="button" className="lengua-pestana"
@@ -52,6 +51,13 @@ export default function ModuloLeccion({ guia, gradoNombre, gradoNumero = 1, onSi
             {pilar.label}
           </button>
         ))}
+        <details className="lengua-mas-recursos">
+          <summary className="lengua-pestana">Recursos</summary>
+          <button type="button" className="lengua-pestana" aria-pressed={seccionPrincipal === 'herramientas'}
+            onClick={() => cambiarSeccion('herramientas')}>Taller y herramientas</button>
+          <button type="button" className="lengua-pestana" aria-pressed={seccionPrincipal === 'leccion' && subSeccion === 'teatro'}
+            onClick={() => cambiarSeccion('leccion', 'teatro')}>Narrar y representar</button>
+        </details>
       </div>
 
       {seccionPrincipal === 'reto' && rondas && (
@@ -62,35 +68,6 @@ export default function ModuloLeccion({ guia, gradoNombre, gradoNumero = 1, onSi
       {/* ══════════ PILAR 1: LECTURA Y LECCIÓN PRINCIPAL ══════════ */}
       {seccionPrincipal === 'leccion' && (
         <div className="space-y-6 animate-fade-in">
-          {/* Sub-navegación interna de la lección */}
-          <div className="flex items-center justify-between gap-2 bg-slate-100 p-1.5 rounded-2xl border border-slate-200">
-            <div className="flex items-center gap-1.5">
-              <button
-                onClick={() => setSubSeccion('principal')}
-                className={`px-4 py-2 rounded-xl text-xs font-black transition-all cursor-pointer ${
-                  subSeccion === 'principal'
-                    ? 'bg-white text-slate-900 shadow-sm'
-                    : 'text-slate-600 hover:text-slate-900'
-                }`}
-              >
-                📖 Teoría y Lectura Guiada
-              </button>
-
-              <button
-                onClick={() => cambiarSeccion('leccion', 'teatro')}
-                className={`px-4 py-2 rounded-xl text-xs font-black transition-all cursor-pointer ${
-                  subSeccion === 'teatro'
-                    ? 'bg-white text-slate-900 shadow-sm'
-                    : 'text-slate-600 hover:text-slate-900'
-                }`}
-              >
-                🎭 Teatro Ilustrado / Oratoria
-              </button>
-            </div>
-
-
-          </div>
-
           {subSeccion === 'principal' ? (
             <TeoriaPedagogicaEnriquecida
               guia={guia}
@@ -117,7 +94,7 @@ export default function ModuloLeccion({ guia, gradoNombre, gradoNumero = 1, onSi
                 subSeccion === 'principal' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-600'
               }`}
             >
-              🧠 Taller en 3 Niveles
+              Preguntas
             </button>
             <button
               onClick={() => setSubSeccion('cuaderno')}
@@ -125,7 +102,7 @@ export default function ModuloLeccion({ guia, gradoNombre, gradoNumero = 1, onSi
                 subSeccion === 'cuaderno' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-600'
               }`}
             >
-              📓 Actividades al Cuaderno
+              Cuaderno
             </button>
             <button
               onClick={() => setSubSeccion('glosario')}
@@ -133,7 +110,7 @@ export default function ModuloLeccion({ guia, gradoNombre, gradoNumero = 1, onSi
                 subSeccion === 'glosario' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-600'
               }`}
             >
-              📚 Glosario de Términos
+              Glosario
             </button>
           </div>
 
@@ -148,7 +125,7 @@ export default function ModuloLeccion({ guia, gradoNombre, gradoNumero = 1, onSi
                   onClick={() => cambiarSeccion('juegos')}
                   className="px-6 py-3.5 bg-gradient-to-r from-amber-400 to-orange-500 text-slate-950 font-black text-sm rounded-2xl shadow-lg hover:scale-105 active:scale-95 transition-all flex items-center gap-2 cursor-pointer"
                 >
-                  <span>Paso 3: ¡Jugar en el Arcade de esta Guía!</span>
+                  <span>Elegir un juego</span>
                   <span>➔</span>
                 </button>
               </div>
@@ -214,7 +191,7 @@ export default function ModuloLeccion({ guia, gradoNombre, gradoNumero = 1, onSi
                 subSeccion === 'principal' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-600'
               }`}
             >
-              🎮 Arcade Didáctico Completo ({gradoNumero}° Grado)
+              Juegos del grado
             </button>
             {!esSecundaria && (
               <>
