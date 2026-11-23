@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import {
   ArrowLeft,
@@ -20,6 +20,13 @@ function InteractiveMissionGame({ mission, onBack, onNext }) {
   const [feedback, setFeedback] = useState(null);
   const [completed, setCompleted] = useState(false);
   const { playSelection, playReset, playError, celebrate } = useGameEffects();
+
+  useEffect(() => {
+    setSelected([]);
+    setChoice(null);
+    setFeedback(null);
+    setCompleted(false);
+  }, [mission.id]);
 
   function toggle(index) {
     setSelected((current) =>

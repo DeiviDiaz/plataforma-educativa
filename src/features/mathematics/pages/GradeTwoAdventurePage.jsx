@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
 import { useGameEffects } from '../effects/useGameEffects.js';
 import { buttonMotion, levelVariants } from '../effects/motionVariants.js';
+import GradeShortcut from '../components/GradeShortcut.jsx';
 
 const worlds = [
   {
@@ -279,7 +279,7 @@ export default function GradeTwoAdventurePage() {
   return (
     <motion.main className="grade-two-adventure" variants={levelVariants} initial="initial" animate="animate">
       <header className="grade-two-topbar">
-        <Link to="/matematicas" className="grade-two-secondary">← Volver a Matemáticas</Link>
+        <GradeShortcut className="grade-two-secondary" />
         <div className="grade-two-audio-controls">
           <button type="button" className="grade-two-secondary" onClick={() => speak(lastInstruction)} aria-label="Repetir instrucción">🔁 Repetir</button>
           <button type="button" className="grade-two-secondary" onClick={toggleVoice} aria-pressed={voiceEnabled}>{voiceEnabled ? '🔊 Voz' : '🔇 Voz'}</button>

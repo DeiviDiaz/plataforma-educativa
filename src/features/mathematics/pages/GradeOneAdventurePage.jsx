@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import GradeShortcut from '../components/GradeShortcut.jsx';
 
 const periods = [
   ['¡Acerquémonos a nuestros amigos los números!', '🐒', 'Cuenta, agrupa y descubre los números del 1 al 50.', 'Números, decenas y operaciones'],
@@ -34,7 +35,7 @@ export default function GradeOneAdventurePage() {
   return (
     <main className="grade-two-adventure">
       <header className="grade-two-topbar">
-        <Link to="/matematicas" className="grade-two-secondary">← Volver a Matemáticas</Link>
+        <GradeShortcut className="grade-two-secondary" />
         <span>Matemáticas <span aria-hidden="true">›</span> Grado 1</span>
         <div className="grade-two-audio-controls">
           <button type="button" className="grade-two-secondary" onClick={() => speak(welcome, voiceEnabled)}>🔁 Repetir</button>

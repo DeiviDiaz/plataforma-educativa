@@ -13,6 +13,7 @@ import FirstGradeMathGame from '../games/FirstGradeMathGame.jsx';
 import FirstGradeSecondPeriodGame from '../games/FirstGradeSecondPeriodGame.jsx';
 import FirstGradeThirdPeriodGame from '../games/FirstGradeThirdPeriodGame.jsx';
 import FirstGradeFourthPeriodGame from '../games/FirstGradeFourthPeriodGame.jsx';
+import GradeShortcut from '../components/GradeShortcut.jsx';
 
 const periodIcons = [Compass, Target, Sparkles, Hammer];
 
@@ -65,7 +66,10 @@ function TopicSelectionPage() {
 
     return (
       <main className="page-container">
-        <Link className="back-link" to={`/matematicas/grado/${currentGrade}`}>← Volver a los periodos</Link>
+        <nav className="math-page-navigation math-page-navigation--back-left" aria-label="Navegación de matemáticas">
+          <Link className="back-link" to={`/matematicas/grado/${currentGrade}`}>← Volver a los periodos</Link>
+          <GradeShortcut />
+        </nav>
         <header className="page-heading">
           <p className="page-eyebrow">MATEMÁTICAS · CUARTO GRADO · PERIODO {selectedPeriod.id}</p>
           <h1>{selectedPeriod.title}</h1>
@@ -116,7 +120,10 @@ function TopicSelectionPage() {
 
     return (
       <main className="page-container">
-        <Link className="back-link" to={`/matematicas/grado/${currentGrade}`}>← Volver a los periodos</Link>
+        <nav className="math-page-navigation" aria-label="Navegación de matemáticas">
+          <Link className="back-link" to={`/matematicas/grado/${currentGrade}`}>← Volver a los periodos</Link>
+          <GradeShortcut />
+        </nav>
         <header className="page-heading">
           <p className="page-eyebrow">MATEMÁTICAS · QUINTO GRADO · PERIODO {selectedPeriod.id}</p>
           <h1>{selectedPeriod.title}</h1>
@@ -166,18 +173,29 @@ function TopicSelectionPage() {
       const nextMission = missions[missions.indexOf(activeMission) + 1];
       return (
         <InteractiveMissionGame
+          key={activeMission.id}
           mission={activeMission}
           onBack={() => setActiveMissionId(null)}
-          onNext={() => setActiveMissionId(nextMission?.id ?? null)}
+          onNext={() => {
+            if (nextMission) {
+              setActiveMissionId(nextMission.id);
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+              return;
+            }
+            setActiveMissionId(null);
+          }}
         />
       );
     }
 
     return (
       <main className="page-container">
-        <Link className="back-link" to="/matematicas/grado/6">
-          ← Volver a los periodos
-        </Link>
+        <nav className="math-page-navigation" aria-label="Navegación de matemáticas">
+          <Link className="back-link" to="/matematicas/grado/6">
+            ← Volver a los periodos
+          </Link>
+          <GradeShortcut />
+        </nav>
         <header className="page-heading">
           <p className="page-eyebrow">MATEMÁTICAS · SEXTO GRADO</p>
           <h1>{selectedPeriod.title}</h1>
@@ -231,9 +249,12 @@ function TopicSelectionPage() {
 
   return (
     <main className="page-container">
-      <Link className="back-link" to={`/matematicas/grado/${currentGrade}`}>
+      <nav className="math-page-navigation" aria-label="Navegación de matemáticas">
+        <Link className="back-link" to={`/matematicas/grado/${currentGrade}`}>
           ← Volver a Periodos de {currentGrade}°
-      </Link>
+        </Link>
+        <GradeShortcut />
+      </nav>
       <header className="page-heading">
         <p className="page-eyebrow">MATEMÁTICAS · GRADO {currentGrade}</p>
         <h1>{period.title}</h1>
