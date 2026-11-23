@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { Calculator, LockKeyhole } from 'lucide-react';
 
 const GRADES = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
@@ -26,12 +27,17 @@ export default function GradeSelectionPage({ subject = 'matematicas' }) {
           const isAvailable = isSubjectAvailable && AVAILABLE_GRADES.includes(grade);
           const gradeContent = (
             <>
-              <span className="grade-number">{grade}</span>
-              <span className="grade-label">
-                {grade === 1 ? 'Primer grado' : `${grade}.º grado`}
+              <span className="grade-card__art" aria-hidden="true">
+                {isAvailable ? <Calculator /> : <LockKeyhole />}
+                <span className="grade-number">{grade}</span>
               </span>
-              <span className={isAvailable ? 'grade-status grade-status--available' : 'grade-status'}>
-                {isAvailable ? 'Disponible' : 'Próximamente'}
+              <span className="grade-card__body">
+                <span className="grade-label">
+                  {grade === 1 ? 'Primer grado' : `${grade}.º grado`}
+                </span>
+                <span className={isAvailable ? 'grade-status grade-status--available' : 'grade-status'}>
+                  {isAvailable ? 'Disponible' : 'Próximamente'}
+                </span>
               </span>
             </>
           );

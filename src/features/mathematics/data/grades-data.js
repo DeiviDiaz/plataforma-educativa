@@ -183,38 +183,46 @@ export const gradesCurriculum = {
     periods: [
       {
         id: 1,
-        title: 'Periodo 1: Sistemas de Ecuaciones Lineales',
+        title: 'Primer periodo',
+        description: 'Álgebra, sistemas y radicales',
         topics: [
-          { id: 'sistemas-2x2-metodos', title: 'Sistemas 2x2: sustitución, igualación y reducción', gameIds: ['sistemas-2x2-metodos'] },
-          { id: 'determinantes-cramer', title: 'Determinantes y regla de Cramer (2x2 y 3x3)', gameIds: ['determinantes-cramer'] },
-          { id: 'racionalizacion', title: 'Radicales y racionalización', gameIds: ['racionalizacion'] }
+          { id: 'grado9-1', title: 'Ecuaciones lineales', sub: 'Construye soluciones y reconoce métodos algebraicos.', gameIds: ['grado9-1'] },
+          { id: 'grado9-2', title: 'Sistemas de ecuaciones 2×2', sub: 'Encuentra intersecciones moviendo rectas.', gameIds: ['grado9-2'] },
+          { id: 'grado9-3', title: 'Problemas de sistemas', sub: 'Traduce situaciones cotidianas a ecuaciones.', gameIds: ['grado9-3'] },
+          { id: 'grado9-4', title: 'Determinantes de 2×2', sub: 'Calcula determinantes y aplica Cramer.', gameIds: ['grado9-4'] },
+          { id: 'grado9-5', title: 'Determinantes de 3×3', sub: 'Explora matrices de tres variables.', gameIds: ['grado9-5'] },
+          { id: 'grado9-6', title: 'Racionalización', sub: 'Elige conjugadas y elimina radicales.', gameIds: ['grado9-6'] }
         ]
       },
       {
         id: 2,
-        title: 'Periodo 2: Estudio de Funciones',
+        title: 'Segundo periodo',
+        description: 'El universo de las funciones',
         topics: [
-          { id: 'concepto-funcion', title: 'Función: dominio, codominio y representaciones', gameIds: ['concepto-funcion'] },
-          { id: 'funcion-lineal-afin', title: 'Función lineal y cálculo de pendiente', gameIds: ['funcion-lineal-afin'] },
-          { id: 'funcion-cuadratica', title: 'Función cuadrática, vértice y eje de simetría', gameIds: ['funcion-cuadratica'] },
-          { id: 'exponencial-logaritmica', title: 'Funciones exponenciales y logarítmicas', gameIds: ['exponencial-logaritmica'] }
+          { id: 'grado9-7', title: 'Representamos funciones', sub: 'Relaciona tablas, pares y diagramas.', gameIds: ['grado9-7'] },
+          { id: 'grado9-8', title: 'Función lineal', sub: 'Cambia pendientes y lee la gráfica.', gameIds: ['grado9-8'] },
+          { id: 'grado9-9', title: 'Función cuadrática', sub: 'Descubre el vértice de una parábola.', gameIds: ['grado9-9'] },
+          { id: 'grado9-10', title: 'Función exponencial', sub: 'Observa crecimiento y completa valores.', gameIds: ['grado9-10'] },
+          { id: 'grado9-11', title: 'Función logarítmica', sub: 'Conecta potencias con logaritmos.', gameIds: ['grado9-11'] }
         ]
       },
       {
         id: 3,
-        title: 'Periodo 3: Semejanza y Teorema de Tales',
+        title: 'Tercer periodo',
+        description: 'Geometría, semejanza y escala',
         topics: [
-          { id: 'teorema-tales', title: 'Segmentos proporcionales y Teorema de Tales', gameIds: ['teorema-tales'] },
-          { id: 'escalas-planos', title: 'Manejo de escalas, planos y maquetas', gameIds: ['escalas-planos'] },
-          { id: 'cuerpos-redondos', title: 'Volumen y capacidad de cuerpos redondos', gameIds: ['cuerpos-redondos'] }
+          { id: 'grado9-12', title: 'Figuras semejantes', sub: 'Compara longitudes, áreas y volúmenes.', gameIds: ['grado9-12'] },
+          { id: 'grado9-13', title: 'Segmentos proporcionales', sub: 'Resuelve longitudes con Pitágoras y Thales.', gameIds: ['grado9-13'] },
+          { id: 'grado9-14', title: 'La herramienta escala', sub: 'Transforma medidas de planos y maquetas.', gameIds: ['grado9-14'] }
         ]
       },
       {
         id: 4,
-        title: 'Periodo 4: Probabilidad Avanzada',
+        title: 'Cuarto periodo',
+        description: 'Probabilidad y conteo',
         topics: [
-          { id: 'espacio-muestral-eventos', title: 'Espacio muestral y clases de eventos', gameIds: ['espacio-muestral-eventos'] },
-          { id: 'calculo-probabilidades', title: 'Cálculo de probabilidad de eventos compuestos', gameIds: ['calculo-probabilidades'] }
+          { id: 'grado9-15', title: 'Probabilidad de eventos', sub: 'Lanza dados y compara resultados.', gameIds: ['grado9-15'] },
+          { id: 'grado9-16', title: 'Probabilidades de varios eventos', sub: 'Recorre árboles y cuenta posibilidades.', gameIds: ['grado9-16'] }
         ]
       }
     ]

@@ -4,6 +4,7 @@ import { gradeFivePeriods } from '../data/grade-five-games.js';
 import { gradeFourPeriods } from '../data/grade-four-games.js';
 import { gradesCurriculum } from '../data/grades-data.js';
 import { interactivePeriods } from '../data/interactive-missions.js';
+import GradeShortcut from '../components/GradeShortcut.jsx';
 import GradeOneAdventurePage from './GradeOneAdventurePage.jsx';
 import GradeTwoAdventurePage from './GradeTwoAdventurePage.jsx';
 
@@ -37,9 +38,12 @@ export default function PeriodSelectionPage() {
 
   return (
     <main className="page-container">
-      <Link className="back-link" to="/matematicas">
+      <nav className="math-page-navigation math-page-navigation--back-left" aria-label="Navegación de matemáticas">
+        <Link className="back-link" to="/matematicas">
           ← Volver a Grados
-      </Link>
+        </Link>
+        <GradeShortcut />
+      </nav>
       <header className="page-heading">
         <p className="page-eyebrow">MATEMÁTICAS · GRADO {currentGrade}</p>
         <h1>Selecciona un periodo</h1>
@@ -53,7 +57,18 @@ export default function PeriodSelectionPage() {
             className={`period-card period-card--${period.color ?? ['green', 'orange', 'purple', 'red'][(period.id - 1) % 4]}`}
             to={`/matematicas/grado/${currentGrade}/periodo/${period.id}`}
           >
-            <span className="period-number">{String(period.id).padStart(2, '0')}</span>
+            <span className="period-card__top">
+              <span className="period-card__icon" aria-hidden="true">
+                {(() => {
+                  if (currentGrade === 6) return period.icon;
+                  const Icon = currentGrade === 5
+                    ? [Compass, Target, Sparkles, Hammer][period.id - 1]
+                    : periodIcons[period.id];
+                  return Icon ? <Icon /> : <Compass />;
+                })()}
+              </span>
+              <span className="period-number">PERIODO {String(period.id).padStart(2, '0')}</span>
+            </span>
             <h2>{period.title}</h2>
             <p>{period.description ?? `${period.topics.length} temas disponibles para explorar.`}</p>
             <span className="period-status">

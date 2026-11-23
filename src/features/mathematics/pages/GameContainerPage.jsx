@@ -1,18 +1,21 @@
 import React from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { gradesCurriculum } from '../data/grades-data.js';
 import { gradeSixMathematics } from '../data/grade-six.js';
 
 // Controladores unificados para Grado 7° y Grado 8°
 import GradeSevenGame from '../games/GradeSevenGame.jsx';
 import GradeEightGame from '../games/GradeEightGame.jsx';
+import GradeNineGame from '../games/GradeNineGame.jsx';
 
 // Motor Universal y Registro (para grados anteriores como 4°, 5°, 6°)
 import UniversalTopicEngine from '../games/UniversalTopicEngine.jsx';
 import { TOPIC_GENERATORS } from '../data/topics-game-registry.js';
+import GradeShortcut from '../components/GradeShortcut.jsx';
 
 export default function GameContainerPage() {
   const { gradeId, topicId } = useParams();
+  const navigate = useNavigate();
   const numericGrade = Number(gradeId);
 
   const curriculum = numericGrade === 6 ? gradeSixMathematics : gradesCurriculum[numericGrade];
@@ -55,6 +58,15 @@ export default function GameContainerPage() {
       return <GradeEightGame topicId={topicId} />;
     }
 
+    if (numericGrade === 9) {
+      return (
+        <GradeNineGame
+          topicId={topicId}
+          onBack={() => navigate(`/matematicas/grado/9/periodo/${currentPeriod.id}`)}
+        />
+      );
+    }
+
     // -------------------------------------------------------
     // Grados 4°, 5° o 6° (Motor Universal)
     // -------------------------------------------------------
@@ -76,13 +88,7 @@ export default function GameContainerPage() {
   return (
     <main style={{ minHeight: '90vh', padding: '24px 16px', backgroundColor: '#f8fafc' }}>
       <header
-        style={{
-          maxWidth: '1100px',
-          margin: '0 auto 20px',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-        }}
+        className="math-game-navigation"
       >
         <Link
           to={`/matematicas/grado/${gradeId}/periodo/${currentPeriod.id}`}
@@ -90,7 +96,8 @@ export default function GameContainerPage() {
         >
           ← Volver a Temas
         </Link>
-        <span style={{ fontSize: '0.9rem', color: '#64748b', fontWeight: '600' }}>
+        <GradeShortcut />
+        <span className="math-game-navigation__context">
           Grado {gradeId}° • Periodo {currentPeriod.id}
         </span>
       </header>
