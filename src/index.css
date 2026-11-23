@@ -1247,12 +1247,25 @@ a {
   border: 1px solid #8fcbb4;
   background: #edf9f4;
   color: #17694b;
+  animation: grade-nine-success 420ms ease;
 }
 
 .grade-nine-feedback--error {
   border: 1px solid #e6b1a8;
   background: #fff3ef;
   color: #9a4438;
+  animation: grade-nine-error 360ms ease;
+}
+
+@keyframes grade-nine-success {
+  0% { transform: scale(0.96); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes grade-nine-error {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
 }
 
 .grade-nine-answer {

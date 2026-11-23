@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { gradeNineGames, gradeNineInstructions } from '../data/grade-nine-games.js';
+import { useGameEffects } from '../effects/useGameEffects.js';
 
 const close = (value, answer) =>
   value.trim() !== '' && Number.isFinite(Number(value.replace(',', '.')))
@@ -73,7 +74,7 @@ function TriangleVisual({ question }) {
   return null;
 }
 
-function ProbabilityVisual({ question }) {
+function ProbabilityVisual({ question, onSelect }) {
   const [rolls, setRolls] = useState([]);
 
   return (
@@ -81,7 +82,13 @@ function ProbabilityVisual({ question }) {
       <div className="grade-nine-dice" aria-live="polite">
         {['⚀', '⚁', '⚂', '⚃', '⚄', '⚅'][rolls.at(-1) ? rolls.at(-1) - 1 : 0]}
       </div>
-      <button type="button" onClick={() => setRolls((items) => [...items, rand(1, 6)])}>
+      <button
+        type="button"
+        onClick={() => {
+          onSelect();
+          setRolls((items) => [...items, rand(1, 6)]);
+        }}
+      >
         Lanzar dado
       </button>
       <p>Espacio muestral: 1, 2, 3, 4, 5, 6</p>
@@ -95,7 +102,7 @@ function ProbabilityVisual({ question }) {
   );
 }
 
-function TreeVisual({ question }) {
+function TreeVisual({ question, onSelect }) {
   const [selected, setSelected] = useState('C');
   return (
     <div className="grade-nine-tree">
@@ -123,7 +130,10 @@ function TreeVisual({ question }) {
             key={option}
             className={selected === option ? 'is-selected' : ''}
             aria-pressed={selected === option}
-            onClick={() => setSelected(option)}
+            onClick={() => {
+              onSelect();
+              setSelected(option);
+            }}
           >
             {option === 'C' ? 'Cara' : 'Sello'}
           </button>
@@ -145,6 +155,7 @@ function GradeNineGame({ topicId, onBack }) {
   const [feedback, setFeedback] = useState(null);
   const [completed, setCompleted] = useState(false);
   const [extraValue, setExtraValue] = useState(1);
+  const { playSelection, playReset, playError, celebrate } = useGameEffects();
 
   useEffect(() => {
     setQuestion(game.make());
@@ -158,20 +169,27 @@ function GradeNineGame({ topicId, onBack }) {
 
   const checkAnswer = () => {
     if (value.trim() === '') {
+      playError();
       setFeedback({ type: 'error', text: 'Escribe una respuesta antes de comprobar.' });
       return;
     }
     const correct = close(value, question.answer);
+    if (correct) {
+      celebrate();
+      setScore((current) => current + 10);
+    } else {
+      playError();
+    }
     setFeedback({
       type: correct ? 'success' : 'error',
       text: correct
         ? `¡Correcto! ${question.explain}`
         : `Todavía no. ${question.hint || 'Revisa la operación y vuelve a intentar.'}`,
     });
-    if (correct) setScore((current) => current + 10);
   };
 
   const nextRound = () => {
+    playSelection();
     setQuestion(game.make());
     setRound((current) => current + 1);
     setValue('');
@@ -179,6 +197,7 @@ function GradeNineGame({ topicId, onBack }) {
   };
 
   const resetGame = () => {
+    playReset();
     setQuestion(game.make());
     setRound(1);
     setScore(0);
@@ -256,8 +275,12 @@ function GradeNineGame({ topicId, onBack }) {
         {game.id === 'grado9-4' && <Matrix question={question} />}
         {game.id === 'grado9-5' && <Matrix question={question} />}
         {game.id === 'grado9-13' && <TriangleVisual question={question} />}
-        {game.id === 'grado9-15' && <ProbabilityVisual question={question} />}
-        {game.id === 'grado9-16' && <TreeVisual question={question} />}
+        {game.id === 'grado9-15' && (
+          <ProbabilityVisual question={question} onSelect={playSelection} />
+        )}
+        {game.id === 'grado9-16' && (
+          <TreeVisual question={question} onSelect={playSelection} />
+        )}
 
         {(game.id === 'grado9-12' || game.id === 'grado9-13' || game.id === 'grado9-14') && (
           <div className="grade-nine-range">
@@ -271,7 +294,10 @@ function GradeNineGame({ topicId, onBack }) {
               max="5"
               step="1"
               value={extraValue}
-              onChange={(event) => setExtraValue(Number(event.target.value))}
+              onChange={(event) => {
+                playSelection();
+                setExtraValue(Number(event.target.value));
+              }}
             />
           </div>
         )}
@@ -290,7 +316,10 @@ function GradeNineGame({ topicId, onBack }) {
               type="number"
               step="any"
               value={value}
-              onChange={(event) => setValue(event.target.value)}
+              onChange={(event) => {
+                playSelection();
+                setValue(event.target.value);
+              }}
             />
           </label>
           <button type="submit">Comprobar respuesta</button>
