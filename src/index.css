@@ -967,6 +967,47 @@ a {
   line-height: 1.55;
 }
 
+.grade-nine-instructions {
+  padding-top: 12px;
+  border-top: 1px solid #d1dbea;
+}
+
+.grade-nine-instructions p {
+  margin: 7px 0 0;
+  color: #475569;
+  font-size: 0.86rem;
+  line-height: 1.45;
+}
+
+.grade-nine-instructions ol {
+  display: grid;
+  gap: 7px;
+  margin: 7px 0 0;
+  padding-left: 18px;
+  color: #475569;
+  font-size: 0.82rem;
+  line-height: 1.45;
+}
+
+.grade-nine-instructions li::marker {
+  color: #3659d9;
+  font-weight: 900;
+}
+
+.grade-nine-instructions--learning p {
+  margin: 7px 0 0;
+  color: #475569;
+  font-size: 0.82rem;
+  line-height: 1.48;
+}
+
+.grade-nine-example {
+  padding: 9px 10px;
+  border-radius: 10px;
+  background: #f1f5fc;
+  color: #31548f !important;
+}
+
 .grade-nine-side-stats {
   display: grid;
   grid-template-columns: repeat(2, 1fr);

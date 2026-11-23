@@ -1,5 +1,104 @@
 export const rand = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
 
+export const gradeNineInstructions = {
+  'grado9-1': {
+    objective: 'Aprende a despejar la incógnita x en una ecuación.',
+    steps: ['Identifica los números de la ecuación.', 'Deshaz la suma o resta.', 'Divide por el número que acompaña a x.'],
+    explanation: 'Despejar una incógnita significa dejar sola la letra x usando operaciones inversas en ambos lados. Primero eliminamos la suma o resta; después dividimos por el coeficiente. Así mantenemos el equilibrio de la ecuación.',
+    example: 'Ejemplo: 3x + 5 = 20. Restamos 5: 3x = 15. Dividimos entre 3: x = 5.',
+  },
+  'grado9-2': {
+    objective: 'Encuentra el punto donde se cruzan dos rectas.',
+    steps: ['Observa las dos rectas.', 'Iguala sus expresiones.', 'Escribe el valor de x en el cruce.'],
+    explanation: 'En el cruce, las dos rectas tienen el mismo valor de y para la misma x. Igualamos sus ecuaciones y resolvemos la incógnita. Luego sustituimos x en una recta para comprobar y.',
+    example: 'Ejemplo: y = 2x + 1 y y = x + 4. Igualamos: 2x + 1 = x + 4. Entonces x = 3 y y = 7.',
+  },
+  'grado9-3': {
+    objective: 'Representa una compra con dos cantidades desconocidas.',
+    steps: ['Escribe el precio de los jugos.', 'Resta ese resultado del total.', 'Divide lo que queda entre las arepas.'],
+    explanation: 'Primero multiplicamos la cantidad conocida por su precio para calcular cuánto se gastó en ese producto. Luego restamos ese valor al total y repartimos lo restante entre las unidades desconocidas.',
+    example: 'Ejemplo: 2 jugos cuestan $2.000 y el total es $5.000. Restamos: 5.000 − 2.000 = 3.000. Si hay 3 arepas, cada una cuesta 3.000 ÷ 3 = $1.000.',
+  },
+  'grado9-4': {
+    objective: 'Calcula el determinante de una matriz 2 por 2.',
+    steps: ['Multiplica los números de la diagonal principal.', 'Multiplica los números de la otra diagonal.', 'Resta el segundo producto del primero.'],
+    explanation: 'El determinante mide una cantidad asociada a la matriz. En una matriz 2×2, se multiplican los extremos de la diagonal que baja y luego se restan los extremos de la otra diagonal.',
+    example: 'Ejemplo: [1 2; 3 4]. Diagonal principal: 1×4 = 4. Otra diagonal: 2×3 = 6. Determinante: 4 − 6 = −2.',
+  },
+  'grado9-5': {
+    objective: 'Calcula el determinante de una matriz 3 por 3.',
+    steps: ['Toma la primera fila.', 'Aplica a(ei−fh) − b(di−fg) + c(dh−eg).', 'Simplifica y escribe el resultado.'],
+    explanation: 'Al expandir por la primera fila, se usa cada número con su menor de 2×2. Los signos del desarrollo son más, menos y más. En una matriz identidad el resultado se conserva con la regla de Cramer.',
+    example: 'Ejemplo: [1 0 0; 0 2 0; 0 0 3]. Solo la diagonal contiene valores: 1×2×3 = 6.',
+  },
+  'grado9-6': {
+    objective: 'Elimina la raíz del denominador usando el conjugado.',
+    steps: ['Cambia el signo central.', 'Multiplica arriba y abajo por la conjugada.', 'Reduce el denominador con diferencia de cuadrados.'],
+    explanation: 'La conjugada conserva los términos y cambia el signo central. Multiplicar expresiones conjugadas elimina la raíz porque aplica la diferencia de cuadrados: (a+b)(a−b)=a²−b².',
+    example: 'Ejemplo: 1/(2+√3). Multiplicamos por (2−√3)/(2−√3). El denominador queda 2²−(√3)² = 4−3 = 1.',
+  },
+  'grado9-7': {
+    objective: 'Calcula la imagen de una función.',
+    steps: ['Observa el valor de x.', 'Sustitúyelo en f(x).', 'Multiplica, suma o resta y escribe el resultado.'],
+    explanation: 'La imagen es el valor que entrega la función cuando entra un número del dominio. Sustituimos x en la fórmula y seguimos el orden de operaciones.',
+    example: 'Ejemplo: f(x)=2x+1. Para x=3, f(3)=2×3+1=7. La pareja formada es (3,7).',
+  },
+  'grado9-8': {
+    objective: 'Evalúa una función lineal con una pendiente y una tabla.',
+    steps: ['Lee el valor de x.', 'Multiplica por la pendiente.', 'Suma o resta el corte con el eje y.'],
+    explanation: 'En y=mx+b, m indica cuánto cambia y por cada unidad de x y b indica dónde la recta corta el eje y. Sustituir x permite calcular un punto exacto de la recta.',
+    example: 'Ejemplo: y=3x−2. Si x=4, y=3×4−2=10. La recta pasa por el punto (4,10).',
+  },
+  'grado9-9': {
+    objective: 'Identifica el vértice de una parábola.',
+    steps: ['Observa y = a(x−h)²+k.', 'El primer número del vértice es h.', 'El segundo número del vértice es k.'],
+    explanation: 'La forma y=a(x−h)²+k muestra directamente el vértice. El eje de simetría pasa por x=h y k indica la altura mínima o máxima según la apertura.',
+    example: 'Ejemplo: y=(x−2)²+3. El vértice es (2,3) y el eje de simetría es x=2.',
+  },
+  'grado9-10': {
+    objective: 'Completa valores de una función exponencial.',
+    steps: ['Observa la base y el exponente.', 'Multiplica la base tantas veces como indica x.', 'Escribe el valor obtenido.'],
+    explanation: 'Una función exponencial multiplica por la misma base en cada paso. Por eso crece o disminuye con rapidez. Cuando x=0, cualquier base distinta de cero elevada a cero vale 1.',
+    example: 'Ejemplo: f(x)=2ˣ. Para x=4, f(4)=2×2×2×2=16.',
+  },
+  'grado9-11': {
+    objective: 'Relaciona una potencia con su logaritmo.',
+    steps: ['Observa la base y el resultado.', 'Pregunta qué exponente produce ese resultado.', 'Escribe el exponente como logaritmo.'],
+    explanation: 'Un logaritmo responde: “¿a qué exponente elevamos la base para obtener este número?”. El resultado log_b(a)=c significa exactamente bᶜ=a.',
+    example: 'Ejemplo: 2³=8, por eso log₂(8)=3.',
+  },
+  'grado9-12': {
+    objective: 'Convierte áreas entre figuras semejantes.',
+    steps: ['Observa la razón de las longitudes.', 'Eleva esa razón al cuadrado.', 'Multiplica el área pequeña por el resultado.'],
+    explanation: 'Las figuras semejantes mantienen sus proporciones. La razón de longitudes se eleva al cuadrado para áreas y al cubo para volúmenes.',
+    example: 'Ejemplo: si k=2 y el área pequeña es 5 cm², el área grande es 5×2²=5×4=20 cm².',
+  },
+  'grado9-13': {
+    objective: 'Halla la hipotenusa de un triángulo rectángulo.',
+    steps: ['Identifica los dos catetos.', 'Eleva cada cateto al cuadrado.', 'Suma los cuadrados y calcula la raíz.'],
+    explanation: 'En todo triángulo rectángulo se cumple c²=a²+b², donde c es la hipotenusa. Luego calculamos la raíz cuadrada de la suma.',
+    example: 'Ejemplo: catetos 3 y 4. c²=3²+4²=9+16=25. Por tanto, c=√25=5.',
+  },
+  'grado9-14': {
+    objective: 'Convierte una medida del plano a la medida real.',
+    steps: ['Lee la escala 1:n.', 'Multiplica los centímetros por n.', 'Convierte los centímetros a metros dividiendo entre 100.'],
+    explanation: 'Una escala 1:n significa que una unidad en el plano representa n unidades reales. Primero multiplicamos por n y después convertimos las unidades si el ejercicio usa metros.',
+    example: 'Ejemplo: escala 1:100 y el plano mide 3 cm. Realmente mide 3×100=300 cm, es decir, 3 m.',
+  },
+  'grado9-15': {
+    objective: 'Calcula la probabilidad de un evento con un dado.',
+    steps: ['Cuenta los resultados favorables.', 'Escribe el total de resultados posibles.', 'Divide y expresa el resultado como decimal.'],
+    explanation: 'La probabilidad teórica compara casos favorables con casos posibles. El dado justo tiene seis resultados equiprobables.',
+    example: 'Ejemplo: obtener un número par: hay 3 casos favorables, {2,4,6}, entre 6 posibles. La probabilidad es 3÷6=0,5.',
+  },
+  'grado9-16': {
+    objective: 'Cuenta todas las secuencias posibles al lanzar monedas.',
+    steps: ['Recuerda que cada lanzamiento tiene 2 opciones.', 'Multiplica 2 por sí mismo una vez por lanzamiento.', 'Escribe el total de secuencias.'],
+    explanation: 'Cada lanzamiento genera dos ramas: cara o sello. Como los lanzamientos son consecutivos, multiplicamos las opciones de cada paso.',
+    example: 'Ejemplo: con 3 monedas hay 2×2×2=8 secuencias: CCC, CCS, CSC, CSS, SCC, SCS, SSC y SSS.',
+  },
+};
+
 const det3 = (m) =>
   m[0] * (m[4] * m[8] - m[5] * m[7])
   - m[1] * (m[3] * m[8] - m[5] * m[6])

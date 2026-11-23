@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { gradeNineGames } from '../data/grade-nine-games.js';
+import { gradeNineGames, gradeNineInstructions } from '../data/grade-nine-games.js';
 
 const close = (value, answer) =>
   value.trim() !== '' && Number.isFinite(Number(value.replace(',', '.')))
@@ -194,7 +194,25 @@ function GradeNineGame({ topicId, onBack }) {
         </span>
         <p className="grade-nine-game__period">MINIJUEGO · {String(round).padStart(2, '0')}</p>
         <h2>{game.title}</h2>
-        <p>Explora la representación, introduce tu respuesta y pulsa «Comprobar».</p>
+        <div className="grade-nine-instructions">
+          <span className="mini-label">Qué debes lograr</span>
+          <p>{gradeNineInstructions[game.id].objective}</p>
+        </div>
+        <div className="grade-nine-instructions">
+          <span className="mini-label">Cómo hacerlo</span>
+          <ol>
+            {gradeNineInstructions[game.id].steps.map((step) => (
+              <li key={step}>{step}</li>
+            ))}
+          </ol>
+        </div>
+        <div className="grade-nine-instructions grade-nine-instructions--learning">
+          <span className="mini-label">Explicación y ejemplo</span>
+          <p>{gradeNineInstructions[game.id].explanation}</p>
+          <p className="grade-nine-example">
+            <strong>Ejemplo:</strong> {gradeNineInstructions[game.id].example.replace(/^Ejemplo:\s*/, '')}
+          </p>
+        </div>
         <div className="grade-nine-side-stats">
           <div><strong>{score}</strong><span>Puntos</span></div>
           <div><strong>{round}</strong><span>Ronda</span></div>
