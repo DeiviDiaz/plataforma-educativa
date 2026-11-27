@@ -205,13 +205,6 @@ export default function SpanishLayout() {
 
         {/* ══════════ PIE DE PÁGINA LIMPIO ══════════ */}
         <footer className="institution-footer border-t border-slate-200 bg-white py-8 text-center text-xs text-slate-500 font-medium space-y-2 mt-auto">
-          <div className="flex items-center justify-center gap-2 text-sm text-slate-800 font-bold">
-            <span>📖✨</span>
-            <span>Lengua Viva • Plataforma Interactiva de Lenguaje</span>
-          </div>
-          <p className="text-slate-400 max-w-lg mx-auto">
-            Diseñada para grados 1° a 9° de básica rural y urbana • Fonética con voz para primero • Arcade didáctico • 100% Funcional sin Internet
-          </p>
           <div className="institution-footer__identity">
             <img className="institution-footer__flag" src={bandera} alt="Bandera" />
             <p>© 2026 Centro Educativo Rural Caliyaco. Todos los derechos reservados.</p>

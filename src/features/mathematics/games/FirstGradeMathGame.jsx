@@ -7,7 +7,7 @@ import { useGameEffects } from '../effects/useGameEffects.js';
 const adventures = [
   {
     title: '¡Conozcamos los números del 1 al 9!',
-    icon: '🦋🌼',
+    icon: '🦋',
     intro: 'Mira el bosque. ¡Vamos a contar sus habitantes!',
     tasks: [
       { type: 'count', icon: '🦋', amount: 4, prompt: 'Toca las mariposas.', voice: 'Toca cada mariposa para contar cuatro.' },
@@ -18,29 +18,29 @@ const adventures = [
   },
   {
     title: 'Con la decena hacemos grupo',
-    icon: '🧺🌰',
+    icon: '🐿️',
     intro: 'Las semillas quieren viajar juntas. ¡Hagamos una decena!',
     tasks: [
       { type: 'build', icon: '🌰', target: 10, prompt: 'Llena la canasta con 10 semillas.', voice: 'Lleva diez semillas a la canasta. Diez forman una decena.' },
       { type: 'build', icon: '🌰', target: 0, start: 3, remove: true, prompt: 'Deja la canasta vacía.', voice: 'Retira las tres semillas hasta dejar cero.' },
       { type: 'sequence', series: [4, null, 6], answer: 5, options: [3, 4, 5, 6, 7], prompt: 'Completa el camino.', voice: 'Cuatro, ¿cuál viene antes de seis?' },
-      { type: 'ordinal', animals: ['🐢', '🦜', '🐒', '🦋', '🐸'], answer: 2, prompt: 'Encuentra al tercero.', voice: 'Toca al animal que va en tercer lugar.' },
+      { type: 'ordinal', animals: ['🐢', '🦜', '🐻', '🦋', '🐸'], answer: 2, prompt: 'Encuentra al tercero.', voice: 'Toca al animal que va en tercer lugar.' },
     ],
   },
   {
     title: 'Hagamos adiciones y sustracciones sencillas',
-    icon: '🍌🍎',
+    icon: '🐸',
     intro: 'Las frutas llegan y se van. ¡Mira qué sucede!',
     tasks: [
       { type: 'change', icon: '🍎', start: 2, delta: 3, prompt: 'Agrega 3 frutas.', voice: 'Hay dos frutas. Agrega tres.' },
       { type: 'change', icon: '🍎', start: 5, delta: -3, prompt: 'Quita 3 frutas.', voice: 'Hay cinco frutas. Quita tres.' },
-      { type: 'change', icon: '🍌', start: 4, delta: 2, prompt: 'Agrega 2 bananos.', voice: 'El mono tenía cuatro bananos. Llegan dos más.' },
-      { type: 'change', icon: '🍌', start: 6, delta: -4, prompt: 'Quita 4 bananos.', voice: 'Hay seis bananos. Retira cuatro.' },
+      { type: 'change', icon: '🦋', start: 4, delta: 2, prompt: 'Llegan 2 mariposas.', voice: 'Hay cuatro mariposas. Llegan dos más.' },
+      { type: 'change', icon: '🦋', start: 6, delta: -4, prompt: 'Vuelan 4 mariposas.', voice: 'Hay seis mariposas. Cuatro vuelan.' },
     ],
   },
   {
     title: '¡Estos son los números hasta 50!',
-    icon: '🌿🔢',
+    icon: '🐢',
     intro: 'Sigue el sendero de los números grandes.',
     tasks: [
       { type: 'build', icon: '🌰', target: 12, start: 10, prompt: 'Completa el 12.', voice: 'Ya hay una decena. Agrega dos unidades para formar doce.' },
@@ -51,7 +51,7 @@ const adventures = [
   },
   {
     title: 'Adicionemos sin reagrupar',
-    icon: '🧺🧺',
+    icon: '🦜',
     intro: 'Dos canastas se encuentran. ¡Juntamos sus frutos!',
     tasks: [
       { type: 'operation', mode: '+', a: 23, b: 14, prompt: 'Junta 23 y 14.', voice: 'Junta dos decenas y tres unidades con una decena y cuatro unidades.' },
@@ -62,13 +62,13 @@ const adventures = [
   },
   {
     title: 'Hagamos sustracciones sin desagrupar',
-    icon: '🐒🍊',
-    intro: 'El mono comparte su cosecha. ¿Cuántas frutas quedan?',
+    icon: '🐰',
+    intro: 'La ardilla comparte sus frutos. ¿Cuántos quedan?',
     tasks: [
       { type: 'operation', mode: '-', a: 24, b: 12, prompt: 'Retira 12 de 24.', voice: 'De veinticuatro frutos retira una decena y dos unidades.' },
       { type: 'operation', mode: '-', a: 38, b: 15, prompt: 'Retira 15 de 38.', voice: 'De treinta y ocho frutos retira una decena y cinco unidades.' },
       { type: 'operation', mode: '-', a: 46, b: 23, prompt: 'Retira 23 de 46.', voice: 'De cuarenta y seis frutos retira dos decenas y tres unidades.' },
-      { type: 'operation', mode: '-', a: 29, b: 7, prompt: 'Retira 7 de 29.', voice: 'El mono tenía veintinueve frutos. Retira siete.' },
+      { type: 'operation', mode: '-', a: 29, b: 7, prompt: 'Retira 7 de 29.', voice: 'La ardilla tenía veintinueve frutos. Retira siete.' },
     ],
   },
 ];
@@ -140,7 +140,7 @@ export default function FirstGradeMathGame() {
   const progress = useMemo(() => screen === 'intro' ? 0 : screen === 'win' ? 100 : Math.round((step / adventure.tasks.length) * 100), [screen, step, adventure.tasks.length]);
 
   return <motion.main className="first-grade-game" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}>
-    <header className="first-grade-header"><button className="back-link" type="button" onClick={() => navigate('/matematicas/grado/1')}><ArrowLeft size={18} /> Volver al periodo</button><span>⭐ {completed.length}</span><button className="voice-button" type="button" onClick={() => setMuted((value) => !value)} aria-label={muted ? 'Activar voz' : 'Silenciar voz'}>{muted ? <VolumeX /> : <Volume2 />}</button></header>
+    <header className="first-grade-header"><button className="back-link" type="button" onClick={() => navigate('/matematicas/grado/1', { state: { returnToPeriodSelection: true } })}><ArrowLeft size={18} /> Volver al periodo</button><span>⭐ {completed.length}</span><button className="voice-button" type="button" onClick={() => setMuted((value) => !value)} aria-label={muted ? 'Activar voz' : 'Silenciar voz'}>{muted ? <VolumeX /> : <Volume2 />}</button></header>
     <div className="first-grade-audio"><button type="button" onClick={() => speak(line, muted, volume)}>▶ Escuchar / repetir</button><label htmlFor="first-grade-volume">Volumen</label><input id="first-grade-volume" type="range" min="0" max="100" value={volume * 100} onChange={(event) => setVolume(Number(event.target.value) / 100)} /></div>
     {screen === 'map' && <><div className="page-heading"><p className="page-eyebrow">MATEMÁTICAS · PRIMER GRADO · PERIODO 1</p><h1>Aventuras matemáticas</h1><p>Un viaje para descubrir, tocar y jugar.</p></div><section className="mission-grid">{adventures.map((item, index) => <button className="mission-card first-grade-adventure" type="button" key={item.title} onClick={() => start(index)}><span className="mission-card__icon">{item.icon}</span><span className="mission-card__number">AVENTURA {String(index + 1).padStart(2, '0')}</span><h2>{item.title}</h2><span className="period-status">{completed.includes(index) ? '⭐ ¡Completada!' : '✨ ¡Vamos!'}</span></button>)}</section></>}
     {screen !== 'map' && <section className="first-grade-play"><div className="first-grade-play-top"><button className="back-link" type="button" onClick={() => setScreen('map')}><ArrowLeft size={18} /> Aventuras</button><h1>{adventure.title}</h1><span>⭐ {completed.includes(adventureIndex) ? 'Ganada' : 'Por ganar'}</span></div><div className="first-grade-progress"><span style={{ width: `${progress}%` }} /></div><div className="first-grade-field">{screen === 'intro' && <Intro adventure={adventure} onStart={() => setScreen('play')} />}{screen === 'win' && <div className="first-grade-intro"><div className="first-grade-art">⭐</div><h2>¡Lo lograste!</h2><button className="game-secondary-button" type="button" onClick={() => setScreen('map')}>🗺️ Aventuras</button>{adventureIndex < adventures.length - 1 ? <button className="game-primary-button" type="button" onClick={() => start(adventureIndex + 1)}><ArrowRight size={18} /> Siguiente</button> : <button className="game-primary-button" type="button" onClick={() => setScreen('map')}>🏠 Volver al mapa</button>}</div>}{screen === 'play' && <><p className="page-eyebrow">RETO {step + 1} DE {adventure.tasks.length}</p><h2>{task.prompt}</h2><Task task={task} state={state} setState={setState} onDone={next} /></>}</div></section>}

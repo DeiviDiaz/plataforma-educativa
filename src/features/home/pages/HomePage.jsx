@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import bandera from '../../../assets/bandera.webp';
 import logo from '../../../assets/logo.webp';
 
 function HomePage() {
@@ -75,8 +76,9 @@ function HomePage() {
         </div>
       </section>
 
-      <footer className="home__footer">
-        Una plataforma educativa para aprender jugando.
+      <footer className="institution-footer home__footer">
+        <img className="institution-footer__flag" src={bandera} alt="Bandera" />
+        <p>© 2026 Centro Educativo Rural Caliyaco. Todos los derechos reservados.</p>
       </footer>
     </main>
   );

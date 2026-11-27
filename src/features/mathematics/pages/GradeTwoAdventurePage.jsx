@@ -332,7 +332,7 @@ export default function GradeTwoAdventurePage() {
         <section className="grade-two-hero">
           <div>
             <span className="grade-two-eyebrow">Matemáticas · Grado segundo</span>
-            <h1>¡Aventuras matemáticas en el Putumayo!</h1>
+            <h1>¡Aventuras matemáticas!</h1>
             <p>Explora, toca, construye y descubre cuatro mundos con Luna.</p>
             <button type="button" className="grade-two-primary" onClick={() => { setScreen('map'); playSound(); speak('Escoge un mundo para explorar.'); }}>¡Comenzar aventura! →</button>
           </div>

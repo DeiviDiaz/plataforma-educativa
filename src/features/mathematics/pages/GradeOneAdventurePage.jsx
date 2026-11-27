@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import GradeShortcut from '../components/GradeShortcut.jsx';
 
 const periods = [
-  ['¡Acerquémonos a nuestros amigos los números!', '🐒', 'Cuenta, agrupa y descubre los números del 1 al 50.', 'Números, decenas y operaciones'],
-  ['Cuando contamos aprendemos.', '🦜', 'Aprende a reagrupar y resuelve situaciones cotidianas.', 'Reagrupación y problemas'],
-  ['Reconozcamos nuestro entorno y aprendamos de él.', '🌳', 'Explora centenas, secuencias y operaciones.', 'Centenas y resolución de situaciones'],
-  ['Juguemos con las operaciones matemáticas.', '🧭', 'Descubre formas, medidas, tiempo y datos.', 'Geometría, medidas y pictogramas'],
+  ['Números', '🐒', 'Cuenta hasta 50 y suma.'],
+  ['Sumas', '🦜', 'Junta números y resuelve retos.'],
+  ['Números grandes', '🌳', 'Cuenta, suma y completa caminos.'],
+  ['Formas y medidas', '🧭', 'Mide, mira la hora y cuenta.'],
 ];
 
 function speak(text, enabled) {
@@ -22,8 +22,11 @@ function speak(text, enabled) {
 }
 
 export default function GradeOneAdventurePage() {
+  const location = useLocation();
   const navigate = useNavigate();
-  const [screen, setScreen] = useState('welcome');
+  const [screen, setScreen] = useState(() => (
+    location.state?.returnToPeriodSelection ? 'map' : 'welcome'
+  ));
   const [voiceEnabled, setVoiceEnabled] = useState(true);
   const welcome = '¡Hola! Soy tu guía. Vamos a descubrir las matemáticas de primer grado.';
 
@@ -55,9 +58,9 @@ export default function GradeOneAdventurePage() {
           <div>
             <span className="grade-two-eyebrow">Matemáticas · Grado primero</span>
             <h1>¡Aventuras matemáticas!</h1>
-            <p>Explora cuatro periodos con los minijuegos originales de grado 1.</p>
+            <p>¡Vamos a jugar y aprender con números!</p>
             <button type="button" className="grade-two-primary" onClick={() => setScreen('map')}>
-              ¡Comenzar aventura! →
+              ¡Jugar! →
             </button>
           </div>
           <div className="grade-two-guide" aria-hidden="true">🌳 👧🏽🎒 🌴</div>
@@ -66,26 +69,25 @@ export default function GradeOneAdventurePage() {
 
       {screen === 'map' && (
         <section>
-          <p className="grade-two-kicker">Mapa de aventuras</p>
-          <h1>¿A dónde vamos hoy?</h1>
-          <p>Elige un periodo y juega sus retos sin cambiar sus mecánicas.</p>
+          <p className="grade-two-kicker">¡Vamos a jugar!</p>
+          <h1>¿Qué quieres aprender?</h1>
+          <p>Toca un dibujo para empezar.</p>
           <div className="grade-two-worlds">
-            {periods.map(([title, icon, description, topics], index) => (
+            {periods.map(([title, icon, description], index) => (
               <button
                 type="button"
                 className="grade-two-world-card"
-                key={title}
+                key={index}
                 onClick={() => navigate(`/matematicas/grado/1/periodo/${index + 1}`)}
               >
-                <span>{icon}</span>
-                <strong>Periodo {index + 1}<br />{title}</strong>
+                <span aria-hidden="true">{icon}</span>
+                <strong>Periodo {index + 1}: {title}</strong>
                 <small>{description}</small>
-                <small>{topics} · Explorar →</small>
               </button>
             ))}
           </div>
           <button type="button" className="grade-two-secondary" onClick={() => setScreen('welcome')}>
-            ← Presentación
+            ← Volver
           </button>
         </section>
       )}

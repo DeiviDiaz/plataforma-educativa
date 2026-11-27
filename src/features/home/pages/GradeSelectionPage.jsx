@@ -1,9 +1,31 @@
 import { Link } from 'react-router-dom';
-import { Calculator, LockKeyhole } from 'lucide-react';
+import {
+  Blocks,
+  Calculator,
+  ChartNoAxesCombined,
+  Compass,
+  PieChart,
+  Radical,
+  Ruler,
+  Shapes,
+  Sigma,
+  Triangle,
+} from 'lucide-react';
 
 const GRADES = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
 const AVAILABLE_GRADES = [1, 2, 4, 5, 6, 7, 8, 9];
+const GRADE_ILLUSTRATIONS = [
+  Calculator,
+  Shapes,
+  Ruler,
+  Compass,
+  Blocks,
+  PieChart,
+  Sigma,
+  Triangle,
+  Radical,
+];
 
 export default function GradeSelectionPage({ subject = 'matematicas' }) {
   const isSubjectAvailable = subject === 'matematicas';
@@ -25,11 +47,14 @@ export default function GradeSelectionPage({ subject = 'matematicas' }) {
         <div className="grades-grid">
         {GRADES.map((grade) => {
           const isAvailable = isSubjectAvailable && AVAILABLE_GRADES.includes(grade);
+          const Illustration = GRADE_ILLUSTRATIONS[grade - 1];
           const gradeContent = (
             <>
-              <span className="grade-card__art" aria-hidden="true">
-                {isAvailable ? <Calculator /> : <LockKeyhole />}
-                <span className="grade-number">{grade}</span>
+              <span className="grade-card__art" aria-hidden="true" data-grade={grade}>
+                <span className="grade-number">{grade}.º</span>
+                <span className="grade-card__illustration">
+                  <Illustration />
+                </span>
               </span>
               <span className="grade-card__body">
                 <span className="grade-label">

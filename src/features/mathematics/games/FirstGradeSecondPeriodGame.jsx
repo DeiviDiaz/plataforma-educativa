@@ -6,7 +6,7 @@ import { useGameEffects } from '../effects/useGameEffects.js';
 
 const missions = [
   {
-    number: 7, title: 'Aprendamos a adicionar reagrupando', art: '🧺🍊',
+    number: 7, title: 'Aprendamos a adicionar reagrupando', art: '🐝',
     tasks: [
       { mode: 'collect', text: 'Toca diez flores para formar una decena.', emoji: '🌼', count: 10, goal: 10 },
       { mode: 'choice', text: 'Ocho semillas y siete semillas. ¿Cuántas son?', picture: '🫘 × 8  +  🫘 × 7', options: [14, 15, 16], answer: 15 },
@@ -18,21 +18,21 @@ const missions = [
     ],
   },
   {
-    number: 8, title: '¡Desagrupemos para restar!', art: '🪵🔟',
+    number: 8, title: '¡Desagrupemos para restar!', art: '🦔',
     tasks: [
-      { mode: 'split', text: 'Toca la barra para convertir una decena en diez unidades.', emoji: '🟨' },
+      { mode: 'split', text: 'Toca la barra para convertir una decena en diez unidades.', emoji: '🟨', unitEmoji: '🟡' },
       { mode: 'remove', text: 'Había doce semillas. Quita cuatro.', emoji: '🫘', count: 12, goal: 4 },
       { mode: 'choice', text: 'Una decena y dos unidades, quita cinco. ¿Cuántas quedan?', picture: '12 − 5', options: [6, 7, 8], answer: 7 },
-      { mode: 'split', text: 'Desagrupa la decena para poder retirar unidades.', emoji: '🍃' },
+      { mode: 'split', text: 'Desagrupa la decena para poder retirar unidades.', emoji: '🌿', unitEmoji: '🍃' },
       { mode: 'remove', text: 'Había quince flores. Quita seis y cuenta las que quedan.', emoji: '🌸', count: 15, goal: 6 },
       { mode: 'choice', text: 'Dieciséis menos siete. ¿Cuántas quedan?', picture: '16 − 7', options: [8, 9, 10], answer: 9 },
       { mode: 'choice', text: 'Una decena y tres unidades. Retira cinco. ¿Cuántas quedan?', picture: '13 − 5', options: [7, 8, 9], answer: 8 },
     ],
   },
   {
-    number: 9, title: 'Encontremos la mejor solución', art: '🐒🍌',
+    number: 9, title: 'Encontremos la mejor solución', art: '🦊',
     tasks: [
-      { mode: 'choice', text: 'Llegaron dos monos a los cinco que había. ¿Qué hacemos?', picture: '5 + 2', options: ['➕ Juntar', '➖ Quitar'], answer: '➕ Juntar' },
+      { mode: 'choice', text: 'Llegaron dos conejos a los cinco que había. ¿Qué hacemos?', picture: '5 + 2', options: ['➕ Juntar', '➖ Quitar'], answer: '➕ Juntar' },
       { mode: 'choice', text: 'Había nueve plátanos. Se comieron tres. ¿Cuántos quedan?', picture: '9 − 3', options: [5, 6, 7], answer: 6 },
       { mode: 'collect', text: 'Junta las cuatro frutas con las tres de la otra canasta.', emoji: '🍎', count: 7, goal: 7 },
       { mode: 'choice', text: 'Cuatro aves vuelan y dos llegan. ¿Cuántas hay?', picture: '4 + 2', options: [5, 6, 7], answer: 6 },
@@ -42,7 +42,7 @@ const missions = [
     ],
   },
   {
-    number: 10, title: '¡Estos son los números del 50 al 99!', art: '🔢🌼',
+    number: 10, title: '¡Estos son los números del 50 al 99!', art: '🦉',
     tasks: [
       { mode: 'choice', text: 'Cinco decenas y tres unidades. ¿Qué número es?', picture: '🟧🟧🟧🟧🟧 + 🟡🟡🟡', options: [35, 53, 55], answer: 53 },
       { mode: 'choice', text: '¿Cuál sigue después de 76?', picture: '74 → 75 → 76 → ?', options: [77, 67, 78], answer: 77 },
@@ -54,7 +54,7 @@ const missions = [
     ],
   },
   {
-    number: 11, title: '¡Resolvamos situaciones con la adición!', art: '🧺➕',
+    number: 11, title: '¡Resolvamos situaciones con la adición!', art: '🦦',
     tasks: [
       { mode: 'collect', text: 'Junta siete frutas y cuatro más. Tócalas todas.', emoji: '🍐', count: 11, goal: 11 },
       { mode: 'choice', text: 'Cinco flores más ocho flores. ¿Cuántas?', picture: '5 + 8', options: [12, 13, 14], answer: 13 },
@@ -66,7 +66,7 @@ const missions = [
     ],
   },
   {
-    number: 12, title: '¡Resolvamos situaciones con la sustracción!', art: '🐢➖',
+    number: 12, title: '¡Resolvamos situaciones con la sustracción!', art: '🐨',
     tasks: [
       { mode: 'remove', text: 'Había diez hojas. Quita cuatro.', emoji: '🍃', count: 10, goal: 4 },
       { mode: 'choice', text: 'Doce peces menos cinco peces. ¿Cuántos quedan?', picture: '12 − 5', options: [6, 7, 8], answer: 7 },
@@ -94,8 +94,30 @@ function Task({ task, onDone }) {
   const [selected, setSelected] = useState([]);
   const [message, setMessage] = useState('');
   const [order, setOrder] = useState([]);
+  const [split, setSplit] = useState(false);
   const expected = task.mode === 'order' ? [...task.numbers].sort((a, b) => task.ascending ? a - b : b - a) : [];
   const choose = (answer) => answer === task.answer ? onDone() : setMessage('Mira con calma y vuelve a intentarlo. 👀');
+  if (task.mode === 'split') {
+    return (
+      <>
+        <div className="first-grade-sequence">
+          {split
+            ? Array.from({ length: 10 }, (_, index) => <span key={index}>{task.unitEmoji}</span>)
+            : <button className="token" type="button" onClick={() => setSplit(true)}>{task.emoji}</button>}
+        </div>
+        {split ? (
+          <>
+            <p className="game-counter">¡Una decena son 10 unidades!</p>
+            <button className="game-primary-button" type="button" onClick={onDone}>Continuar →</button>
+          </>
+        ) : (
+          <button className="game-primary-button" type="button" onClick={() => setSplit(true)}>
+            Cambiar 1 decena por 10 unidades
+          </button>
+        )}
+      </>
+    );
+  }
   if (task.mode === 'choice') return <><div className="first-grade-sequence"><span>{task.picture}</span></div><div className="first-grade-options">{task.options.map((option) => <button className="token" type="button" key={option} onClick={() => choose(option)}>{option}</button>)}</div><p className="game-feedback">{message}</p></>;
   if (task.mode === 'order') return <><div className="first-grade-sequence"><span>{order.join(' → ') || '① → ② → ③'}</span></div><div className="first-grade-options">{task.numbers.map((number) => <button className="token" type="button" key={number} disabled={order.includes(number)} onClick={() => { if (number !== expected[order.length]) setMessage('Busca el número que va ahora.'); else if (order.length + 1 === expected.length) onDone(); else setOrder([...order, number]); }}>{number}</button>)}</div><p className="game-feedback">{message}</p></>;
   const isRemove = task.mode === 'remove';
@@ -121,9 +143,9 @@ export default function FirstGradeSecondPeriodGame() {
   const start = (index) => { setMissionIndex(index); setStep(0); setScreen('play'); };
   const done = () => { celebrate(); if (step < mission.tasks.length - 1) setStep(step + 1); else { setCompleted((items) => [...new Set([...items, missionIndex])]); setScreen('win'); } };
   return <motion.main className="first-grade-game" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}>
-    <header className="first-grade-header"><button className="back-link" type="button" onClick={() => navigate('/matematicas/grado/1')}><ArrowLeft size={18} /> Volver al periodo</button><span>⭐ {completed.length} / 42</span><button className="voice-button" type="button" onClick={() => setMuted((value) => !value)} aria-label={muted ? 'Activar voz' : 'Silenciar voz'}>{muted ? <VolumeX /> : <Volume2 />}</button></header>
+    <header className="first-grade-header"><button className="back-link" type="button" onClick={() => navigate('/matematicas/grado/1', { state: { returnToPeriodSelection: true } })}><ArrowLeft size={18} /> Volver al periodo</button><span>⭐ {completed.length} / 42</span><button className="voice-button" type="button" onClick={() => setMuted((value) => !value)} aria-label={muted ? 'Activar voz' : 'Silenciar voz'}>{muted ? <VolumeX /> : <Volume2 />}</button></header>
     <div className="first-grade-audio"><button type="button" onClick={() => speak(line, muted, volume)}>▶ Escuchar / repetir</button><label htmlFor="second-period-volume">Volumen</label><input id="second-period-volume" type="range" min="0" max="100" value={volume * 100} onChange={(event) => setVolume(Number(event.target.value) / 100)} /></div>
     {screen === 'map' && <><div className="page-heading"><p className="page-eyebrow">MATEMÁTICAS · PRIMER GRADO · PERIODO 2</p><h1>¡Cuando contamos aprendemos!</h1><p>Elige una misión y sigue el sendero con Lila 🦜</p></div><section className="mission-grid">{missions.map((item, index) => <button className="mission-card first-grade-adventure" type="button" key={item.number} onClick={() => start(index)}><span className="mission-card__icon">{item.art}</span><span className="mission-card__number">MISIÓN {item.number}</span><h2>{item.title}</h2><span className="period-status">{completed.includes(index) ? '⭐ ¡Completada!' : '✨ ¡Explorar!'}</span></button>)}</section></>}
-    {screen !== 'map' && <section className="first-grade-play"><div className="first-grade-play-top"><button className="back-link" type="button" onClick={() => setScreen('map')}><ArrowLeft size={18} /> Mapa</button><h1>{mission.title}</h1><span>Reto {step + 1} / 7</span></div><div className="first-grade-progress"><span style={{ width: `${progress}%` }} /></div><div className="first-grade-field">{screen === 'win' ? <div className="first-grade-intro"><div className="first-grade-art">⭐</div><h2>¡Misión superada!</h2><button className="game-secondary-button" type="button" onClick={() => setScreen('map')}>🗺️ Mapa</button><button className="game-primary-button" type="button" onClick={() => missionIndex < missions.length - 1 ? start(missionIndex + 1) : setScreen('map')}><ArrowRight size={18} />{missionIndex < missions.length - 1 ? ' Siguiente misión' : ' Volver al mapa'}</button></div> : <><p className="page-eyebrow">MISIÓN {mission.number} · RETO {step + 1} DE 7</p><h2>{task.text}</h2><Task task={task} onDone={done} /></>}</div></section>}
+    {screen !== 'map' && <section className="first-grade-play"><div className="first-grade-play-top"><button className="back-link" type="button" onClick={() => setScreen('map')}><ArrowLeft size={18} /> Mapa</button><h1>{mission.title}</h1><span>Reto {step + 1} / 7</span></div><div className="first-grade-progress"><span style={{ width: `${progress}%` }} /></div><div className="first-grade-field">{screen === 'win' ? <div className="first-grade-intro"><div className="first-grade-art">⭐</div><h2>¡Misión superada!</h2><button className="game-secondary-button" type="button" onClick={() => setScreen('map')}>🗺️ Mapa</button><button className="game-primary-button" type="button" onClick={() => missionIndex < missions.length - 1 ? start(missionIndex + 1) : setScreen('map')}><ArrowRight size={18} />{missionIndex < missions.length - 1 ? ' Siguiente misión' : ' Volver al mapa'}</button></div> : <><p className="page-eyebrow">MISIÓN {mission.number} · RETO {step + 1} DE 7</p><h2>{task.text}</h2><Task key={`${missionIndex}-${step}`} task={task} onDone={done} /></>}</div></section>}
   </motion.main>;
 }
