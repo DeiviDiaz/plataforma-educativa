@@ -1,13 +1,34 @@
 import React, { useState } from 'react';
 
 const rand = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
-const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
 
 const UNITS = [
   { id: 'm3', name: 'Metros cúbicos', sym: 'm³', step: 3 },
   { id: 'dm3', name: 'Decímetros cúbicos', sym: 'dm³', step: 2 },
   { id: 'cm3', name: 'Centímetros cúbicos', sym: 'cm³', step: 1 },
 ];
+
+function parseAnswer(value) {
+  const normalized = value.trim().replace(/\s/g, '');
+  if (!normalized) return Number.NaN;
+
+  const commaIndex = normalized.lastIndexOf(',');
+  const periodIndex = normalized.lastIndexOf('.');
+  let numericValue = normalized;
+
+  if (commaIndex >= 0 && periodIndex >= 0) {
+    const decimalSeparator = commaIndex > periodIndex ? ',' : '.';
+    const groupSeparator = decimalSeparator === ',' ? '.' : ',';
+    numericValue = normalized
+      .replaceAll(groupSeparator, '')
+      .replace(decimalSeparator, '.');
+  } else if (commaIndex >= 0) {
+    numericValue = normalized.replace(',', '.');
+  }
+
+  if (!/^-?(?:\d+\.?\d*|\.\d+)$/.test(numericValue)) return Number.NaN;
+  return Number(numericValue);
+}
 
 export default function VolumeConverterGame() {
   const generateLevel = () => {
@@ -43,14 +64,14 @@ export default function VolumeConverterGame() {
   const checkAnswer = () => {
     if (feedback) return;
 
-    const parsed = parseFloat(userInputVal.replace(/\./g, '').replace(',', '.'));
+    const parsed = parseAnswer(userInputVal);
     const expected = level.targetResult;
 
     const opCorrect = level.isGoingDown ? userOp === 'multiplicar' : userOp === 'dividir';
     const jumpsCorrect = userJumps === level.jumps;
-    const valCorrect = !isNaN(parsed) && Math.abs(parsed - expected) < 0.0001;
+    const valCorrect = Number.isFinite(parsed) && Math.abs(parsed - expected) < 0.0001;
 
-    if (valCorrect && opCorrect) {
+    if (valCorrect && opCorrect && jumpsCorrect) {
       setScore((s) => s + 25);
       setFeedback({
         type: 'success',
@@ -94,6 +115,8 @@ export default function VolumeConverterGame() {
             setScore(0);
             setRound(1);
             setUserInputVal('');
+            setUserJumps(1);
+            setUserOp('multiplicar');
             setLevel(generateLevel());
             setFeedback(null);
           }}
@@ -160,6 +183,11 @@ export default function VolumeConverterGame() {
 
         {/* Panel de Configuración de la Operación */}
         <div style={styles.stepControls}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px', marginBottom: '10px' }}>
+            <span>Peldaños: <strong>{userJumps}</strong></span>
+            <button type="button" aria-label="Un peldaño menos" disabled={userJumps <= 1} onClick={() => setUserJumps((value) => Math.max(1, value - 1))}>−</button>
+            <button type="button" aria-label="Un peldaño más" disabled={userJumps >= 2} onClick={() => setUserJumps((value) => Math.min(2, value + 1))}>+</button>
+          </div>
           <div style={{ display: 'flex', gap: '8px', justifyContent: 'center', marginBottom: '10px' }}>
             <button
               onClick={() => setUserOp('multiplicar')}

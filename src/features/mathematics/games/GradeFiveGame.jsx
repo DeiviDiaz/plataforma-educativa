@@ -179,6 +179,11 @@ function GradeFiveGame({ period, game, gameNumber, onBack, onNextGame }) {
     setMissionComplete(false);
   }
 
+  function resetMission() {
+    setLevelIndex(0);
+    resetLevel();
+  }
+
   function check(value) {
     const normalized = (item) => String(item).trim().replace(/\s+/g, '').replace('.', ',');
     const correct =
@@ -216,7 +221,7 @@ function GradeFiveGame({ period, game, gameNumber, onBack, onNextGame }) {
         </motion.div>
         <h2>¡Misión completada!</h2>
         <p>Superaste los cinco niveles de esta aventura.</p>
-        <motion.button {...buttonMotion} className="game-secondary-button" type="button" onClick={resetLevel}>
+        <motion.button {...buttonMotion} className="game-secondary-button" type="button" onClick={resetMission}>
           <RotateCcw aria-hidden="true" size={17} /> Repetir misión
         </motion.button>
         <motion.button {...buttonMotion} className="game-next-button" type="button" onClick={onNextGame}>

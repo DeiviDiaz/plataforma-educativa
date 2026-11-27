@@ -34,7 +34,7 @@ const nextChallenge = () => {
   }, [generatorFn]);
 
   const handleSelect = (option) => {
-    if (!level) return;
+    if (!level || feedback?.type === 'success') return;
 
     if (option === level.correct) {
       setScore((s) => s + 15 + streak * 5);
@@ -97,6 +97,8 @@ const nextChallenge = () => {
           {level.options.map((opt, i) => (
             <button
               key={i}
+              type="button"
+              disabled={feedback?.type === 'success'}
               onClick={() => { playSelection(); handleSelect(opt); }}
               {...buttonMotion}
               style={styles.optionBtn}

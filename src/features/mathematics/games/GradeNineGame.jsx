@@ -6,6 +6,8 @@ const close = (value, answer) =>
   value.trim() !== '' && Number.isFinite(Number(value.replace(',', '.')))
   && Math.abs(Number(value.replace(',', '.')) - answer) < 0.011;
 
+const rand = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+
 function CartesianPlane({ question }) {
   const scale = 22;
   const center = 130;
@@ -168,6 +170,8 @@ function GradeNineGame({ topicId, onBack }) {
   }, [game]);
 
   const checkAnswer = () => {
+    if (feedback?.type === 'success') return;
+
     if (value.trim() === '') {
       playError();
       setFeedback({ type: 'error', text: 'Escribe una respuesta antes de comprobar.' });
@@ -322,7 +326,7 @@ function GradeNineGame({ topicId, onBack }) {
               }}
             />
           </label>
-          <button type="submit">Comprobar respuesta</button>
+          <button type="submit" disabled={feedback?.type === 'success'}>Comprobar respuesta</button>
         </form>
 
         <div className="grade-nine-game__actions">
