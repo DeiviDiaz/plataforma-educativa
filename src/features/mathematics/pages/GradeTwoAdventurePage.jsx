@@ -103,6 +103,7 @@ export default function GradeTwoAdventurePage() {
   const [feedback, setFeedback] = useState('');
   const canvasRef = useRef(null);
   const drawingRef = useRef(false);
+  const drawingStartRef = useRef(null);
   const [voiceEnabled, setVoiceEnabled] = useState(true);
   const [soundEnabled, setSoundEnabled] = useState(true);
   const [lastInstruction, setLastInstruction] = useState('¡Hola! Soy Luna. ¡Vamos a descubrir las matemáticas!');
@@ -157,12 +158,14 @@ export default function GradeTwoAdventurePage() {
   }
 
   function startTask(index) {
+    if (index < 0) setMissionIndex(0);
     setTaskIndex(index);
     setChoice('');
     setSequence([]);
     setMeasure(0);
     setTapped([]);
     setDrawn(false);
+    drawingStartRef.current = null;
     setCovered([]);
     setBuildValues([0, 0, 0]);
     setGroups([]);
@@ -177,22 +180,36 @@ export default function GradeTwoAdventurePage() {
 
   function checkAnswer() {
     const data = isFinal ? { options: task[2], answer: task[3] } : task[5];
-    const answer = data.answer ?? data.target;
     const type = isFinal ? (missionIndex === 1 ? 'sequence' : 'choice') : task[2];
-    const value = isFinal ? choice
-      : type === 'build' ? (data.unit === 'CDU' ? buildValues : buildValues[0])
+    let correct;
+
+    if (type === 'draw') {
+      correct = drawn;
+    } else if (type === 'group' || type === 'share') {
+      const expectedCount = type === 'group' ? data.each : data.count / data.groups;
+      correct = groups.length === data.groups && groups.every((count) => count === expectedCount);
+    } else {
+      const answer = type === 'sort'
+        ? data.labels
+        : type === 'measure'
+          ? data
+          : type === 'pictogram'
+            ? data.targets
+            : data.answer ?? data.target ?? data;
+      const value = type === 'build'
+        ? data.unit === 'CDU' ? buildValues : buildValues[0]
         : type === 'sequence' ? sequence
-        : type === 'sort' ? sortValues
-        : type === 'measure' ? measure
-          : type === 'tap' ? tapped.length
-            : type === 'draw' ? drawn
-              : type === 'group' ? groups.every((count) => count === data.each)
-                : type === 'share' ? groups.every((count) => count === data.count / data.groups)
-                  : type === 'move' ? movePosition
-                    : type === 'cover' ? covered.length
-                      : type === 'pictogram' ? pictogram
+          : type === 'sort' ? sortValues
+            : type === 'measure' ? measure
+              : type === 'tap' ? tapped.length
+                : type === 'move' ? movePosition
+                  : type === 'cover' ? covered.length
+                    : type === 'pictogram' ? pictogram
+                      : type === 'choice' ? choice
                         : choice;
-    const correct = type === 'draw' ? drawn : JSON.stringify(value) === JSON.stringify(answer);
+      correct = JSON.stringify(value) === JSON.stringify(answer);
+    }
+
     if (!correct) {
       setFeedback('💡 Revisa la pista y prueba otra vez.');
       playError();
@@ -219,6 +236,7 @@ export default function GradeTwoAdventurePage() {
     else context.lineTo(405, 90);
     context.stroke();
     setDrawn(true);
+    drawingStartRef.current = null;
     playSound();
   }
 
@@ -227,6 +245,7 @@ export default function GradeTwoAdventurePage() {
     if (!canvas) return;
     canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
     setDrawn(false);
+    drawingStartRef.current = null;
   }
 
   function getCanvasPosition(event) {
@@ -243,6 +262,9 @@ export default function GradeTwoAdventurePage() {
     const context = canvas.getContext('2d');
     const position = getCanvasPosition(event);
     drawingRef.current = true;
+    drawingStartRef.current = position;
+    setDrawn(false);
+    context.clearRect(0, 0, canvas.width, canvas.height);
     canvas.setPointerCapture(event.pointerId);
     context.strokeStyle = '#228c70';
     context.lineWidth = 7;
@@ -258,6 +280,25 @@ export default function GradeTwoAdventurePage() {
     context.lineTo(position.x, position.y);
     context.stroke();
     setDrawn(true);
+  }
+
+  function finishDrawing(event) {
+    if (!drawingRef.current) return;
+    drawingRef.current = false;
+
+    const start = drawingStartRef.current;
+    drawingStartRef.current = null;
+    const end = getCanvasPosition(event);
+    const startPoint = { x: 25, y: 90 };
+    const endPoint = { x: 405, y: 90 };
+    const isNear = (point, target) => Math.hypot(point.x - target.x, point.y - target.y) <= 40;
+    const connectsEndpoints = start && (
+      (isNear(start, startPoint) && isNear(end, endPoint))
+      || (isNear(start, endPoint) && isNear(end, startPoint))
+    );
+
+    setDrawn(Boolean(connectsEndpoints));
+    if (!connectsEndpoints) setFeedback('Conecta el camino desde el punto verde hasta el naranja.');
   }
 
   function next() {
@@ -428,8 +469,8 @@ export default function GradeTwoAdventurePage() {
                   aria-label="Área para dibujar el camino"
                   onPointerDown={startDrawing}
                   onPointerMove={continueDrawing}
-                  onPointerUp={() => { drawingRef.current = false; }}
-                  onPointerCancel={() => { drawingRef.current = false; }}
+                  onPointerUp={finishDrawing}
+                  onPointerCancel={() => { drawingRef.current = false; drawingStartRef.current = null; setDrawn(false); }}
                 />
                 <div className="grade-two-options">
                   <button type="button" onClick={() => drawPreset('recta')}>Trazar recta</button>

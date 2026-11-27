@@ -1,11 +1,18 @@
 import { Link } from 'react-router-dom';
+import logo from '../../../assets/logo.webp';
 
 function HomePage() {
   return (
     <main className="home">
       <header className="home__header">
-        <span className="home__brand">Aula Interactiva</span>
-        <span className="home__badge">Aprender jugando</span>
+        <div className="home__brand">
+          <img className="home__logo" src={logo} alt="Logo CER Caliyaco" />
+          <span className="home__brand-text">
+            <span>CER Caliyaco</span>
+            <span>Educación con calidad</span>
+          </span>
+        </div>
+        <span className="home__badge">Aula Interactiva</span>
       </header>
 
       <section className="home__hero">

@@ -6,6 +6,7 @@ import GradeSelectionPage from '../features/home/pages/GradeSelectionPage.jsx';
 import PeriodSelectionPage from '../features/mathematics/pages/PeriodSelectionPage.jsx';
 import TopicSelectionPage from '../features/mathematics/pages/TopicSelectionPage.jsx';
 import GameContainerPage from '../features/mathematics/pages/GameContainerPage.jsx';
+import MathematicsLayout from '../features/mathematics/layouts/MathematicsLayout.jsx';
 
 // ══════════════════════════════════════════════════════════════
 // MÓDULO OFICIAL DE ESPAÑOL ("Lengua Viva" - Grados 1° a 9°)
@@ -22,10 +23,12 @@ function AppRouter() {
       <Route path="/" element={<HomePage />} />
 
       {/* ═══ MATEMÁTICAS (Área de tu compañero - 100% Intacta) ═══ */}
-      <Route path="/matematicas" element={<GradeSelectionPage subject="matematicas" />} />
-      <Route path="/matematicas/grado/:gradeId" element={<PeriodSelectionPage />} />
-      <Route path="/matematicas/grado/:gradeId/periodo/:periodId" element={<TopicSelectionPage />} />
-      <Route path="/matematicas/grado/:gradeId/tema/:topicId" element={<GameContainerPage />} />
+      <Route path="/matematicas" element={<MathematicsLayout />}>
+        <Route index element={<GradeSelectionPage subject="matematicas" />} />
+        <Route path="grado/:gradeId" element={<PeriodSelectionPage />} />
+        <Route path="grado/:gradeId/periodo/:periodId" element={<TopicSelectionPage />} />
+        <Route path="grado/:gradeId/tema/:topicId" element={<GameContainerPage />} />
+      </Route>
 
       {/* ═══ ESPAÑOL (Módulo interactivo completo de 1° a 9°) ═══ */}
       <Route path="/espanol" element={<SpanishLayout />}>

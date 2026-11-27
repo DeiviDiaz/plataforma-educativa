@@ -16,6 +16,7 @@ function BasicOperationsGame() {
   const [streak, setStreak] = useState(0);
   const [bestStreak, setBestStreak] = useState(0);
   const [timeLeft, setTimeLeft] = useState(QUESTION_TIME);
+  const [timerExpired, setTimerExpired] = useState(false);
   const [gameFinished, setGameFinished] = useState(false);
 
   const currentQuestion = basicOperationsQuestions[questionIndex];
@@ -44,7 +45,7 @@ function BasicOperationsGame() {
   }, [attempts, currentQuestion, lives]);
 
   useEffect(() => {
-    if (gameFinished || feedback?.type === 'success' ||
+    if (gameFinished || timerExpired || feedback?.type === 'success' ||
       feedback?.type === 'solution') {
       return undefined;
     }
@@ -61,7 +62,7 @@ function BasicOperationsGame() {
     }, 1000);
 
     return () => window.clearInterval(timerId);
-  }, [feedback, gameFinished, handleWrongAnswer]);
+  }, [feedback, gameFinished, handleWrongAnswer, timerExpired]);
 
   function handleAnswer(option) {
     if (feedback?.type === 'success' || feedback?.type === 'solution') {
@@ -105,6 +106,7 @@ function BasicOperationsGame() {
     setSelectedOption(null);
     setFeedback(null);
     setTimeLeft(QUESTION_TIME);
+    setTimerExpired(false);
   }
 
   function handleRestart() {
@@ -118,6 +120,7 @@ function BasicOperationsGame() {
     setStreak(0);
     setBestStreak(0);
     setTimeLeft(QUESTION_TIME);
+    setTimerExpired(false);
     setGameFinished(false);
   }
 
