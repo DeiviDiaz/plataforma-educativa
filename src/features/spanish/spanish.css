@@ -1066,3 +1066,247 @@
     font-weight: 700;
   }
 }
+
+/* Pasos del tema y recursos opcionales. */
+.spanish-area .lengua-cambiar-tema {
+  border: 1px solid #dce2eb;
+  border-radius: 12px;
+  background: white;
+  padding: .7rem .85rem;
+}
+.spanish-area .lengua-cambiar-tema[open] .lengua-ruta {
+  margin-top: .7rem;
+}
+.spanish-area .lengua-actividades > button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .45rem;
+}
+.spanish-area .lengua-paso-numero {
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  width: 1.6rem;
+  height: 1.6rem;
+  border-radius: 50%;
+  background: #eef2ff;
+  color: #3730a3;
+}
+.spanish-area .lengua-instruccion-paso {
+  scroll-margin-top: 1rem;
+  padding: .65rem .85rem;
+  border-left: 3px solid var(--lengua-accent);
+  background: var(--lengua-tint);
+  border-radius: 0 10px 10px 0;
+  font-size: .9rem;
+  line-height: 1.5;
+}
+.spanish-area .lengua-continuar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .7rem;
+  justify-content: flex-end;
+  padding-top: .75rem;
+}
+.spanish-area .lengua-continuar > :first-child:not(:only-child) {
+  margin-right: auto;
+}
+.spanish-area .lengua-continuar button {
+  white-space: normal;
+}
+@media (max-width: 600px) {
+  .spanish-area .lengua-leccion .lengua-actividades > button {
+    flex: 1 1 0;
+    min-width: 0;
+    flex-direction: column;
+    justify-content: center;
+    font-size: .8rem;
+    line-height: 1.3;
+  }
+  .spanish-area .lengua-continuar > button {
+    width: 100%;
+    justify-content: center;
+  }
+}
+.spanish-area .lengua-pregunta {
+  padding: .85rem;
+  border: 1px solid #dce2eb;
+  border-radius: 12px;
+  background: #f8fafc;
+}
+
+/* Pantallas de selección: grado, periodo, tema y actividad. */
+.spanish-area .es-recorrido { display: grid; gap: 1.5rem; }
+.spanish-area .es-encabezado { margin-block: .75rem 1.5rem; }
+.spanish-area .es-contexto { color: #526779; font-size: .8rem; font-weight: 750; letter-spacing: .05em; }
+.spanish-area .es-encabezado h1 { color: #152a3d; font-size: clamp(1.7rem, 3vw, 2.5rem); line-height: 1.2; font-weight: 800; margin-block: .5rem; overflow-wrap: anywhere; }
+.spanish-area .es-encabezado > p:last-child { color: #526779; max-width: 65ch; line-height: 1.6; }
+.spanish-area .es-bienvenida { text-align: center; padding-block: 1rem; }
+.spanish-area .es-bienvenida > p { margin-inline: auto; }
+.spanish-area .es-escuchar { padding: .5rem .75rem; margin-top: .65rem; color: #355f76; font-weight: 650; border-radius: 8px; }
+.spanish-area .es-periodos { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1rem; }
+.spanish-area .es-periodo, .spanish-area .es-tema { --es-tono: #246657; --es-fondo: #eaf6ee; display: flex; flex-direction: column; align-items: flex-start; gap: .7rem; min-width: 0; padding: 1.5rem; border: 1px solid #dce5e9; border-radius: 20px; background: white; color: #183043; text-decoration: none; box-shadow: 0 6px 20px #18304306; transition: border-color .15s, box-shadow .15s; }
+.spanish-area .es-periodo[data-periodo="2"] { --es-tono: #95612d; --es-fondo: #fff3e7; }
+.spanish-area .es-periodo[data-periodo="3"] { --es-tono: #67529a; --es-fondo: #f1edfb; }
+.spanish-area .es-periodo[data-periodo="4"] { --es-tono: #9c4f64; --es-fondo: #fceef2; }
+.spanish-area .es-icono { display: inline-grid; place-items: center; width: 52px; height: 52px; border-radius: 15px; background: var(--es-fondo, #edf3fa); color: var(--es-tono, #385a84); flex: none; font-size: 1.6rem; }
+.spanish-area .es-periodo h2, .spanish-area .es-tema h2 { font-size: 1.2rem; font-weight: 800; line-height: 1.4; margin: 0; overflow-wrap: anywhere; }
+.spanish-area .es-periodo p { font-size: .9rem; color: #647587; margin: 0; }
+.spanish-area .es-accion { display: inline-flex; align-items: center; gap: .5rem; color: var(--es-tono); font-size: .9rem; font-weight: 750; padding-top: 1rem; margin-top: auto; }
+.spanish-area .es-periodo:hover, .spanish-area .es-tema:hover { border-color: var(--es-tono); box-shadow: 0 8px 22px #1830430f; }
+.spanish-area .es-temas { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; }
+.spanish-area .es-tipo-tema { margin: 0; font-size: .8rem; color: #607584; }
+.spanish-area .es-tema .es-icono { width: 44px; height: 44px; }
+.spanish-area .es-practica-libre { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem; border: 1px dashed #b8cad2; border-radius: 15px; padding: 1rem 1.25rem; margin-top: .5rem; }
+.spanish-area .es-practica-libre h2 { font-size: 1rem; font-weight: 750; }
+.spanish-area .es-practica-libre p { color: #607584; font-size: .9rem; margin-top: .25rem; }
+.spanish-area .es-practica-libre a { display: inline-flex; align-items: center; gap: .6rem; }
+.spanish-area .es-actividad { width: 100%; max-width: 1050px; margin-inline: auto; min-width: 0; }
+.spanish-area .es-docente { margin-top: 1.5rem; padding: 1rem; border: 1px solid #dce5e9; border-radius: 12px; color: #526779; font-size: .9rem; }
+.spanish-area .es-docente summary { cursor: pointer; font-weight: 650; }
+.spanish-area .es-docente dl { display: grid; gap: 1rem; padding-top: 1rem; }
+.spanish-area .es-docente dt { font-weight: 750; }
+.spanish-area .es-docente dd { margin-top: .3rem; line-height: 1.6; }
+.spanish-area .es-barra-superior { border-bottom: 1px solid #e2e9ed; background: white; position: relative; z-index: 40; }
+.spanish-area .es-barra-interior { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: .65rem; max-width: 1280px; margin: auto; padding: .85rem 1.5rem; }
+.spanish-area .es-regresar { color: #385567; text-decoration: none; padding: .5rem 0; font-size: .9rem; font-weight: 700; }
+.spanish-area .es-controles { display: flex; align-items: center; gap: .6rem; }
+.spanish-area .es-controles > button { padding: .6rem; min-width: 42px; min-height: 42px; border-radius: 10px; background: #f3f6f8; cursor: pointer; }
+.spanish-area .es-selector-grado { min-height: 42px; max-width: 175px; padding: .45rem .5rem; border: 1px solid #dce5e9; border-radius: 10px; background: white; color: #385567; font-size: .85rem; }
+.spanish-area .es-buscador { position: relative; font-size: .85rem; color: #385567; }
+.spanish-area .es-buscador > summary { cursor: pointer; padding: .65rem .4rem; }
+.spanish-area .es-buscador-contenido { position: absolute; right: 0; top: 100%; width: min(330px, 85vw); padding: .75rem; border: 1px solid #dce5e9; border-radius: 12px; background: white; box-shadow: 0 8px 24px #18304320; }
+.spanish-area .es-pie { margin-top: auto; padding: 1.5rem; text-align: center; color: #718493; font-size: .8rem; }
+.spanish-area .es-juegos { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)); gap: 1rem; }
+.spanish-area .es-juego-elegir { display: flex; flex-direction: column; align-items: flex-start; gap: .6rem; text-align: left; border: 1px solid #dce5e9; border-radius: 16px; background: white; padding: 1.25rem; color: #183043; cursor: pointer; }
+.spanish-area .es-juego-elegir strong { font-size: 1.05rem; }
+.spanish-area .es-juego-elegir > span:last-child { font-size: .9rem; line-height: 1.5; color: #607584; }
+.spanish-area .es-juego-elegir[aria-pressed="true"] { border: 2px solid #386655; padding: calc(1.25rem - 1px); background: #f2f9f5; }
+.spanish-area .es-instrucciones { border: 1px solid #dce5e9; background: white; border-radius: 16px; padding: 1.5rem; display: grid; gap: 1rem; }
+.spanish-area .es-instrucciones h2 { font-size: 1.3rem; font-weight: 800; margin-block: .4rem; }
+.spanish-area .es-instrucciones p { line-height: 1.6; max-width: 70ch; }
+.spanish-area .es-acciones-instrucciones { display: flex; flex-wrap: wrap; gap: .75rem; }
+.spanish-area :is(.es-periodo, .es-tema, .es-juego-elegir, .es-regresar):focus-visible { outline: 3px solid #556ba4; outline-offset: 4px; }
+@media (max-width: 1100px) {
+  .spanish-area .es-periodos { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .spanish-area .es-temas { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 640px) {
+  .spanish-area .es-barra-interior { padding: .65rem 1rem; }
+  .spanish-area .es-controles { width: 100%; justify-content: space-between; gap: .4rem; }
+  .spanish-area .es-selector-grado { max-width: 155px; }
+  .spanish-area .es-encabezado { margin-bottom: 1rem; }
+  .spanish-area .es-periodos, .spanish-area .es-temas { grid-template-columns: minmax(0, 1fr); gap: .8rem; }
+  .spanish-area .es-periodo, .spanish-area .es-tema { padding: 1.15rem; }
+  .spanish-area .es-accion { padding-top: .3rem; }
+  .spanish-area .es-recorrido { gap: 1rem; }
+  .spanish-area .es-buscador-contenido { right: -80px; }
+  .spanish-area .es-acciones-instrucciones > button { width: 100%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .spanish-area .es-periodo, .spanish-area .es-tema { transition: none; }
+}
+
+/* Juegos de Español: una tarea y una acción principal por ronda. */
+.spanish-area .es-juego-claro {
+  --juego-acento: #286857;
+  --juego-suave: #eef8f0;
+  display: grid;
+  gap: 1rem;
+  width: 100%;
+  max-width: 1000px;
+  margin-inline: auto;
+  padding: clamp(1rem, 2.5vw, 1.75rem);
+  border: 1px solid #d6e4df;
+  border-radius: 20px;
+  background: white;
+  color: #223747;
+  box-shadow: 0 8px 28px #18304308;
+}
+.spanish-area .es-juego-secundaria { --juego-acento: #36587b; --juego-suave: #edf3fa; border-color: #dce5ee; }
+.spanish-area .es-juego-cabecera { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+.spanish-area .es-juego-cabecera h2 { font-size: clamp(1.3rem, 2.7vw, 1.8rem); line-height: 1.3; font-weight: 800; margin-block: .3rem .5rem; color: #193344; }
+.spanish-area .es-juego-cabecera > div > p:last-child { color: #556c79; line-height: 1.6; max-width: 65ch; font-size: 1rem; }
+.spanish-area .es-juego-avance { white-space: nowrap; border: 1px solid #dce5e9; padding: .4rem .7rem; border-radius: 10px; color: #526779; font-size: .9rem; }
+.spanish-area .es-juego-progreso { appearance: none; border: 0; width: 100%; height: 6px; border-radius: 99px; overflow: hidden; background: #edf2f4; }
+.spanish-area .es-juego-progreso::-webkit-progress-bar { background: #edf2f4; }
+.spanish-area .es-juego-progreso::-webkit-progress-value { background: var(--juego-acento); border-radius: 99px; }
+.spanish-area .es-juego-progreso::-moz-progress-bar { background: var(--juego-acento); }
+.spanish-area .es-juego-herramientas { display: flex; flex-wrap: wrap; gap: .6rem; }
+.spanish-area :is(.es-juego-herramientas button, .es-juego-ayuda) { min-height: 44px; padding: .55rem .85rem; border: 1px solid #d4e0e6; border-radius: 10px; background: #f8fafb; color: #36576a; font-weight: 650; cursor: pointer; }
+.spanish-area .es-juego-pregunta { display: grid; gap: .75rem; padding: clamp(.85rem, 2vw, 1.25rem); border-radius: 14px; background: var(--juego-suave); }
+.spanish-area .es-juego-pregunta h3, .spanish-area .es-subtitulo-juego { margin: 0; max-width: 65ch; font-size: clamp(1.1rem, 2.1vw, 1.4rem); font-weight: 700; line-height: 1.6; white-space: pre-line; overflow-wrap: anywhere; }
+.spanish-area .es-juego-ilustracion { font-size: 3.5rem; line-height: 1.3; }
+.spanish-area .es-juego-opciones { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .75rem; }
+.spanish-area .es-juego-opciones button { min-height: 62px; border: 2px solid #d9e3e8; padding: .85rem 1rem; text-align: left; color: #223747; background: white; border-radius: 13px; font-size: 1rem; font-weight: 650; line-height: 1.5; overflow-wrap: anywhere; cursor: pointer; }
+.spanish-area .es-juego-opciones button:hover:not(:disabled) { background: var(--juego-suave); border-color: var(--juego-acento); }
+.spanish-area .es-juego-opciones button[data-estado="bien"] { border-color: #28764d; background: #edf8f0; }
+.spanish-area .es-juego-opciones button[data-estado="revisar"] { border-color: #d8ac5a; background: #fff7e9; }
+.spanish-area .es-juego-claro button:disabled { cursor: default; }
+.spanish-area .es-juego-feedback { min-height: 1.5em; color: #365c4b; font-size: 1rem; line-height: 1.6; }
+.spanish-area .es-juego-pista { padding: .75rem 1rem; border-radius: 10px; background: #fff8e8; color: #785d22; line-height: 1.6; }
+.spanish-area .es-boton-principal { justify-self: end; min-height: 46px; padding: .7rem 1.1rem; border: 0; border-radius: 11px; background: var(--juego-acento, #286857); color: white; font-size: 1rem; font-weight: 750; cursor: pointer; }
+.spanish-area .es-boton-principal:disabled { background: #dce6e9; color: #647980; }
+.spanish-area .es-juego-final { display: grid; justify-items: center; gap: 1rem; padding-block: 1.25rem; text-align: center; }
+.spanish-area .es-juego-final > span { display: grid; place-items: center; width: 72px; height: 72px; border-radius: 50%; color: #286857; background: #edf8f0; font-size: 2rem; }
+.spanish-area .es-juego-final h3 { font-size: 1.5rem; font-weight: 800; }
+.spanish-area .es-juego-final .es-boton-principal { justify-self: center; }
+.spanish-area .es-etiqueta-juego { font-size: .9rem; font-weight: 700; color: #526779; }
+.spanish-area .es-zona-armar { min-height: 76px; display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; padding: .85rem; border: 2px dashed #b5cabe; border-radius: 12px; background: var(--juego-suave); }
+.spanish-area .es-zona-armar > span { color: #607584; }
+.spanish-area :is(.es-piezas, .es-zona-armar) button { min-width: 48px; min-height: 46px; padding: .6rem .9rem; border: 1px solid #b9cfca; border-radius: 10px; color: #234c40; background: white; font-size: 1.1rem; font-weight: 750; cursor: pointer; }
+.spanish-area .es-piezas { display: flex; flex-wrap: wrap; gap: .5rem; }
+.spanish-area .es-piezas button:disabled { opacity: .35; }
+.spanish-area .es-juego-nota { font-size: .85rem; color: #647980; }
+.spanish-area .es-letras-sonoras { display: grid; grid-template-columns: repeat(auto-fit, minmax(115px, 1fr)); gap: .75rem; }
+.spanish-area .es-letras-sonoras > button { display: grid; justify-items: center; gap: .5rem; background: #f6faf5; border: 2px solid #d4e6d5; border-radius: 16px; padding: 1rem .5rem; cursor: pointer; }
+.spanish-area .es-letras-sonoras > button[aria-pressed="true"] { border-color: #337954; background: #eaf5eb; }
+.spanish-area .es-letras-sonoras > button > span:first-child { font-size: 2.5rem; }
+.spanish-area .es-letras-sonoras strong { font-size: 2rem; color: #285f48; }
+.spanish-area .es-letras-sonoras small { font-size: 1.4rem; }
+.spanish-area .es-juego-extra { border-top: 1px solid #dce5e9; padding-top: 1rem; }
+.spanish-area .es-juego-extra summary { cursor: pointer; color: #526779; }
+.spanish-area .es-juego-extra > :not(summary) { margin-top: 1rem; }
+.spanish-area .es-cartas-memoria { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .75rem; }
+.spanish-area .es-cartas-memoria button { display: grid; align-content: center; justify-items: center; gap: .5rem; min-height: 130px; border: 2px solid #cadfd0; border-radius: 15px; padding: .75rem; background: var(--juego-suave); color: #315840; font-size: 1rem; cursor: pointer; overflow-wrap: anywhere; }
+.spanish-area .es-cartas-memoria button > span { font-size: 2rem; }
+.spanish-area .es-cartas-memoria button[data-encontrada="true"] { background: #dff2e3; border-color: #70a87b; }
+.spanish-area .es-texto-detective { display: flex; flex-wrap: wrap; align-items: center; gap: .25rem; padding: 1rem; background: #f5f8fa; border-radius: 12px; }
+.spanish-area .es-texto-detective button { min-height: 44px; padding: .3rem .5rem; border: 1px solid transparent; border-radius: 7px; font-size: 1.15rem; color: #263f50; cursor: pointer; }
+.spanish-area .es-texto-detective button:hover { border-color: #aac6d3; background: white; }
+.spanish-area .es-texto-detective button[data-estado="revisar"] { border-color: #d8ac5a; background: #fff6df; }
+.spanish-area .es-texto-detective button[data-estado="bien"] { border-color: #6da480; background: #e5f4e9; }
+.spanish-area .es-texto-completar { font-size: 1.1rem; line-height: 2.3; padding: 1rem; background: #f7fafb; border-radius: 12px; }
+.spanish-area .es-texto-completar mark { border-radius: 6px; background: #e9f2ed; padding: .25rem .45rem; color: #285e43; }
+.spanish-area .es-texto-completar mark[data-activo="true"] { outline: 2px solid #548b6d; outline-offset: 2px; }
+.spanish-area .es-crucigrama-contenido { display: grid; grid-template-columns: minmax(220px, 320px) minmax(0, 1fr); gap: 1.5rem; align-items: start; }
+.spanish-area .es-crucigrama-tablero { display: grid; gap: 3px; max-width: 320px; padding: .6rem; border-radius: 12px; background: #e8eff3; }
+.spanish-area .es-crucigrama-tablero span { aspect-ratio: 1; display: grid; place-items: center; min-width: 0; border: 1px solid #bccdd6; background: white; font-weight: 800; }
+.spanish-area .es-crucigrama-tablero span[data-vacia="true"] { visibility: hidden; }
+.spanish-area .es-crucigrama-tablero span[data-activa="true"] { border-color: #5485a5; background: #e5f1fc; }
+.spanish-area .es-formulario-palabra { display: grid; gap: .6rem; }
+.spanish-area .es-formulario-palabra input { min-width: 0; width: 100%; padding: .75rem; border: 1px solid #b8cbd5; border-radius: 10px; font-size: 1.1rem; text-transform: uppercase; }
+.spanish-area .es-juego-claro :is(button, input):focus-visible { outline: 3px solid #6c86b9; outline-offset: 3px; }
+@media (max-width: 640px) {
+  .spanish-area .es-juego-opciones { grid-template-columns: minmax(0, 1fr); }
+  .spanish-area .es-juego-claro { padding: 1rem; gap: .85rem; }
+  .spanish-area .es-cartas-memoria { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .spanish-area .es-cartas-memoria button { min-height: 105px; }
+  .spanish-area .es-crucigrama-contenido { grid-template-columns: minmax(0, 1fr); }
+  .spanish-area .es-boton-principal { width: 100%; justify-self: stretch; }
+  .spanish-area .es-texto-detective { padding: .6rem; }
+}
+.spanish-area .es-aviso-logro { position: fixed; right: 1rem; bottom: 1rem; z-index: 50; display: flex; align-items: center; gap: .75rem; max-width: calc(100vw - 2rem); padding: .8rem 1rem; border: 1px solid #acc9b6; background: #f0f8f2; color: #315d42; border-radius: 12px; box-shadow: 0 5px 18px #18304315; }
+.spanish-area .es-aviso-logro button { padding: .35rem .5rem; font-size: 1.3rem; cursor: pointer; }
+.spanish-area .es-sala-juegos:has(.lengua-juego-activo) > .es-encabezado,
+.spanish-area .es-sala-juegos:has(.lengua-juego-activo) > .lengua-elegir-grado { display: none; }
+@media (min-width: 641px) {
+  .spanish-area .es-juego-primaria .es-juego-opciones { grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); }
+}
+.spanish-area .es-juego-claro > .es-juego-ayuda { justify-self: start; }
+.spanish-area .es-armar-contenido { display: grid; grid-template-columns: minmax(0, 1fr); gap: 1rem; }
+@media (min-width: 900px) {
+  .spanish-area .es-armar-contenido { grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr); gap: 1.5rem; align-items: center; }
+  .spanish-area .es-armar-contenido .es-juego-pregunta { justify-items: center; text-align: center; }
+}

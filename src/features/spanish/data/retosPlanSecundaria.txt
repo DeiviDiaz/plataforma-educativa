@@ -1,0 +1,60 @@
+# id|pregunta~correcta~distractor~distractor|explicación
+6-1-1|¿Quién cuenta los hechos de un relato?~El narrador~El canal~El editor siempre|El narrador es la voz que cuenta; no debe confundirse automáticamente con el autor.
+6-1-2|¿Qué rompe la coherencia?~Una contradicción sin explicación~Un conector adecuado~Un orden temporal claro|Las ideas deben mantener relaciones comprensibles y no contradecirse sin motivo.
+6-1-3|¿Cuál sustantivo está en femenino singular?~Viajera~Viajeras~Viajeros|Viajera nombra una sola persona en femenino.
+6-1-4|¿Qué relato se vincula con un lugar conocido y sucesos extraordinarios?~La leyenda~Una receta~Un informe de laboratorio|La leyenda enlaza tradición, personajes o lugares y elementos extraordinarios.
+6-1-6|¿Cuál frase personifica?~El zorro debatió con la liebre~El zorro corrió~La liebre saltó|Debatir atribuye a los animales una actividad humana.
+6-2-7|¿Qué se elimina primero al resumir?~Los detalles secundarios~La idea principal~El tema central|Resumir conserva lo esencial y reduce detalles que no hacen falta para entenderlo.
+6-2-8|¿Qué parte amplía los detalles de la noticia?~El cuerpo~La firma~La fecha sola|Tras el titular y la entrada, el cuerpo desarrolla la información.
+6-2-9|En nosotros consultamos, ¿qué persona aparece?~Primera persona plural~Segunda persona singular~Tercera persona singular|Nosotros incluye a quien habla junto con otras personas.
+6-3-10|¿Qué expresión es metáfora?~La tarde es una sábana dorada~La tarde parece una sábana~La tarde dura varias horas|La metáfora identifica dos realidades sin usar una comparación explícita con como o parece.
+6-3-11|¿Qué cambia de yo canto a ella cantó?~La persona y el tiempo del verbo~Solo el tamaño de la palabra~El género del sustantivo|Canto está en primera persona del presente; cantó, en tercera persona del pasado. Ambas formas pertenecen al verbo cantar.
+6-3-12|¿Qué conviene hacer antes de declamar?~Comprender el sentido del poema~Memorizarlo sin entenderlo~Eliminar todas las pausas|Comprender permite elegir pausas, énfasis y ritmo con intención.
+6-4-13|¿Por qué una señal puede interpretarse de forma distinta?~Porque cambia el contexto o el código compartido~Porque todas las señales carecen de significado~Porque el color siempre significa lo mismo|El contexto y los códigos aprendidos intervienen en la interpretación.
+6-4-14|¿Qué organiza un párrafo?~Una idea principal y su desarrollo~Oraciones sin relación~Solo signos de puntuación|Las oraciones del párrafo desarrollan una idea y se relacionan entre sí.
+6-4-15|¿Qué parte del guion orienta los gestos?~La acotación~El apellido del editor~La portada|Las acotaciones indican acciones, movimientos o formas de decir el diálogo.
+7-1-1|En la cabeza del equipo, ¿qué sentido tiene cabeza?~Quien dirige el grupo~Solo una parte del cuerpo~Un objeto sin relación|El contexto permite reconocer el sentido de una palabra polisémica.
+7-1-2|¿Qué expresión nombra un espacio imaginario?~Un castillo que flota entre planetas~El salón de mi escuela~La plaza de mi municipio|El espacio imaginario se construye mediante la ficción.
+7-1-3|¿Qué recurso ayuda a dar cohesión?~Un pronombre con referente claro~Cambiar de tema sin vínculo~Contradecir cada oración|La cohesión incluye recursos que enlazan las partes del texto.
+7-2-4|¿Qué expresión concuerda en género y número?~Estas noticias~Estos noticias~Esta noticias|El determinante estas concuerda con noticias en femenino plural.
+7-2-5|En Ana investigó; ella escribió, ¿qué retoma ella?~Ana~La investigación~Un lugar|Ella es un pronombre personal que evita repetir Ana.
+7-2-6|¿Qué oración expresa una postura?~Conviene ampliar la biblioteca~La biblioteca tiene dos puertas~La biblioteca abrió en marzo|Una postura plantea una valoración o propuesta que puede argumentarse.
+7-3-7|¿Qué punto inicia un párrafo nuevo?~Punto aparte~Punto seguido~Una coma|El punto aparte separa párrafos; el seguido separa oraciones dentro del mismo párrafo.
+7-3-8|¿Qué oración evita separar sujeto y verbo indebidamente?~Los estudiantes leen noticias~Los estudiantes, leen noticias~Los, estudiantes leen noticias|Una coma no debe romper sin motivo la relación entre sujeto y verbo.
+7-3-9|¿Qué corresponde a la conclusión?~Retomar la postura después de las razones~Introducir otra tesis sin relación~Copiar solo el título|El cierre recupera lo argumentado y evita abrir un asunto ajeno.
+7-4-10|¿Qué género se centra en una voz poética?~Lírico~Periodístico informativo~Instructivo|La lírica explora la expresión de una voz y sus efectos mediante lenguaje poético.
+7-4-11|En libro de cuentos, ¿qué palabra relaciona los sustantivos?~De~Libro~Cuentos|De es una preposición que relaciona libro y cuentos.
+7-4-12|¿Qué precaución ayuda al hablar de una tradición regional?~Reconocer variaciones y procedencias~Afirmar que todos piensan igual~Inventar un origen y presentarlo como cierto|Una comunidad es diversa y sus expresiones culturales tienen versiones y contextos.
+7-4-13|¿Qué elemento pertenece a la paralingüística?~El volumen de la voz~La distancia entre personas~El movimiento de una mano|La paralingüística analiza rasgos vocales; distancia corresponde a proxémica y gesto a kinésica.
+7-4-14|¿Una imagen de felicidad demuestra que un producto hará feliz a todos?~No, es una asociación persuasiva~Sí, siempre~Sí, si tiene muchos colores|Una asociación emocional no es evidencia suficiente de una promesa.
+7-4-15|¿Qué debe indicar la parte de sonido de un guion?~Voces, música o efectos previstos~Solo el precio del producto~El tamaño de cada hoja|El guion audiovisual coordina lo que se ve con lo que se escucha.
+8-1-1|En la comunidad transmite relatos, ¿cuál es el sujeto?~La comunidad~Transmite relatos~Relatos|El sujeto es la comunidad; transmite relatos es el predicado.
+8-1-2|¿Qué constituye el núcleo de un predicado verbal?~Un verbo~Siempre un adjetivo~Una preposición aislada|El verbo organiza lo que se dice del sujeto en un predicado verbal.
+8-1-3|¿Qué distingue informar de inventar una noticia?~Apoyar los datos en fuentes contrastables~Añadir muchos adjetivos~Usar un título llamativo|La información periodística debe sostenerse en datos y fuentes verificables.
+8-1-4|¿Cuál sustitución mantiene un sentido semejante?~Relato por narración~Relato por silencio~Relato por semáforo|Relato y narración pueden funcionar como sinónimos en contextos adecuados.
+8-1-5|¿Qué pareja es antónima?~Cercano y lejano~Cercano y próximo~Relato y narración|Los antónimos expresan oposición de significado.
+8-1-6|¿Qué diferencia añade un mensaje audiovisual a un texto solo escrito?~La combinación de imagen y sonido~La obligación de ser verdadero~La ausencia de interpretación|La imagen y el sonido aportan recursos expresivos, pero no garantizan veracidad.
+8-2-7|¿Qué caracteriza un diario personal?~Experiencias fechadas desde una perspectiva propia~Un narrador siempre neutral~Una lista sin voz personal|El diario registra vivencias y reflexiones de quien escribe.
+8-2-8|¿Por qué hay que analizar la mirada del autor costumbrista?~Porque selecciona e interpreta lo que retrata~Porque representa a todos por igual~Porque nunca puede criticar|El retrato de una costumbre responde a una perspectiva y un contexto.
+8-2-9|¿Qué expresa la interjección ay en ay, me duele?~Dolor~Una fecha~Una cantidad exacta|Las interjecciones expresan reacciones o llaman la atención según el contexto.
+8-3-10|¿Qué propuesta distingue una experimentación consciente?~Explicar qué convención modifica y para qué~Alterar palabras sin poder explicarlo~Copiar un texto y ocultarlo|La exploración formal puede justificarse mediante una intención expresiva.
+8-3-11|¿Quién escribió Huasipungo?~Jorge Icaza~José Eustasio Rivera~Rubén Darío|Huasipungo es una novela de Jorge Icaza; La vorágine es de José Eustasio Rivera.
+8-3-12|¿Qué hace una intervención argumentada en un debate?~Relaciona postura, razón y evidencia~Interrumpe para imponer una opinión~Cambia de tema para evitar responder|Debatir implica sostener y contrastar ideas con razones y escucha.
+8-4-13|¿Qué define el público de un anuncio?~A quién se dirige el mensaje~Solo su tamaño~El nombre del archivo|El público destinatario orienta lenguaje, códigos y medio de difusión.
+8-4-14|¿Qué diferencia un hecho de una valoración?~El hecho puede contrastarse con evidencia~La valoración siempre tiene fecha~El hecho depende de un color|Las valoraciones expresan juicios; los hechos se contrastan con registros o fuentes.
+8-4-15|¿Qué es el montaje cinematográfico?~La organización de planos para construir relaciones~Solo el volumen de la música~El precio de la entrada|La selección y combinación de planos construye continuidad, ritmo y sentido.
+9-1-1|¿Qué precaución requiere una cita textual?~Indicar la fuente y respetar las palabras~Cambiar palabras sin avisar~Suponer que las comillas prueban la verdad|La cita reconoce la procedencia; su contenido también puede analizarse críticamente.
+9-1-2|¿Qué falta si un instructivo tiene acciones sin orden?~Una secuencia comprensible~Una moraleja~Un narrador fantástico|Los pasos deben organizarse para que el destinatario pueda realizar la acción.
+9-1-3|¿Por qué pueden variar las versiones de una leyenda oral?~Por su transmisión y sus contextos~Porque solo existe una voz cultural~Porque nunca se narran en comunidad|La transmisión oral reelabora relatos y conserva versiones diversas.
+9-1-4|¿Qué forma verbal es pretérito imperfecto?~Cantaba~Cantó~Ha cantado|Cantaba presenta una acción pasada sin marcar su límite como lo hace cantó.
+9-1-5|¿Qué es ONU?~Una sigla~Un adverbio~Una acotación|ONU se forma con iniciales de Organización de las Naciones Unidas.
+9-1-6|¿Qué ayuda a solicitar información por correo?~Un asunto claro y una petición respetuosa~Un mensaje sin destinatario revisado~Una lista de datos personales innecesarios|El correo se adapta al destinatario y comunica con claridad el propósito.
+9-2-7|¿Todo texto romántico trata de amor de pareja?~No, puede abordar libertad, nación y naturaleza~Sí, sin excepción~Solo si está en prosa|Romanticismo es una categoría histórica y estética más amplia que un tema amoroso.
+9-2-8|¿Qué evidencia sostiene mejor una interpretación literaria?~Un detalle concreto del fragmento~Solo el gusto personal~El tamaño de la portada|Una interpretación argumentada relaciona sus afirmaciones con el texto.
+9-2-9|¿Qué conviene analizar al hablar de musicalidad?~Ritmo, pausas y organización sonora~Solo el nombre del editor~La cantidad de páginas|La musicalidad se construye con recursos sonoros y rítmicos del lenguaje.
+9-3-10|¿Para qué sirve una sustitución por sinónimo en un texto expositivo?~Para evitar repetición conservando el sentido~Para cambiar el tema sin avisar~Para volver imposible el referente|La sustitución léxica ayuda a cohesionar si mantiene el sentido pertinente.
+9-3-11|¿Qué problema hay en usar un pronombre sin referente claro?~No se sabe a quién o a qué alude~Siempre forma una metáfora~Resuelve todas las repeticiones|La cohesión pronominal necesita referentes identificables.
+9-3-12|¿Qué elemento organiza un ensayo argumentativo?~Una tesis defendida con razones~Una sucesión de opiniones sin relación~Solo una lista de personajes|La tesis orienta los argumentos y el cierre del ensayo.
+9-4-13|¿Qué anuncio tiene finalidad social?~Una campaña para prevenir el desperdicio de agua~Una oferta de zapatos~Un catálogo de precios|La publicidad social promueve conductas o causas de interés colectivo.
+9-4-14|¿Qué decisión es central al hacer un collage?~Cómo relacionar imágenes para comunicar una idea~Pegar imágenes sin considerar el mensaje~Copiar sin reconocer procedencias|La selección y composición crean relaciones de sentido entre materiales visuales.
+9-4-15|¿Qué oración es exhortativa?~Cuida la biblioteca~Ojalá cuidemos la biblioteca~¿Quién cuida la biblioteca?|La exhortativa pide, aconseja u ordena una acción; se distingue del deseo y la pregunta.
