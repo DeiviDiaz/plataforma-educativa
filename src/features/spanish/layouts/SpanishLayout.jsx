@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { NavLink, Outlet, Link, useNavigate, useLocation } from 'react-router-dom';
+import { Outlet, Link, useNavigate, useLocation } from 'react-router-dom';
 import mallaData from '../data/mallaCurricularEspanol.json';
 import { sounds } from '../utils/audio';
 import { voiceReader } from '../utils/speech';
@@ -32,6 +32,20 @@ export default function SpanishLayout() {
   const navigate = useNavigate();
   const location = useLocation();
   const esPortada = location.pathname.replace(/\/$/, '') === '/espanol';
+  const parametros = new URLSearchParams(location.search);
+  const gradoId = location.pathname.split('/')[3];
+  const gradoActual = mallaData.grados[gradoId];
+  const guiaActual = parametros.get('guia');
+  const periodoActual = gradoActual?.periodos.find((item) => item.unidades.some((unidad) => unidad.guias.some((guia) => guia.id === guiaActual)));
+  let regreso = { to: '/espanol', label: 'Volver a los grados' };
+  if (esPortada) regreso = { to: '/', label: 'Volver al inicio' };
+  else if (gradoActual && periodoActual) regreso = { to: '/espanol/grado/' + gradoId + '?periodo=' + periodoActual.numero, label: 'Volver a los temas' };
+  else if (gradoActual && parametros.has('periodo')) regreso = { to: '/espanol/grado/' + gradoId, label: 'Volver a los periodos' };
+  else if (location.pathname.endsWith('/juegos')) regreso = {
+    to: '/espanol/grado/' + (parametros.get('grado') || '1') + (guiaActual ? '?guia=' + encodeURIComponent(guiaActual) : parametros.has('periodo') ? '?periodo=' + encodeURIComponent(parametros.get('periodo')) : ''),
+    label: guiaActual ? 'Volver al tema' : parametros.has('periodo') ? 'Volver a los temas' : 'Volver a los periodos',
+  };
+
 
   useEffect(() => {
     if (location.hash === '#grados') {
@@ -39,7 +53,7 @@ export default function SpanishLayout() {
     } else if (!location.hash) {
       window.scrollTo(0, 0);
     }
-  }, [location.pathname, location.hash]);
+  }, [location.pathname, location.search, location.hash]);
 
   useEffect(() => {
     const handleFullscreenChange = () => {
@@ -109,10 +123,20 @@ export default function SpanishLayout() {
       <div className="min-h-screen flex flex-col bg-slate-50 font-sans text-slate-800 antialiased selection:bg-indigo-100 selection:text-indigo-900">
         
         {/* ══════════ HEADER PRINCIPAL ELEGANTE ══════════ */}
-        <header className="relative z-40 lg:sticky lg:top-0 bg-white/95 backdrop-blur-xl border-b border-slate-200/80 shadow-xs">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex flex-wrap items-center justify-between gap-x-3 gap-y-2">
-            
-            <div className="relative w-full order-last sm:order-none sm:flex-1 sm:max-w-sm"
+        <header className="es-barra-superior">
+          <div className="es-barra-interior">
+            <Link to={regreso.to} className="es-regresar" onClick={() => { sounds.playClick(); voiceReader.stop(); }}>← {regreso.label}</Link>
+            <div className="es-controles">
+              <label className="sr-only" htmlFor="es-cambiar-grado">Cambiar grado</label>
+              <select id="es-cambiar-grado" className="es-selector-grado" value={gradoActual?.id || ''} onChange={(event) => {
+                if (event.target.value) { voiceReader.stop(); navigate('/espanol/grado/' + event.target.value); }
+              }}>
+                <option value="" disabled>Cambiar grado</option>
+                {grados.map((grado) => <option key={grado.id} value={grado.id}>{grado.nombre}</option>)}
+              </select>
+              <details key={location.key} className="es-buscador">
+                <summary>Buscar tema</summary>
+            <div className="es-buscador-contenido"
               onBlur={(event) => {
                 if (!event.currentTarget.contains(event.relatedTarget)) setBuscadorAbierto(false);
               }}
@@ -152,50 +176,11 @@ export default function SpanishLayout() {
               )}
             </div>
 
-            {/* Herramientas & Navegación */}
-            <div className="flex items-center gap-2">
-              
-              <Link to={esPortada ? '/' : '/espanol#grados'} onClick={() => sounds.playClick()} className="lengua-volver-inicio">
-                <span aria-hidden="true">←</span> {esPortada ? 'Regresar al inicio' : 'Volver a los grados'}
-              </Link>
-
-              {/* Voz Pedagógica */}
-              <button
-                onClick={toggleVoz}
-                title={vozSilenciada ? "Voz silenciada (Click para activar)" : "Voz activa (Click para silenciar)"}
-                className={`p-2 rounded-xl border font-bold text-xs flex items-center justify-center transition-all cursor-pointer ${
-                  vozSilenciada
-                    ? 'bg-rose-50 text-rose-600 border-rose-200'
-                    : 'bg-emerald-50 text-emerald-700 border-emerald-200'
-                }`}
-              >
-                <span className="text-sm">{vozSilenciada ? '🔇' : '🔊'}</span>
-              </button>
-
-              {/* Pantalla Completa / Proyector */}
-              <button
-                onClick={togglePantallaCompleta}
-                title={enPantallaCompleta ? "Salir de pantalla completa" : "Modo Proyector de Aula"}
-                className="p-2 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-xl border border-slate-200 transition-colors cursor-pointer"
-              >
-                <span className="text-sm">{enPantallaCompleta ? '🗗' : '🖥️'}</span>
-              </button>
+              </details>
+              <button type="button" onClick={toggleVoz} aria-label={vozSilenciada ? 'Activar voz' : 'Silenciar voz'} title={vozSilenciada ? 'Activar voz' : 'Silenciar voz'}>{vozSilenciada ? '🔇' : '🔊'}</button>
+              <button type="button" onClick={togglePantallaCompleta} aria-label={enPantallaCompleta ? 'Salir de pantalla completa' : 'Pantalla completa'} title="Pantalla completa">{enPantallaCompleta ? '🗗' : '⛶'}</button>
             </div>
           </div>
-
-          <nav aria-label="Cambiar de grado" className="border-t border-slate-200 bg-white">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 py-1.5 flex items-center gap-2 flex-wrap">
-              <span className="text-sm font-semibold text-slate-600 hidden sm:inline">Grados</span>
-              {grados.map((grado) => (
-                <NavLink key={grado.id} to={`/espanol/grado/${grado.id}`} end
-                  aria-label={grado.nombre}
-                  onClick={() => sounds.playClick()}
-                  className="lengua-nav-grado">
-                  {grado.numero}.º
-                </NavLink>
-              ))}
-            </div>
-          </nav>
         </header>
 
         {/* ══════════ CONTENIDO PRINCIPAL ══════════ */}
@@ -236,30 +221,11 @@ export default function SpanishLayout() {
                 ✕
               </button>
 
-              <span className="text-5xl block">⭐👑⭐</span>
-              <span className="text-[11px] font-black uppercase tracking-widest bg-amber-400 text-slate-950 px-3 py-1 rounded-full shadow-xs inline-block">
-                ¡NUEVO RANGO DESBLOQUEADO!
-              </span>
-              <h3 className="text-2xl font-black text-white">
-                {celebracionNivel.titulo}
-              </h3>
-              <p className="text-xs text-slate-400 leading-relaxed">
-                {celebracionNivel.desc}
-              </p>
+        {celebracionNivel && <aside className="es-aviso-logro" role="status">
+          <span>✓ Nuevo logro · {celebracionNivel.titulo}</span>
+          <button type="button" aria-label="Cerrar aviso de logro" onClick={() => setCelebracionNivel(null)}>×</button>
+        </aside>}
 
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  sounds.playClick();
-                  setCelebracionNivel(null);
-                }}
-                className="w-full py-3.5 px-6 bg-[#3659d9] hover:bg-[#2845b5] text-white font-bold text-sm rounded-xl shadow-lg transition-all cursor-pointer"
-              >
-                ¡Aceptar y Continuar!
-              </button>
-            </div>
-          </div>
-        )}
       </div>
     </div>
   );
