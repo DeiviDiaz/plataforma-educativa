@@ -9,8 +9,7 @@ import { TERMINOS_GLOSARIO } from './GlosarioInteractivo';
 export default function TeoriaPedagogicaEnriquecida({
   guia,
   gradoNumero = 1,
-  gradoNombre = 'Grado Escolar',
-  onAvanzarPaso
+  gradoNombre = 'Grado Escolar'
 }) {
   const esInicial = gradoNumero <= 2;
   const esSecundaria = gradoNumero >= 6;
@@ -719,22 +718,6 @@ export default function TeoriaPedagogicaEnriquecida({
           </div>
         </div>
       )}
-
-      {/* ══════════════════════════════════════════════════════════════
-          BOTÓN GLOBAL DE PASO AL SIGUIENTE PILAR (COMPRENSIÓN Y CUADERNO)
-          ══════════════════════════════════════════════════════════════ */}
-      <div className="flex justify-end">
-        <button
-          onClick={() => {
-            sounds.playClick();
-            if (onAvanzarPaso) onAvanzarPaso('comprension');
-          }}
-          className="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-indigo-600 via-blue-600 to-indigo-700 hover:from-indigo-500 hover:to-blue-500 text-white font-title font-black text-sm rounded-2xl shadow-xl hover:scale-102 active:scale-98 transition-all flex items-center justify-center gap-2 cursor-pointer border border-indigo-400"
-        >
-          <span>Practicar lo leído →</span>
-          <span>➔</span>
-        </button>
-      </div>
 
       {/* ══════════════════════════════════════════════════════════════
           MODAL DE GLOSARIO RÁPIDO EN CONTEXTO

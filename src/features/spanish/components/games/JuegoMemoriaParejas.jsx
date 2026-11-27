@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import { sounds } from '../../utils/audio';
+import { useState } from 'react';
+import MarcoJuego from './MarcoJuego';
 import { voiceReader } from '../../utils/speech';
-import { lanzarConfeti } from '../../utils/confetti';
+import { sounds } from '../../utils/audio';
 import { GameProgress } from '../../utils/gamification';
 
 const MAZOS_PAREJAS = {
@@ -14,7 +14,7 @@ const MAZOS_PAREJAS = {
       { id: 'p2', a: { texto: 'CAMPANA', icono: '🔔' }, b: { texto: 'MANZANA', icono: '🍎' } },
       { id: 'p3', a: { texto: 'ESTRELLA', icono: '⭐' }, b: { texto: 'BOTELLA', icono: '🍾' } },
       { id: 'p4', a: { texto: 'VENTANA', icono: '🪟' }, b: { texto: 'RANA', icono: '🐸' } },
-      { id: 'p5', a: { texto: 'CANCION', icono: '🎶' }, b: { texto: 'CORAZÓN', icono: '❤️' } },
+      { id: 'p5', a: { texto: 'CANCIÓN', icono: '🎶' }, b: { texto: 'CORAZÓN', icono: '❤️' } },
       { id: 'p6', a: { texto: 'PINTOR', icono: '🎨' }, b: { texto: 'FLOR', icono: '🌸' } }
     ]
   },
@@ -85,226 +85,45 @@ const MAZOS_PAREJAS = {
   }
 };
 
-export default function JuegoMemoriaParejas({ tema = 'rimas' }) {
-  const [mazoActual, setMazoActual] = useState(MAZOS_PAREJAS[tema] ? tema : 'rimas');
-  const [cartas, setCartas] = useState([]);
+export default function JuegoMemoriaParejas({ tema = 'rimas', gradoNumero = 2 }) {
+  const mazo = MAZOS_PAREJAS[tema] || MAZOS_PAREJAS.rimas;
+  function crearCartas() {
+    const parejas = mazo.parejas.slice(0, gradoNumero <= 2 ? 3 : 4);
+    return parejas.flatMap((pareja) => [{ ...pareja.a, pareja: pareja.id, id: pareja.id + '-a' }, { ...pareja.b, pareja: pareja.id, id: pareja.id + '-b' }]).sort(() => Math.random() - .5);
+  }
+  const [cartas, setCartas] = useState(crearCartas);
   const [volteadas, setVolteadas] = useState([]);
-  const [acertadas, setAcertadas] = useState([]);
-  const [intentos, setIntentos] = useState(0);
-  const [puntaje, setPuntaje] = useState(0);
-  const [tiempo, setTiempo] = useState(0);
-  const [activo, setActivo] = useState(false);
-
-  const mazo = MAZOS_PAREJAS[mazoActual] || MAZOS_PAREJAS.rimas;
-
-  // Generar cartas aplanadas a partir de las parejas
-  const inicializarJuego = (nuevoTema = mazoActual) => {
-    const dataMazo = MAZOS_PAREJAS[nuevoTema] || MAZOS_PAREJAS.rimas;
-    const items = [];
-    dataMazo.parejas.forEach((par, idx) => {
-      items.push({
-        id: `a-${idx}-${par.id}`,
-        parId: par.id,
-        texto: par.a.texto,
-        icono: par.a.icono
-      });
-      items.push({
-        id: `b-${idx}-${par.id}`,
-        parId: par.id,
-        texto: par.b.texto,
-        icono: par.b.icono
-      });
-    });
-
-    setCartas(items.sort(() => Math.random() - 0.5));
-    setVolteadas([]);
-    setAcertadas([]);
-    setIntentos(0);
-    setTiempo(0);
-    setPuntaje(0);
-    setActivo(true);
-  };
-
-  useEffect(() => {
-    inicializarJuego(mazoActual);
-  }, [mazoActual]);
-
-  // Cronómetro
-  useEffect(() => {
-    if (!activo || acertadas.length === mazo.parejas.length) return;
-    const timer = setInterval(() => {
-      setTiempo((t) => t + 1);
-    }, 1000);
-    return () => clearInterval(timer);
-  }, [activo, acertadas.length, mazo.parejas.length]);
-
-  const voltearCarta = (carta) => {
-    if (volteadas.length === 2) return;
-    if (volteadas.find((c) => c.id === carta.id)) return;
-    if (acertadas.includes(carta.parId)) return;
-
-    sounds.playClick();
-    // Pronunciar en voz alta la palabra de la tarjeta
-    voiceReader.speakWord(carta.texto);
-
-    const nuevasVolteadas = [...volteadas, carta];
-    setVolteadas(nuevasVolteadas);
-
-    if (nuevasVolteadas.length === 2) {
-      setIntentos((prev) => prev + 1);
-      const [c1, c2] = nuevasVolteadas;
-
-      if (c1.parId === c2.parId) {
-        sounds.playCorrect();
-        setPuntaje((p) => p + 150);
-        setAcertadas((prev) => {
-          const actualizadas = [...prev, c1.parId];
-          if (actualizadas.length === mazo.parejas.length) {
-            sounds.playFanfare();
-            lanzarConfeti();
-            setActivo(false);
-            const bonusIntentos = Math.max(50, 200 - intentos * 10);
-            const puntosFinales = puntaje + 150 + bonusIntentos;
-            GameProgress.addXP(puntosFinales, 'rimas_flow');
-            GameProgress.registrarVictoria(1);
-            voiceReader.speak("¡Felicitaciones! ¡Encontraste todas las parejas con gran memoria!");
-          }
-          return actualizadas;
-        });
+  const [encontradas, setEncontradas] = useState([]);
+  const [mensaje, setMensaje] = useState('');
+  const terminado = encontradas.length === cartas.length / 2;
+  function voltear(carta) {
+    if (volteadas.length === 2 || volteadas.includes(carta.id) || encontradas.includes(carta.pareja)) return;
+    voiceReader.speak(carta.texto);
+    if (volteadas.length === 1) {
+      const anterior = cartas.find((item) => item.id === volteadas[0]);
+      if (anterior.pareja === carta.pareja) {
+        setEncontradas([...encontradas, carta.pareja]);
         setVolteadas([]);
-      } else {
-        setTimeout(() => {
-          sounds.playWrong();
-          setVolteadas([]);
-        }, 900);
+        setMensaje(tema === 'rimas' ? '✓ ¡Estas palabras riman!' : '✓ ¡Encontraste una pareja!');
+        sounds.playSuccess(); GameProgress.addXP(10);
+        return;
       }
-    }
-  };
-
-  const completado = acertadas.length === mazo.parejas.length && mazo.parejas.length > 0;
-
-  const formatearTiempo = (s) => {
-    const min = Math.floor(s / 60);
-    const seg = s % 60;
-    return `${min}:${seg < 10 ? '0' : ''}${seg}`;
-  };
-
-  return (
-    <div className="bg-white rounded-3xl p-5 sm:p-8 shadow-xl border-2 border-indigo-200/80 space-y-6">
-      {/* Selector de Mazos Temáticos */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-slate-100 pb-4">
-        <div>
-          <span className="text-xs font-black text-indigo-600 uppercase tracking-widest bg-indigo-50 px-3 py-1 rounded-full border border-indigo-200">
-            Juego de Memoria Visual y Conceptual
-          </span>
-          <h3 className="text-2xl font-black text-slate-800 mt-1 flex items-center gap-2">
-            <span>{mazo.icono}</span> {mazo.nombre}
-          </h3>
-          <p className="text-xs text-slate-500 font-semibold mt-0.5">{mazo.descripcion}</p>
-        </div>
-
-        {/* Mazos disponibles */}
-        <div className="flex flex-wrap gap-1.5 bg-slate-100 p-1.5 rounded-2xl border border-slate-200">
-          {Object.entries(MAZOS_PAREJAS).map(([key, item]) => (
-            <button
-              key={key}
-              onClick={() => {
-                sounds.playClick();
-                setMazoActual(key);
-              }}
-              className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                mazoActual === key
-                  ? 'bg-indigo-600 text-white shadow-sm'
-                  : 'text-slate-600 hover:bg-white'
-              }`}
-            >
-              <span>{item.icono}</span> {item.nombre.split(' ')[0]}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* Marcadores */}
-      <div className="flex flex-wrap items-center justify-between gap-3 bg-slate-50 p-4 rounded-2xl border border-slate-200 text-xs sm:text-sm font-bold text-slate-700">
-        <div className="flex items-center gap-4">
-          <span className="flex items-center gap-1.5">
-            <span>⏱️</span> Tiempo: <strong className="text-indigo-600 font-black">{formatearTiempo(tiempo)}</strong>
-          </span>
-          <span className="flex items-center gap-1.5">
-            <span>🎯</span> Intentos: <strong className="text-slate-900 font-black">{intentos}</strong>
-          </span>
-          <span className="flex items-center gap-1.5">
-            <span>⭐</span> Puntos: <strong className="text-amber-600 font-black">{puntaje}</strong>
-          </span>
-        </div>
-
-        <button
-          onClick={() => inicializarJuego(mazoActual)}
-          className="px-3.5 py-1.5 bg-white hover:bg-slate-100 text-slate-700 rounded-xl text-xs font-black border border-slate-300 transition-all cursor-pointer shadow-sm active:scale-95"
-        >
-          🔄 Barajar de nuevo
-        </button>
-      </div>
-
-      {/* Cuadrícula de Cartas (12 cartas en 3x4 o 4x3) */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 sm:gap-4 max-w-3xl mx-auto">
-        {cartas.map((carta) => {
-          const estaVolteada = volteadas.some((c) => c.id === carta.id);
-          const estaAcertada = acertadas.includes(carta.parId);
-
-          return (
-            <button
-              key={carta.id}
-              onClick={() => voltearCarta(carta)}
-              disabled={estaAcertada}
-              className={`h-28 sm:h-32 rounded-2xl p-3 flex flex-col items-center justify-center border-b-4 transition-all duration-200 cursor-pointer select-none ${
-                estaAcertada
-                  ? 'bg-emerald-500 text-white border-emerald-700 shadow-sm scale-95 opacity-85 cursor-default'
-                  : estaVolteada
-                  ? 'bg-amber-400 text-amber-950 border-amber-600 shadow-lg scale-105 ring-2 ring-amber-300'
-                  : 'bg-gradient-to-br from-indigo-500 to-violet-600 text-white border-indigo-800 hover:scale-[1.03] hover:shadow-md'
-              }`}
-            >
-              {estaVolteada || estaAcertada ? (
-                <>
-                  <span className="text-3xl sm:text-4xl mb-1.5">{carta.icono}</span>
-                  <span className="font-extrabold text-xs sm:text-sm text-center leading-tight max-w-[120px]">
-                    {carta.texto}
-                  </span>
-                </>
-              ) : (
-                <>
-                  <span className="text-2xl sm:text-3xl mb-1 opacity-80">🎴</span>
-                  <span className="text-[10px] font-black uppercase tracking-widest text-indigo-100">
-                    Descubrir
-                  </span>
-                </>
-              )}
-            </button>
-          );
-        })}
-      </div>
-
-      {/* Pantalla de Victoria */}
-      {completado && (
-        <div className="bg-emerald-50 border-2 border-emerald-300 p-6 sm:p-8 rounded-3xl text-center animate-fade-in space-y-3">
-          <span className="text-5xl block animate-bounce">🏆</span>
-          <h4 className="text-2xl font-black text-emerald-950">
-            ¡Felicitaciones! ¡Todas las parejas encontradas!
-          </h4>
-          <p className="text-emerald-800 font-bold text-sm">
-            Completaste el mazo de <strong>{mazo.nombre}</strong> en {intentos} intentos y {formatearTiempo(tiempo)}.
-          </p>
-          <div className="flex justify-center gap-3 pt-2">
-            <button
-              onClick={() => inicializarJuego(mazoActual)}
-              className="px-6 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-black text-sm rounded-xl shadow-md transition-all active:scale-95 cursor-pointer"
-            >
-              Jugar otra ronda ➔
-            </button>
-          </div>
-        </div>
-      )}
-    </div>
-  );
+      setMensaje('Estas no forman pareja. Escúchalas y vuelve a intentarlo.');
+    } else setMensaje('Ahora toca otra tarjeta.');
+    setVolteadas([...volteadas, carta.id]);
+  }
+  return <MarcoJuego titulo={tema === 'rimas' ? 'Parejas de rimas' : mazo.nombre} gradoNumero={gradoNumero}
+    consigna={tema === 'rimas' ? 'Toca dos tarjetas. Busca palabras que terminen con un sonido parecido.' : mazo.descripcion}>
+    <p className="es-etiqueta-juego">{encontradas.length} de {cartas.length / 2} parejas</p>
+    <div className="es-cartas-memoria">{cartas.map((carta, index) => {
+      const visible = volteadas.includes(carta.id) || encontradas.includes(carta.pareja);
+      return <button key={carta.id} aria-label={visible ? carta.texto : 'Tarjeta ' + (index + 1)}
+        data-encontrada={encontradas.includes(carta.pareja)} disabled={encontradas.includes(carta.pareja)} onClick={() => voltear(carta)}>
+        <span aria-hidden="true">{visible ? carta.icono : '🐾'}</span><strong>{visible ? carta.texto : '?'}</strong>
+      </button>;
+    })}</div>
+    <p className="es-juego-feedback" role="status">{terminado ? '✓ ¡Encontraste todas las parejas!' : mensaje}</p>
+    {volteadas.length === 2 && <button className="es-boton-principal" onClick={() => { setVolteadas([]); setMensaje('Toca otras dos tarjetas.'); }}>Volver a intentar</button>}
+    {terminado && <button className="es-boton-principal" onClick={() => { setCartas(crearCartas()); setEncontradas([]); setVolteadas([]); setMensaje(''); }}>Jugar otra vez</button>}
+  </MarcoJuego>;
 }

@@ -25,29 +25,15 @@ export default function Home() {
 
   return (
     <div className={`space-y-7 pb-8 ${dyslexicMode ? 'tracking-wide' : ''}`}>
-      <section className="lengua-hero lengua-portada">
-        <div>
-          <p className="lengua-kicker">Lengua Viva · 1.º a 9.º</p>
-          <h1>Español</h1>
-          <p>Lee, escribe y practica a tu ritmo. Elige tu grado para empezar.</p>
-          <div className="flex flex-wrap gap-3 mt-5">
-            <a href="#grados" className="lengua-action">Elegir mi grado</a>
-            <Link to="/espanol/juegos" className="lengua-action lengua-action-outline" onClick={() => sounds.playClick()}>
-              Sala de juegos
-            </Link>
-            <button type="button" className="lengua-action lengua-action-outline" onClick={() => {
-              sounds.playClick();
-              voiceReader.speak('Bienvenido a Lengua Viva. Elige tu grado para leer, escribir y practicar.');
-            }}>
-              Escuchar bienvenida
-            </button>
-          </div>
-        </div>
-        <span aria-hidden="true" className="lengua-letras">Aa</span>
-      </section>
+      <header className="es-encabezado es-bienvenida">
+        <p className="es-contexto">Español · De primero a noveno</p>
+        <h1>¿En qué grado estás?</h1>
+        <p>Elige tu grado, entra a un periodo y descubre sus temas.</p>
+        <button type="button" className="es-escuchar" onClick={() => voiceReader.speak('Elige tu grado. Después entra al periodo que estás trabajando en clase y abre un tema para aprender.')}>🔊 Escuchar cómo empezar</button>
+      </header>
 
       <section id="grados" className="space-y-4 scroll-mt-32" aria-labelledby="elige-grado">
-        <h2 id="elige-grado" className="text-2xl font-extrabold">Elige tu grado</h2>
+        <h2 id="elige-grado" className="sr-only">Elige tu grado</h2>
         <ul className="lengua-tarjetas-grado">
           {grados.map((grado) => (
             <li key={grado.id}>
@@ -58,7 +44,7 @@ export default function Home() {
                   <span className="lengua-tarjeta-nivel">{grado.numero <= 5 ? 'Primaria' : 'Secundaria'}</span>
                   <h3>{grado.nombre}</h3>
                   <p>{rutas[grado.numero - 1]}</p>
-                  <span className="lengua-tarjeta-entrada">Entrar <span aria-hidden="true">→</span></span>
+                  <span className="lengua-tarjeta-entrada">Empezar <span aria-hidden="true">→</span></span>
                 </div>
               </Link>
             </li>
@@ -66,6 +52,8 @@ export default function Home() {
         </ul>
       </section>
 
+      <details className="es-docente">
+        <summary>Ayuda para leer y escribir</summary>
       <section className="relative z-10 grid grid-cols-1 md:grid-cols-2 gap-4 pt-4 border-t-2 border-blue-100">
         {/* Herramienta 1 */}
         <div className="bg-white rounded-3xl p-5 border-2 border-blue-100 shadow-sm flex items-center justify-between gap-4 group hover:border-blue-300 transition-all">
@@ -113,6 +101,8 @@ export default function Home() {
           </button>
         </div>
       </section>
+
+      </details>
 
       {/* ══════════ MODAL DE REGLAS DE ORTOGRAFÍA ══════════ */}
       {modalReglasAbierto && (
