@@ -1,9 +1,8 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { sounds } from '../../utils/audio';
 
-export default function ComprensionLectora({ lecturaTitulo = "Lectura de Clase", preguntas = null }) {
+export default function ComprensionLectora({ lecturaTitulo = "Lectura de Clase", preguntas = null, gradoNumero = 1 }) {
   const [nivelActivo, setNivelActivo] = useState('literal'); // 'literal' | 'inferencial' | 'critico'
-  const [respuestasVisibles, setRespuestasVisibles] = useState({});
   const [conclusionesSalón, setConclusionesSalón] = useState('');
 
   const preguntasDefault = {
@@ -62,148 +61,42 @@ export default function ComprensionLectora({ lecturaTitulo = "Lectura de Clase",
 
   const listaActual = preguntas ? preguntas[nivelActivo] || preguntasDefault[nivelActivo] : preguntasDefault[nivelActivo];
 
-  const toggleRespuesta = (id) => {
-    sounds.playClick();
-    setRespuestasVisibles((prev) => ({ ...prev, [id]: !prev[id] }));
-  };
+  const niveles = [
+    ['literal', gradoNumero <= 5 ? 'Recuerda' : 'Recuerda · Literal'],
+    ['inferencial', gradoNumero <= 5 ? 'Piensa' : 'Deduce · Inferencial'],
+    ['critico', gradoNumero <= 5 ? 'Opina' : 'Opina · Crítico'],
+  ];
 
   return (
-    <div className="bg-white rounded-4xl p-6 sm:p-10 shadow-xl border-4 border-teal-300 space-y-6">
-      <div className="flex flex-col sm:flex-row items-center justify-between gap-4 border-b-2 border-slate-100 pb-5">
-        <div className="flex items-center gap-3">
-          <span className="text-4xl">🧠</span>
-          <div>
-            <span className="text-xs font-black text-teal-700 uppercase tracking-widest bg-teal-50 px-3 py-1 rounded-full border border-teal-200">
-              Taller de Análisis Profundo de Lectura (20-30 Minutos)
-            </span>
-            <h3 className="text-2xl font-black text-slate-800 mt-1">
-              Comprensión Lectora en Tres Niveles
-            </h3>
-            <p className="text-xs text-slate-500 font-bold">
-              Texto de análisis: <em>{lecturaTitulo}</em>
-            </p>
-          </div>
-        </div>
-
-        {/* Selector de Nivel de Pensamiento */}
-        <div className="flex gap-1.5 bg-slate-100 p-1.5 rounded-2xl border border-slate-200">
-          <button
-            onClick={() => { sounds.playClick(); setNivelActivo('literal'); }}
-            className={`px-3.5 py-2 rounded-xl text-xs font-black transition-all ${
-              nivelActivo === 'literal'
-                ? 'bg-emerald-500 text-white shadow-sm'
-                : 'text-slate-600 hover:text-slate-900'
-            }`}
-          >
-            🟢 Literal
-          </button>
-          <button
-            onClick={() => { sounds.playClick(); setNivelActivo('inferencial'); }}
-            className={`px-3.5 py-2 rounded-xl text-xs font-black transition-all ${
-              nivelActivo === 'inferencial'
-                ? 'bg-amber-500 text-white shadow-sm'
-                : 'text-slate-600 hover:text-slate-900'
-            }`}
-          >
-            🟡 Inferencial
-          </button>
-          <button
-            onClick={() => { sounds.playClick(); setNivelActivo('critico'); }}
-            className={`px-3.5 py-2 rounded-xl text-xs font-black transition-all ${
-              nivelActivo === 'critico'
-                ? 'bg-rose-500 text-white shadow-sm'
-                : 'text-slate-600 hover:text-slate-900'
-            }`}
-          >
-            🔴 Crítico
-          </button>
-        </div>
+    <section className="lengua-panel space-y-4" aria-label="Preguntas del texto">
+      <header>
+        <h3 className="text-lg font-bold">{gradoNumero <= 2 ? 'Hablemos del texto' : 'Comprueba lo que entendiste'}</h3>
+        <p className="text-sm text-slate-600">Responde en voz alta o en tu cuaderno{gradoNumero <= 2 ? ', con ayuda de tu docente.' : '.'}</p>
+      </header>
+      <div className="flex flex-wrap gap-2" role="group" aria-label="Tipos de preguntas">
+        {niveles.map(([id, nombre]) => <button key={id} type="button" className="lengua-pestana"
+          aria-pressed={nivelActivo === id} onClick={() => { sounds.playClick(); setNivelActivo(id); }}>{nombre}</button>)}
       </div>
-
-      {/* Explicación del Nivel Pedagógico Activo */}
-      <div className={`p-4 rounded-2xl border-2 text-sm font-bold flex items-center gap-3 ${
-        nivelActivo === 'literal'
-          ? 'bg-emerald-50 border-emerald-300 text-emerald-900'
-          : nivelActivo === 'inferencial'
-          ? 'bg-amber-50 border-amber-300 text-amber-900'
-          : 'bg-rose-50 border-rose-300 text-rose-900'
-      }`}>
-        <span className="text-2xl">
-          {nivelActivo === 'literal' ? '🔍' : nivelActivo === 'inferencial' ? '💡' : '⚖️'}
-        </span>
-        <div>
-          <span className="font-black uppercase tracking-wider block text-xs">
-            {nivelActivo === 'literal' ? 'Nivel 1: Comprensión Literal' : nivelActivo === 'inferencial' ? 'Nivel 2: Comprensión Inferencial' : 'Nivel 3: Comprensión Crítica y Valorativa'}
-          </span>
-          <p className="text-xs sm:text-sm mt-0.5">
-            {nivelActivo === 'literal'
-              ? 'Preguntas directas sobre lo que está escrito explícitamente en el texto (hechos, nombres, lugares y tiempos).'
-              : nivelActivo === 'inferencial'
-              ? 'Preguntas para deducir lo que el autor sugiere entre líneas (causas, motivos, simbolismos e hipótesis).'
-              : 'Preguntas de juicio, debate ciudadano y valoración personal frente a la realidad de nuestra comunidad veredal.'}
-          </p>
-        </div>
-      </div>
-
-      {/* Tarjetas de Preguntas Guiadas para el Aula */}
-      <div className="space-y-4">
+      <p className="text-sm text-slate-600">{nivelActivo === 'literal' ? 'Busca las respuestas en el texto.' : nivelActivo === 'inferencial' ? 'Usa las pistas del texto para explicar tus ideas.' : 'Cuenta qué piensas y explica por qué.'}</p>
+      <div className="space-y-3">
         {listaActual.map((item, index) => (
-          <div
-            key={item.id}
-            className="bg-slate-50 border-2 border-slate-200 hover:border-teal-400 p-5 rounded-3xl transition-all space-y-3"
-          >
-            <div className="flex items-start justify-between gap-4">
-              <div className="flex items-start gap-3">
-                <span className="w-8 h-8 rounded-xl bg-teal-600 text-white font-black text-sm flex items-center justify-center shrink-0 mt-0.5">
-                  {index + 1}
-                </span>
-                <h4 className="text-base sm:text-lg font-black text-slate-800 leading-snug">
-                  {item.pregunta}
-                </h4>
-              </div>
-
-              <button
-                onClick={() => toggleRespuesta(item.id)}
-                className="text-xs font-black bg-white hover:bg-slate-100 text-slate-700 px-3 py-1.5 rounded-xl border border-slate-300 shadow-sm shrink-0 cursor-pointer"
-              >
-                {respuestasVisibles[item.id] ? 'Ocultar Guía' : '💡 Guía Docente'}
-              </button>
-            </div>
-
-            {respuestasVisibles[item.id] && (
-              <div className="p-3.5 bg-teal-50 border border-teal-200 rounded-2xl text-xs sm:text-sm font-semibold text-teal-950 animate-fade-in">
-                <strong>Pauta Pedagógica para el Profesor:</strong> {item.guiaRespuesta}
-              </div>
-            )}
-          </div>
+          <details key={nivelActivo + item.id} className="lengua-pregunta" open={index === 0}>
+            <summary className="lengua-summary">Pregunta {index + 1}</summary>
+            <p className="mt-3 font-semibold">{item.pregunta}</p>
+            <details className="mt-3 text-sm text-slate-600">
+              <summary className="cursor-pointer">Orientación para el docente</summary>
+              <p className="mt-2">{item.guiaRespuesta}</p>
+            </details>
+          </details>
         ))}
       </div>
-
-      {/* Pizarra de Conclusiones del Aula */}
-      <div className="bg-slate-900 text-white p-6 rounded-3xl space-y-3 shadow-inner">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <span className="text-xl">📝</span>
-            <h4 className="font-black text-amber-300 text-sm sm:text-base">
-              Conclusiones Colectivas del Salón (Para copiar en el cuaderno)
-            </h4>
-          </div>
-          <button
-            onClick={() => setConclusionesSalón('')}
-            className="text-[11px] text-slate-400 hover:text-rose-400 font-bold cursor-pointer"
-          >
-            Borrar
-          </button>
-        </div>
-
-        <textarea
-          value={conclusionesSalón}
-          onChange={(e) => setConclusionesSalón(e.target.value)}
-          placeholder="El profesor o un relator estudiantil escribe aquí el acuerdo del debate de la clase..."
-          rows={3}
-          className="w-full p-4 bg-slate-800 border-2 border-slate-700 rounded-2xl text-sm font-medium text-white placeholder-slate-500 focus:border-amber-400 outline-none"
-        />
-      </div>
-    </div>
+      <details className="lengua-pregunta">
+        <summary className="lengua-summary">Notas de la clase</summary>
+        <label htmlFor="lengua-conclusiones" className="block mt-3 text-sm">Ideas sobre {lecturaTitulo}</label>
+        <textarea id="lengua-conclusiones" value={conclusionesSalón} onChange={(e) => setConclusionesSalón(e.target.value)}
+          placeholder="Escribe las ideas que compartieron en clase." rows={3} className="lengua-select mt-2" />
+        <button type="button" className="lengua-nav-guia mt-2" onClick={() => setConclusionesSalón('')}>Borrar notas</button>
+      </details>
+    </section>
   );
 }
