@@ -205,26 +205,51 @@ export default function SpanishLayout() {
 
         {/* ══════════ MODAL CELEBRACIÓN DE NIVEL ══════════ */}
         {celebracionNivel && (
-          <div
-            onClick={() => setCelebracionNivel(null)}
-            className="fixed inset-0 z-50 bg-black/75 backdrop-blur-md flex items-center justify-center p-4 animate-fade-in cursor-pointer select-none"
-          >
             <div
-              onClick={(e) => e.stopPropagation()}
-              className="bg-slate-900 border border-amber-400/40 text-white rounded-3xl max-w-md w-full p-6 sm:p-8 text-center space-y-4 shadow-2xl relative cursor-default"
-            >
-              <button
                 onClick={() => setCelebracionNivel(null)}
-                className="absolute top-4 right-4 w-8 h-8 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold flex items-center justify-center text-sm cursor-pointer transition-colors"
-                title="Cerrar"
+                className="fixed inset-0 z-50 bg-black/75 backdrop-blur-md flex items-center justify-center p-4 animate-fade-in cursor-pointer select-none"
+            >
+              <div
+                  onClick={(e) => e.stopPropagation()}
+                  className="bg-slate-900 border border-amber-400/40 text-white rounded-3xl max-w-md w-full p-6 sm:p-8 text-center space-y-4 shadow-2xl relative cursor-default"
               >
-                ✕
-              </button>
+                <button
+                    type="button"
+                    onClick={() => setCelebracionNivel(null)}
+                    className="absolute top-4 right-4 w-8 h-8 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold flex items-center justify-center text-sm cursor-pointer transition-colors"
+                    title="Cerrar"
+                >
+                  ✕
+                </button>
+                <p className="text-xs uppercase tracking-wider text-amber-300 font-semibold">
+                  ¡Nuevo nivel alcanzado!
+                </p>
+                <h2 className="text-2xl font-bold">
+                  {celebracionNivel.titulo || 'Subiste de nivel'}
+                </h2>
+                <button
+                    type="button"
+                    onClick={() => setCelebracionNivel(null)}
+                    className="px-5 py-2 rounded-xl bg-amber-400 text-slate-950 font-semibold text-sm hover:bg-amber-300 transition-colors cursor-pointer"
+                >
+                  Continuar
+                </button>
+              </div>
+            </div>
+        )}
 
-        {celebracionNivel && <aside className="es-aviso-logro" role="status">
-          <span>✓ Nuevo logro · {celebracionNivel.titulo}</span>
-          <button type="button" aria-label="Cerrar aviso de logro" onClick={() => setCelebracionNivel(null)}>×</button>
-        </aside>}
+        {celebracionNivel && (
+            <aside className="es-aviso-logro" role="status">
+              <span>✓ Nuevo logro · {celebracionNivel.titulo}</span>
+              <button
+                  type="button"
+                  aria-label="Cerrar aviso de logro"
+                  onClick={() => setCelebracionNivel(null)}
+              >
+                ×
+              </button>
+            </aside>
+        )}
 
       </div>
     </div>
